@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="KulturPlatform.API/KulturPlatform.API.csproj" />
+    <Project Path="KulturPlatform.Application/KulturPlatform.Application.csproj" />
+    <Project Path="KulturPlatform.Domain/KulturPlatform.Domain.csproj" />
+    <Project Path="KulturPlatform.Infrastructure/KulturPlatform.Infrastructure.csproj" />
+  </Folder>
+</Solution>

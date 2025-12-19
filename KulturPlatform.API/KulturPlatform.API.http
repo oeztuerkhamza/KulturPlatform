@@ -1,0 +1,201 @@
+@KulturPlatform.API_HostAddress = https://localhost:7189
+@token = 
+
+
+### 1. Login as SystemAdmin
+POST {{KulturPlatform.API_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@kpf.de",
+  "password": "Admin123!"
+}
+
+### 2. Login as UserAdmin
+POST {{KulturPlatform.API_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "useradmin@kpf.de",
+  "password": "Admin123!"
+}
+
+### 3. Login as User
+POST {{KulturPlatform.API_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "user@kpf.de",
+  "password": "User123!"
+}
+
+### 4. Get Current User Info
+GET {{KulturPlatform.API_HostAddress}}/api/Auth/me
+Authorization: Bearer {{token}}
+
+### 5. Debug Claims (Check Token)
+GET {{KulturPlatform.API_HostAddress}}/api/Auth/debug/claims
+Authorization: Bearer {{token}}
+
+### 6. Get All Admins (SystemAdmin only)
+GET {{KulturPlatform.API_HostAddress}}/api/Admins
+Authorization: Bearer {{token}}
+
+### 7. Get Dashboard Stats (UserAdmin+)
+GET {{KulturPlatform.API_HostAddress}}/api/Dashboard/stats
+Authorization: Bearer {{token}}
+
+### 8. Get Dashboard Overview (UserAdmin+)
+GET {{KulturPlatform.API_HostAddress}}/api/Dashboard/overview
+Authorization: Bearer {{token}}
+
+### 9. Get Volunteer Submissions (UserAdmin+)
+GET {{KulturPlatform.API_HostAddress}}/api/VolunteerSubmissions
+Authorization: Bearer {{token}}
+
+### 10. Get Volunteer Page Content (Public)
+GET {{KulturPlatform.API_HostAddress}}/api/VolunteerSubmissions/page
+
+### 11. Submit Volunteer Application (Public)
+POST {{KulturPlatform.API_HostAddress}}/api/VolunteerSubmissions
+Content-Type: application/json
+
+{
+  "fullName": "Ahmet Y?lmaz",
+  "email": "ahmet@example.com",
+  "phone": "+49 123 456 7890",
+  "message": "Frankfurt'taki kültürel etkinliklerde gönüllü olarak yer almak istiyorum."
+}
+
+### 12. Get Contact Info (Public)
+GET {{KulturPlatform.API_HostAddress}}/api/ContactInfo
+
+### 13. Get Contact Page Content (Public - Turkish)
+GET {{KulturPlatform.API_HostAddress}}/api/ContactInfo/page?lang=tr
+
+### 13.1 Get Contact Page Content (Public - German)
+GET {{KulturPlatform.API_HostAddress}}/api/ContactInfo/page?lang=de
+
+### 13.2 Get Contact Page Content (Public - English)
+GET {{KulturPlatform.API_HostAddress}}/api/ContactInfo/page?lang=en
+
+### 13.3 Get Supported Languages
+GET {{KulturPlatform.API_HostAddress}}/api/ContactInfo/languages
+
+### 14. Update Contact Info (UserAdmin+)
+PUT {{KulturPlatform.API_HostAddress}}/api/ContactInfo
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "email": "info@kpf.de",
+  "phone": "+49 69 123 456 78",
+  "addressTurkish": "Kultur Platform Frankfurt e.V.\nBahnhofstraße 123\n60329 Frankfurt am Main\nAlmanya",
+  "addressGerman": "Kultur Platform Frankfurt e.V.\nBahnhofstraße 123\n60329 Frankfurt am Main\nDeutschland",
+  "socialMedia": {
+    "facebook": "https://facebook.com/kulturplatformfrankfurt",
+    "instagram": "https://instagram.com/kulturplatformfrankfurt",
+    "twitter": "https://twitter.com/kpf_frankfurt",
+    "linkedin": "https://linkedin.com/company/kultur-platform-frankfurt",
+    "youtube": "https://youtube.com/@kulturplatformfrankfurt"
+  },
+  "officeHoursTurkish": "Pazartesi - Cuma: 09:00 - 18:00\nCumartesi: 10:00 - 14:00\nPazar: Kapal?",
+  "officeHoursGerman": "Montag - Freitag: 09:00 - 18:00\nSamstag: 10:00 - 14:00\nSonntag: Geschlossen"
+}
+
+### 15. Send Contact Message (Public)
+POST {{KulturPlatform.API_HostAddress}}/api/ContactInfo/message
+Content-Type: application/json
+
+{
+  "name": "Mehmet Demir",
+  "email": "mehmet@example.com",
+  "phone": "+49 123 456 7890",
+  "subject": "Etkinlik Hakk?nda Bilgi",
+  "message": "Merhaba, önümüzdeki hafta düzenlenecek olan kültür gecesi etkinli?i hakk?nda detayl? bilgi almak istiyorum. Te?ekkürler."
+}
+
+### 16. Get Volunteer Page Content (Public - Turkish)
+GET {{KulturPlatform.API_HostAddress}}/api/VolunteerSubmissions/page?lang=tr
+
+### 16.1 Get Volunteer Page Content (Public - German)
+GET {{KulturPlatform.API_HostAddress}}/api/VolunteerSubmissions/page?lang=de
+
+### 16.2 Get Volunteer Page Content (Public - English)
+GET {{KulturPlatform.API_HostAddress}}/api/VolunteerSubmissions/page?lang=en
+
+### === LOCALIZATION RESOURCES MANAGEMENT (Admin Panel) ===
+
+### 17. Get All Localization Resources (UserAdmin+)
+GET {{KulturPlatform.API_HostAddress}}/api/LocalizationResources
+Authorization: Bearer {{token}}
+
+### 18. Get Localization Resource by ID (UserAdmin+)
+GET {{KulturPlatform.API_HostAddress}}/api/LocalizationResources/{id}
+Authorization: Bearer {{token}}
+
+### 19. Get Localization Resources by Section (UserAdmin+)
+GET {{KulturPlatform.API_HostAddress}}/api/LocalizationResources/section/contact
+Authorization: Bearer {{token}}
+
+### 20. Create Localization Resource (UserAdmin+)
+POST {{KulturPlatform.API_HostAddress}}/api/LocalizationResources
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "key": "test.message.hello",
+  "turkish": "Merhaba Dünya",
+  "german": "Hallo Welt",
+  "english": "Hello World",
+  "section": "test",
+  "description": "Test greeting message"
+}
+
+### 21. Update Localization Resource (UserAdmin+)
+PUT {{KulturPlatform.API_HostAddress}}/api/LocalizationResources/{id}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "turkish": "Merhaba Dünya (Güncellenmi?)",
+  "german": "Hallo Welt (Aktualisiert)",
+  "english": "Hello World (Updated)",
+  "description": "Updated greeting message"
+}
+
+### 22. Activate Localization Resource (UserAdmin+)
+PATCH {{KulturPlatform.API_HostAddress}}/api/LocalizationResources/{id}/activate
+Authorization: Bearer {{token}}
+
+### 23. Deactivate Localization Resource (UserAdmin+)
+PATCH {{KulturPlatform.API_HostAddress}}/api/LocalizationResources/{id}/deactivate
+Authorization: Bearer {{token}}
+
+### 24. Delete Localization Resource (SystemAdmin only)
+DELETE {{KulturPlatform.API_HostAddress}}/api/LocalizationResources/{id}
+Authorization: Bearer {{token}}
+
+### 25. Bulk Import Localization Resources (UserAdmin+)
+POST {{KulturPlatform.API_HostAddress}}/api/LocalizationResources/bulk-import
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[
+  {
+    "key": "home.welcome.title",
+    "turkish": "Ho? Geldiniz",
+    "german": "Willkommen",
+    "english": "Welcome",
+    "section": "home",
+    "description": "Home page welcome title"
+  },
+  {
+    "key": "home.welcome.subtitle",
+    "turkish": "Frankfurt'?n kültür merkezi",
+    "german": "Kulturzentrum Frankfurt",
+    "english": "Frankfurt's cultural center",
+    "section": "home",
+    "description": "Home page welcome subtitle"
+  }
+]
