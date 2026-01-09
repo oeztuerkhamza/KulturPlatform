@@ -12,11 +12,9 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
         public Description DescriptionTr { get; private set; }
         public Description DescriptionDe { get; private set; }
 
-        public string? DetailedContentTr { get; private set; }
-        public string? DetailedContentDe { get; private set; }
-
-        public ActivityDate DateTr { get; private set; }
-        public ActivityDate DateDe { get; private set; }
+        public LocalizedContent? DetailedContentTr { get; private set; }
+        public LocalizedContent? DetailedContentDe { get; private set; }
+        public ActivityDate Date { get; private set; }
         public Address Address { get; private set; }
         public Category Category { get; private set; }
 
@@ -34,8 +32,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             Title titleDe,
             Description descriptionTr,
             Description descriptionDe,
-            ActivityDate dateTr,
-            ActivityDate dateDe,
+            ActivityDate date,
             Address address,
             Category category,
             Url? imageUrl = null,
@@ -49,8 +46,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
                 TitleDe = titleDe,
                 DescriptionTr = descriptionTr,
                 DescriptionDe = descriptionDe,
-                DateTr = dateTr,
-                DateDe = dateDe,
+                Date = date,
                 Address = address,
                 Category = category,
                 ImageUrl = imageUrl,
@@ -65,21 +61,20 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             Title titleTr, Title titleDe,
             Description descriptionTr,
             Description descriptionDe,
-            ActivityDate dateTr,
-            ActivityDate dateDe,
+            ActivityDate date,
             Address address,
             Category category,
             Url? imageUrl = null,
             MediaGallery? galleryImages = null,
             Url? videoUrl = null,
             bool isActive = true,
-            string? detailedContentTr = null,
-            string? detailedContentDe = null
+            LocalizedContent? detailedContentTr = null,
+            LocalizedContent? detailedContentDe = null
         )
         {
             UpdateTitle(titleTr, titleDe);
             UpdateDescription(descriptionTr, descriptionDe);
-            UpdateDate(dateTr, dateDe);
+            UpdateDate(date);
             UpdateLocation(address);
             UpdateCategory(category);
             ImageUrl = imageUrl;
@@ -120,10 +115,9 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             SetUpdatedAt();
         }
 
-        public void UpdateDate(ActivityDate dateTr, ActivityDate dateDe)
+        public void UpdateDate(ActivityDate date)
         {
-            DateTr = dateTr;
-            DateDe = dateDe;
+            Date = date;
             SetUpdatedAt();
         }
 

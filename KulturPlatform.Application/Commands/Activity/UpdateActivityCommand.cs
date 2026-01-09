@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using KulturPlatform.Application.Dtos.LocalizationDto;
+using MediatR;
 
 namespace KulturPlatform.Application.Commands.Activity
 {
@@ -10,21 +11,12 @@ namespace KulturPlatform.Application.Commands.Activity
         string DescriptionDe,
         string? DetailedContentTr,
         string? DetailedContentDe,
-        string DateTr,
-        string DateDe,
-        DateTime DateISO,
-        string Street,
-        string HouseNo,
-        string City,
-        string State,
-        string Country,
-        string ZipCode,
+        string Date,
+        AddressDto Address,
         string Category,
         string? ImageUrl,
         List<string>? GalleryImages,
         string? VideoUrl,
         bool IsActive
-    ) : IRequest;
-
-
+    ) : IRequest<Unit>;
 }

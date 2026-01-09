@@ -1,4 +1,4 @@
-﻿using KulturPlatform.Application.Dtos;
+﻿using KulturPlatform.Application.Dtos.ActivityDto;
 using KulturPlatform.Application.Interfaces.Activity;
 using Microsoft.EntityFrameworkCore;
 

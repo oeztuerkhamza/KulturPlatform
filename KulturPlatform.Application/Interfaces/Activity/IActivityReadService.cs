@@ -1,4 +1,4 @@
-﻿using KulturPlatform.Application.Dtos;
+﻿using KulturPlatform.Application.Dtos.Activity;
 
 namespace KulturPlatform.Application.Interfaces.Activity
 {

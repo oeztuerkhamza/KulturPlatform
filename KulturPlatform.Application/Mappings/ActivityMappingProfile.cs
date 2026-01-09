@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using KulturPlatform.Application.Dtos;
+using KulturPlatform.Application.Dtos.ActivityDto;
 using KulturPlatform.Domain.Commons.AggregateRoot;
 
 namespace KulturPlatform.Application.Mappings

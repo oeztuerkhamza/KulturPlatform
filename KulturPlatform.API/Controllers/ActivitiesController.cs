@@ -1,5 +1,5 @@
 ﻿using KulturPlatform.Application.Commands.Activity;
-using KulturPlatform.Application.Dtos;
+using KulturPlatform.Application.Dtos.Activity;
 using KulturPlatform.Application.Queries.Activity;
 using KulturPlatform.Domain.Commons.Constants;
 using MediatR;
@@ -19,33 +19,30 @@ namespace KulturPlatform.API.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/activities - Public (Anyone can view)
+        // GET: api/activities
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAll()
         {
-            var query = new GetAllActivitiesQuery();
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetAllActivitiesQuery());
             return Ok(result);
         }
 
-        // GET: api/activities/upcoming - Public (Anyone can view)
+        // GET: api/activities/upcoming
         [HttpGet("upcoming")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetUpcoming()
         {
-            var query = new GetUpcomingActivitiesQuery();
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetUpcomingActivitiesQuery());
             return Ok(result);
         }
 
-        // GET: api/activities/{id} - Public (Anyone can view)
-        [HttpGet("{id}")]
+        // GET: api/activities/{id}
+        [HttpGet("{id:guid}")]
         [AllowAnonymous]
         public async Task<ActionResult<ActivityDto>> GetById(Guid id)
         {
-            var query = new GetActivityByIdQuery(id);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetActivityByIdQuery(id));
 
             if (result == null)
                 return NotFound();
@@ -53,19 +50,27 @@ namespace KulturPlatform.API.Controllers
             return Ok(result);
         }
 
-        // POST: api/activities - UserAdmin+ (Create content)
+        // POST: api/activities
         [HttpPost]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateActivityCommand command)
+        public async Task<ActionResult<Guid>> Create(
+            [FromBody] CreateActivityCommand command)
         {
             var id = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetById), new { id }, id);
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id },
+                id
+            );
         }
 
-        // PUT: api/activities/{id} - UserAdmin+ (Update content)
-        [HttpPut("{id}")]
+        // PUT: api/activities/{id}
+        [HttpPut("{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateActivityCommand command)
+        public async Task<IActionResult> Update(
+            Guid id,
+            [FromBody] UpdateActivityCommand command)
         {
             if (id != command.Id)
                 return BadRequest("Id mismatch.");
@@ -74,13 +79,12 @@ namespace KulturPlatform.API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/activities/{id} - SystemAdmin only (Destructive operation)
-        [HttpDelete("{id}")]
+        // DELETE: api/activities/{id}
+        [HttpDelete("{id:guid}")]
         [Authorize(Policy = Policies.RequireSystemAdmin)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var command = new DeleteActivityCommand(id);
-            await _mediator.Send(command);
+            await _mediator.Send(new DeleteActivityCommand(id));
             return NoContent();
         }
     }

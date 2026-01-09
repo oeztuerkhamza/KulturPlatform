@@ -1,4 +1,4 @@
-﻿using KulturPlatform.Application.Dtos;
+﻿using KulturPlatform.Application.Dtos.Activity;
 using MediatR;
 
 namespace KulturPlatform.Application.Queries.Activity

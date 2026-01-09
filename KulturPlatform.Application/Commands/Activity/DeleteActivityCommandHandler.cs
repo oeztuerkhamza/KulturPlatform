@@ -18,7 +18,7 @@ namespace KulturPlatform.Application.Commands.Activity
             if (activity == null)
                 throw new KeyNotFoundException($"Activity with Id {request.Id} not found.");
 
-            _activityRepository.Delete(activity, cancellationToken);
+            await _activityRepository.DeleteAsync(activity, cancellationToken);
         }
     }
 }

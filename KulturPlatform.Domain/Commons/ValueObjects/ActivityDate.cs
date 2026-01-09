@@ -1,34 +1,44 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
 
 namespace KulturPlatform.Domain.Commons.ValueObjects
 {
-    public record ActivityDate
+    public sealed record ActivityDate
     {
-        public string DateTr { get; init; }
-        public string DateDe { get; init; }
-        public DateTime DateISO { get; init; }
+        public DateTime DateIso { get; init; }
 
-        // Private parameterless constructor for EF Core
+        // EF Core için
         private ActivityDate()
         {
-            DateTr = string.Empty;
-            DateDe = string.Empty;
-            DateISO = DateTime.MinValue;
+            DateIso = DateTime.MinValue;
         }
-        [JsonConstructor]
-        public ActivityDate(string dateTr, string dateDe, DateTime dateISO)
+
+        private ActivityDate(DateTime dateIso)
         {
-            if (string.IsNullOrWhiteSpace(dateTr))
-                throw new ArgumentException("DateTr cannot be empty.", nameof(dateTr));
+            if (dateIso == DateTime.MinValue)
+                throw new ArgumentException("Date cannot be empty.", nameof(dateIso));
 
-            if (string.IsNullOrWhiteSpace(dateDe))
-                throw new ArgumentException("DateDe cannot be empty.", nameof(dateDe));
-
-            DateTr = dateTr.Trim();
-            DateDe = dateDe.Trim();
-            DateISO = dateISO;
+            DateIso = DateTime.SpecifyKind(dateIso, DateTimeKind.Utc);
         }
 
-        public override string ToString() => $"{DateTr} / {DateDe} / {DateISO:yyyy-MM-dd}";
+        public static ActivityDate Create(DateTime dateIso)
+            => new(dateIso);
+
+        public static ActivityDate FromString(string date)
+        {
+            if (!DateTime.TryParse(date, null, DateTimeStyles.AssumeUniversal, out var parsedDate))
+                throw new ArgumentException("Invalid date format", nameof(date));
+            return Create(parsedDate);
+        }
+
+
+        // Derived / computed values (domain-safe)
+        public string ToTrString()
+            => DateIso.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
+
+        public string ToDeString()
+            => DateIso.ToString("dd. MMMM yyyy", new CultureInfo("de-DE"));
+
+        public override string ToString()
+            => DateIso.ToString("yyyy-MM-dd");
     }
 }
