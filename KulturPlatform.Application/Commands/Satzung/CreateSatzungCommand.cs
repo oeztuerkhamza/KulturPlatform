@@ -4,7 +4,6 @@ using MediatR;
 namespace KulturPlatform.Application.Commands.Satzung
 {
     public record CreateSatzungCommand(
-        string Key,
         Title TitleTurkish,
         Title TitleGerman,
         SectionContent NameAndSeatTurkish,

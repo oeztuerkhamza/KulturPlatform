@@ -2,7 +2,8 @@ namespace KulturPlatform.Application.Dtos.AboutUs
 {
     public class AboutUsDto
     {
-        public DescriptionDto Quote { get; set; }
+        public DescriptionDto QuoteTr { get; set; }
+        public DescriptionDto QuoteDe { get; set; }
         public string QuoteAuthor { get; set; }
 
         public DescriptionDto WhoWeAreTr { get; set; }

@@ -34,14 +34,6 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DetailedContentDe")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
-
-                    b.Property<string>("DetailedContentTr")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -51,6 +43,253 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Activities", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.AggregateRoot.CtaSection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionDe")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("DescriptionDe");
+
+                    b.Property<string>("DescriptionTr")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("DescriptionTr");
+
+                    b.Property<string>("DonateButtonDe")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("DonateButtonDe");
+
+                    b.Property<string>("DonateButtonTr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("DonateButtonTr");
+
+                    b.Property<string>("PrimaryButtonDe")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("PrimaryButtonDe");
+
+                    b.Property<string>("PrimaryButtonTr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("PrimaryButtonTr");
+
+                    b.Property<string>("SecondaryButtonDe")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("SecondaryButtonDe");
+
+                    b.Property<string>("SecondaryButtonTr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("SecondaryButtonTr");
+
+                    b.Property<string>("TitleDe")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("TitleDe");
+
+                    b.Property<string>("TitleTr")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("TitleTr");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CtaSections", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.AggregateRoot.Feature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Color");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionDe")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("DescriptionDe");
+
+                    b.Property<string>("DescriptionTr")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("DescriptionTr");
+
+                    b.Property<string>("TitleDe")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("TitleDe");
+
+                    b.Property<string>("TitleTr")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("TitleTr");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Features", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.AggregateRoot.HeroSection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BackgroundImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("BackgroundImageUrl");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DescriptionDe")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("DescriptionDe");
+
+                    b.Property<string>("DescriptionTr")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("DescriptionTr");
+
+                    b.Property<string>("PrimaryButtonTextDe")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("PrimaryButtonTextDe");
+
+                    b.Property<string>("PrimaryButtonTextTr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("PrimaryButtonTextTr");
+
+                    b.Property<string>("SecondaryButtonTextDe")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("SecondaryButtonTextDe");
+
+                    b.Property<string>("SecondaryButtonTextTr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("SecondaryButtonTextTr");
+
+                    b.Property<string>("SubtitleDe")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
+                        .HasColumnName("SubtitleDe");
+
+                    b.Property<string>("SubtitleTr")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
+                        .HasColumnName("SubtitleTr");
+
+                    b.Property<string>("TitleDe")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("TitleDe");
+
+                    b.Property<string>("TitleTr")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("TitleTr");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HeroSections", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.AggregateRoot.InstagramPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("ImageUrl");
+
+                    b.Property<string>("Link")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("Link");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InstagramPosts", (string)null);
                 });
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUs", b =>
@@ -476,18 +715,10 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Key")
-                        .IsUnique();
 
                     b.ToTable("Satzungs", (string)null);
                 });
@@ -658,35 +889,37 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasColumnName("Location_City");
+                                .HasColumnName("Address_City");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasColumnName("Location_Country");
+                                .HasColumnName("Address_Country");
 
                             b1.Property<string>("HouseNo")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("Address_HouseNo");
 
                             b1.Property<string>("State")
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasColumnName("Location_State");
+                                .HasColumnName("Address_State");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
                                 .HasMaxLength(200)
                                 .HasColumnType("nvarchar(200)")
-                                .HasColumnName("Location_Address");
+                                .HasColumnName("Address_Street");
 
                             b1.Property<string>("ZipCode")
                                 .IsRequired()
                                 .HasMaxLength(20)
                                 .HasColumnType("nvarchar(20)")
-                                .HasColumnName("Location_ZipCode");
+                                .HasColumnName("Address_ZipCode");
 
                             b1.HasKey("ActivityId");
 
@@ -706,64 +939,6 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)")
                                 .HasColumnName("Category");
-
-                            b1.HasKey("ActivityId");
-
-                            b1.ToTable("Activities");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ActivityId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ActivityDate", "DateDe", b1 =>
-                        {
-                            b1.Property<Guid>("ActivityId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("DateDe")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)")
-                                .HasColumnName("DateDe_TextDe");
-
-                            b1.Property<DateTime>("DateISO")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("DateDe_DateISO");
-
-                            b1.Property<string>("DateTr")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)")
-                                .HasColumnName("DateDe_TextTr");
-
-                            b1.HasKey("ActivityId");
-
-                            b1.ToTable("Activities");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ActivityId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ActivityDate", "DateTr", b1 =>
-                        {
-                            b1.Property<Guid>("ActivityId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("DateDe")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)")
-                                .HasColumnName("DateTr_TextDe");
-
-                            b1.Property<DateTime>("DateISO")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("DateTr_DateISO");
-
-                            b1.Property<string>("DateTr")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)")
-                                .HasColumnName("DateTr_TextTr");
 
                             b1.HasKey("ActivityId");
 
@@ -802,6 +977,44 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasMaxLength(1000)
                                 .HasColumnType("nvarchar(1000)")
                                 .HasColumnName("DescriptionTr");
+
+                            b1.HasKey("ActivityId");
+
+                            b1.ToTable("Activities");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.LocalizedContent", "DetailedContentDe", b1 =>
+                        {
+                            b1.Property<Guid>("ActivityId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(4000)
+                                .HasColumnType("nvarchar(4000)")
+                                .HasColumnName("DetailedContentDe");
+
+                            b1.HasKey("ActivityId");
+
+                            b1.ToTable("Activities");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.LocalizedContent", "DetailedContentTr", b1 =>
+                        {
+                            b1.Property<Guid>("ActivityId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(4000)
+                                .HasColumnType("nvarchar(4000)")
+                                .HasColumnName("DetailedContentTr");
 
                             b1.HasKey("ActivityId");
 
@@ -887,6 +1100,23 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasForeignKey("ActivityId");
                         });
 
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ActivityDate", "Date", b1 =>
+                        {
+                            b1.Property<Guid>("ActivityId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime>("DateIso")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("DateIso");
+
+                            b1.HasKey("ActivityId");
+
+                            b1.ToTable("Activities");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.MediaGallery", "GalleryImages", b1 =>
                         {
                             b1.Property<Guid>("ActivityId")
@@ -901,14 +1131,14 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                             b1.OwnsMany("KulturPlatform.Domain.Commons.ValueObjects.Url", "Images", b2 =>
                                 {
-                                    b2.Property<Guid>("ActivityId")
-                                        .HasColumnType("uniqueidentifier");
-
                                     b2.Property<int>("Id")
                                         .ValueGeneratedOnAdd()
                                         .HasColumnType("int");
 
                                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b2.Property<int>("Id"));
+
+                                    b2.Property<Guid>("ActivityId")
+                                        .HasColumnType("uniqueidentifier");
 
                                     b2.Property<string>("Value")
                                         .IsRequired()
@@ -916,7 +1146,9 @@ namespace KulturPlatform.Infrastructure.Migrations
                                         .HasColumnType("nvarchar(500)")
                                         .HasColumnName("ImageUrl");
 
-                                    b2.HasKey("ActivityId", "Id");
+                                    b2.HasKey("Id");
+
+                                    b2.HasIndex("ActivityId");
 
                                     b2.ToTable("ActivityGalleryImages", (string)null);
 
@@ -933,10 +1165,7 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.Navigation("Category")
                         .IsRequired();
 
-                    b.Navigation("DateDe")
-                        .IsRequired();
-
-                    b.Navigation("DateTr")
+                    b.Navigation("Date")
                         .IsRequired();
 
                     b.Navigation("DescriptionDe")
@@ -944,6 +1173,10 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                     b.Navigation("DescriptionTr")
                         .IsRequired();
+
+                    b.Navigation("DetailedContentDe");
+
+                    b.Navigation("DetailedContentTr");
 
                     b.Navigation("GalleryImages")
                         .IsRequired();
@@ -1033,7 +1266,7 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasForeignKey("AboutUsId");
                         });
 
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "Quote", b1 =>
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "QuoteDe", b1 =>
                         {
                             b1.Property<Guid>("AboutUsId")
                                 .HasColumnType("uniqueidentifier");
@@ -1041,7 +1274,25 @@ namespace KulturPlatform.Infrastructure.Migrations
                             b1.Property<string>("Value")
                                 .HasMaxLength(2000)
                                 .HasColumnType("nvarchar(2000)")
-                                .HasColumnName("Quote");
+                                .HasColumnName("QuoteDe");
+
+                            b1.HasKey("AboutUsId");
+
+                            b1.ToTable("AboutUs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "QuoteTr", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("QuoteTr");
 
                             b1.HasKey("AboutUsId");
 
@@ -1135,7 +1386,10 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.Navigation("MissionTr")
                         .IsRequired();
 
-                    b.Navigation("Quote")
+                    b.Navigation("QuoteDe")
+                        .IsRequired();
+
+                    b.Navigation("QuoteTr")
                         .IsRequired();
 
                     b.Navigation("VisionDe")

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using KulturPlatform.Application.Dtos.ActivityDto;
+using KulturPlatform.Application.Dtos.Activity;
+using KulturPlatform.Application.Dtos.LocalizationDto;
 using KulturPlatform.Domain.Commons.AggregateRoot;
 
 namespace KulturPlatform.Application.Mappings
@@ -8,18 +9,31 @@ namespace KulturPlatform.Application.Mappings
     {
         public ActivityMappingProfile()
         {
-            // Domain entity → DTO mapping
             CreateMap<Activity, ActivityDto>()
-                .ForMember(dest => dest.TitleTr, opt => opt.MapFrom(src => src.TitleTr.Value))
-                .ForMember(dest => dest.TitleDe, opt => opt.MapFrom(src => src.TitleDe.Value))
-                .ForMember(dest => dest.DescriptionTr, opt => opt.MapFrom(src => src.DescriptionTr.Value))
-                .ForMember(dest => dest.DescriptionDe, opt => opt.MapFrom(src => src.DescriptionDe.Value))
-                .ForMember(dest => dest.Location, opt => opt.MapFrom(src =>
-                    $"{src.Address.Street}, {src.Address.City}, {src.Address.State}, {src.Address.Country}, {src.Address.ZipCode}"))
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Value))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl != null ? src.ImageUrl.Value : null))
-                .ForMember(dest => dest.VideoUrl, opt => opt.MapFrom(src => src.VideoUrl != null ? src.VideoUrl.Value : null))
-                .ForMember(dest => dest.GalleryImages, opt => opt.MapFrom(src => src.GalleryImages.Images));
+                .ConstructUsing(src => new ActivityDto(
+                    src.Id,
+                    src.TitleTr.Value,
+                    src.TitleDe.Value,
+                    src.DescriptionTr.Value,
+                    src.DescriptionDe.Value,
+                    src.DetailedContentTr != null ? src.DetailedContentTr.Value : null,
+                    src.DetailedContentDe != null ? src.DetailedContentDe.Value : null,
+                    src.Date.DateIso.ToString("yyyy-MM-dd"),
+                    new AddressDto
+                    {
+                        Street = src.Address.Street,
+                        HouseNo = src.Address.HouseNo,
+                        ZipCode = src.Address.ZipCode,
+                        City = src.Address.City,
+                        State = src.Address.State,
+                        Country = src.Address.Country
+                    },
+                    src.Category.Value,
+                    src.ImageUrl != null ? src.ImageUrl.Value : null,
+                    src.GalleryImages.Images.Select(img => img.Value).ToList(),
+                    src.VideoUrl != null ? src.VideoUrl.Value : null,
+                    src.IsActive
+                ));
         }
     }
 }

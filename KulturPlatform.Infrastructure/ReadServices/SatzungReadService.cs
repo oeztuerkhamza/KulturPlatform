@@ -21,7 +21,6 @@ namespace KulturPlatform.Infrastructure.ReadServices
                 .Select(a => new SatzungDto
                 {
                     Id = a.Id,
-                    Key = a.Key,
                     TitleTurkish = a.TitleTurkish.Value,
                     TitleGerman = a.TitleGerman.Value,
 
@@ -60,7 +59,6 @@ namespace KulturPlatform.Infrastructure.ReadServices
                 .Select(a => new SatzungDto
                 {
                     Id = a.Id,
-                    Key = a.Key,
                     TitleTurkish = a.TitleTurkish.Value,
                     TitleGerman = a.TitleGerman.Value,
 
@@ -91,43 +89,6 @@ namespace KulturPlatform.Infrastructure.ReadServices
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<SatzungDto?> GetByKeyAsync(string key, CancellationToken cancellationToken)
-        {
-            return await _context.Satzungen
-                .AsNoTracking()
-                .Where(a => a.Key == key)
-                .Select(a => new SatzungDto
-                {
-                    Id = a.Id,
-                    Key = a.Key,
-                    TitleTurkish = a.TitleTurkish.Value,
-                    TitleGerman = a.TitleGerman.Value,
 
-                    NameAndSeatTurkish = a.NameAndSeatTurkish,
-                    NameAndSeatGerman = a.NameAndSeatGerman,
-                    NameDescTurkish = a.NameDescTurkish,
-                    NameDescGerman = a.NameDescGerman,
-                    SeatTurkish = a.SeatTurkish,
-                    SeatGerman = a.SeatGerman,
-                    SeatDescTurkish = a.SeatDescTurkish,
-                    SeatDescGerman = a.SeatDescGerman,
-                    FiscalYearTurkish = a.FiscalYearTurkish,
-                    FiscalYearGerman = a.FiscalYearGerman,
-                    FiscalYearDescTurkish = a.FiscalYearDescTurkish,
-                    FiscalYearDescGerman = a.FiscalYearDescGerman,
-                    PurposeOfAssociationTurkish = a.PurposeOfAssociationTurkish,
-                    PurposeOfAssociationGerman = a.PurposeOfAssociationGerman,
-
-                    Purposes = a.Purposes,
-
-                    GemeinnuetzigkeitTurkish = a.GemeinnuetzigkeitTurkish,
-                    GemeinnuetzigkeitGerman = a.GemeinnuetzigkeitGerman,
-                    PoliticalNeutralityTurkish = a.PoliticalNeutralityTurkish,
-                    PoliticalNeutralityGerman = a.PoliticalNeutralityGerman,
-
-                    Memberships = a.Memberships
-                })
-                .FirstOrDefaultAsync(cancellationToken);
-        }
     }
 }

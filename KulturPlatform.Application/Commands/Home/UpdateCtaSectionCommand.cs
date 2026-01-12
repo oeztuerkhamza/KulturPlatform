@@ -1,4 +1,6 @@
-﻿namespace KulturPlatform.Application.Commands.Home
+﻿using MediatR;
+
+namespace KulturPlatform.Application.Commands.Home
 {
     public record UpdateCtaSectionCommand(
         Guid Id,
@@ -12,6 +14,5 @@
         string SecondaryButtonDe,
         string DonateButtonTr,
         string DonateButtonDe
-    );
-
+    ) : IRequest;
 }

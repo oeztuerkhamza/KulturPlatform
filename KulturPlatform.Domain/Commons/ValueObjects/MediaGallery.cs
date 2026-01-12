@@ -14,13 +14,10 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
         public MediaGallery(IReadOnlyList<Url> images)
         {
             if (images == null)
-                throw new("Images cannot be null.");
-
-            if (images.Count < 1)
-                throw new("Gallery must contain at least 1 image.");
+                throw new ArgumentException("Images cannot be null.");
 
             if (images.Count > 10)
-                throw new("Gallery cannot contain more than 10 images.");
+                throw new ArgumentException("Gallery cannot contain more than 10 images.");
 
             // Immutable copy
             Images = images.ToImmutableList();
@@ -30,22 +27,26 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
         public MediaGallery(IEnumerable<string> urls)
         {
             if (urls == null)
-                throw new("URLs cannot be null.");
+                throw new ArgumentException("URLs cannot be null.");
 
             var list = urls.Select(u => Url.Create(u)).ToList();
 
 
-            if (list.Count < 1)
-                throw new("Gallery must contain at least 1 image.");
-
             if (list.Count > 10)
-                throw new("Gallery cannot contain more than 10 images.");
+                throw new ArgumentException("Gallery cannot contain more than 10 images.");
 
             Images = list.ToImmutableList();
         }
 
+        public static MediaGallery Empty() => new MediaGallery(new List<Url>());
+
+        public bool IsEmpty => Images.Count == 0;
+
         public override string ToString()
         {
+            if (IsEmpty)
+                return "MediaGallery: []";
+
             var sb = new StringBuilder();
             sb.Append("MediaGallery: [");
             for (int i = 0; i < Images.Count; i++)

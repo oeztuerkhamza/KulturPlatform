@@ -1,5 +1,6 @@
 using KulturPlatform.Application.Interfaces.Course;
 using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
 using MediatR;
 
 namespace KulturPlatform.Application.Commands.Course
@@ -7,10 +8,12 @@ namespace KulturPlatform.Application.Commands.Course
     public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand>
     {
         private readonly ICourseRepository _courseRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateCourseCommandHandler(ICourseRepository courseRepository)
+        public UpdateCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork)
         {
             _courseRepository = courseRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
@@ -51,6 +54,7 @@ namespace KulturPlatform.Application.Commands.Course
                 course.Deactivate();
 
             _courseRepository.Update(course, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

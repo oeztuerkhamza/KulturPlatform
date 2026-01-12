@@ -7,18 +7,18 @@ namespace KulturPlatform.Application.Queries.Activity
 {
     public class GetActivityByIdQueryHandler : IRequestHandler<GetActivityByIdQuery, ActivityDto?>
     {
-        private readonly IActivityRepository _activityRepository;
+        private readonly IActivityReadService _activityReadService;
         private readonly IMapper _mapper;
 
-        public GetActivityByIdQueryHandler(IActivityRepository activityRepository, IMapper mapper)
+        public GetActivityByIdQueryHandler(IActivityReadService activityReadService, IMapper mapper)
         {
-            _activityRepository = activityRepository;
+            _activityReadService = activityReadService;
             _mapper = mapper;
         }
 
         public async Task<ActivityDto?> Handle(GetActivityByIdQuery request, CancellationToken cancellationToken)
         {
-            var activity = await _activityRepository.GetByIdAsync(request.Id, cancellationToken);
+            var activity = await _activityReadService.GetByIdAsync(request.Id);
             if (activity == null) return null;
 
             return _mapper.Map<ActivityDto>(activity);

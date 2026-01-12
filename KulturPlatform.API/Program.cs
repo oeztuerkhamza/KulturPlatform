@@ -11,6 +11,7 @@ using KulturPlatform.Application.Interfaces.Course;
 using KulturPlatform.Application.Interfaces.Dashboard;
 using KulturPlatform.Application.Interfaces.DonatePage;
 using KulturPlatform.Application.Interfaces.GuelenMovement;
+using KulturPlatform.Application.Interfaces.Home;
 using KulturPlatform.Application.Interfaces.Imprint;
 using KulturPlatform.Application.Interfaces.LocalizationResource;
 using KulturPlatform.Application.Interfaces.PageContent;
@@ -230,6 +231,13 @@ builder.Services.AddScoped<IContactInfoReadService, ContactInfoReadService>();
 builder.Services.AddScoped<IAboutUsWriteRepository, AboutUsRepository>();
 builder.Services.AddScoped<IAboutUsReadRepository, AboutUsRepository>();
 
+// Home Page
+builder.Services.AddScoped<IHeroSectionRepository, HeroSectionRepository>();
+builder.Services.AddScoped<ICtaSectionRepository, CtaSectionRepository>();
+builder.Services.AddScoped<IFeatureRepository, FeatureRepository>();
+builder.Services.AddScoped<IInstagramPostRepository, InstagramPostRepository>();
+builder.Services.AddScoped<IHomeReadService, HomeReadService>();
+
 
 var app = builder.Build();
 
@@ -307,28 +315,28 @@ if (app.Environment.IsDevelopment())
     // OpenAPI endpoint
     app.MapOpenApi();
     app.MapPost("/api/auth/dev-token", async (IMediator mediator) =>
+    {
+        try
         {
-            try
-            {
-                var command = new LoginCommand("admin@kpf.de", "Admin123!");
-                var result = await mediator.Send(command);
+            var command = new LoginCommand("admin@kpf.de", "Admin123!");
+            var result = await mediator.Send(command);
 
-                return Results.Ok(new
-                {
-                    token = result.Token,
-                    //message = "? Token created! Copy the token above and paste in Bearer Token field.",
-                    //hint = "This is a development-only endpoint. Use admin@kpf.de / Admin123!"
-                });
-            }
-            catch (Exception ex)
+            return Results.Ok(new
             {
-                return Results.BadRequest(new
-                {
-                    error = ex.Message,
-                    hint = "Make sure the database is seeded with admin user"
-                });
-            }
-        })
+                token = result.Token,
+                //message = "? Token created! Copy the token above and paste in Bearer Token field.",
+                //hint = "This is a development-only endpoint. Use admin@kpf.de / Admin123!"
+            });
+        }
+        catch (Exception ex)
+        {
+            return Results.BadRequest(new
+            {
+                error = ex.Message,
+                hint = "Make sure the database is seeded with admin user"
+            });
+        }
+    })
         .AllowAnonymous()
         .WithTags("Authentication")
         .WithName("GetDevToken")

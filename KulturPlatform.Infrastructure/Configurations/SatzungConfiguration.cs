@@ -13,10 +13,6 @@ namespace KulturPlatform.Infrastructure.Configurations
             builder.ToTable("Satzungs");
             builder.HasKey(x => x.Id);
 
-            // Key
-            builder.Property(x => x.Key)
-                   .HasMaxLength(100)
-                   .IsRequired();
 
             // Titles
             ConfigureTitle(builder, x => x.TitleTurkish, "TitleTurkish");
@@ -87,8 +83,7 @@ namespace KulturPlatform.Infrastructure.Configurations
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.UpdatedAt).IsRequired(false);
 
-            // Index
-            builder.HasIndex(x => x.Key).IsUnique();
+
         }
 
         // Generic Title configuration

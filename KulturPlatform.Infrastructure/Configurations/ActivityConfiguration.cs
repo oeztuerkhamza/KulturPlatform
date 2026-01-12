@@ -1,4 +1,5 @@
 ﻿using KulturPlatform.Domain.Commons.AggregateRoot;
+using KulturPlatform.Domain.Commons.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -108,8 +109,9 @@ namespace KulturPlatform.Infrastructure.Configurations
                 {
                     img.ToTable("ActivityGalleryImages");
                     img.WithOwner().HasForeignKey("ActivityId");
+                    img.Property<int>("Id").ValueGeneratedOnAdd();
+                    img.HasKey("Id");
                     img.Property(x => x.Value).HasColumnName("ImageUrl").HasMaxLength(500).IsRequired();
-                    img.HasKey("Id"); // EF Core için primary key
                 });
             });
 

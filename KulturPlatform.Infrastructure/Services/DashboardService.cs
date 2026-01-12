@@ -25,7 +25,7 @@ namespace KulturPlatform.Infrastructure.Services
                 TotalActivities = await _context.Activities.CountAsync(cancellationToken),
                 ActiveActivities = await _context.Activities.CountAsync(a => a.IsActive, cancellationToken),
                 UpcomingActivities = await _context.Activities
-                    .CountAsync(a => a.IsActive && a.DateTr.DateISO > DateTime.UtcNow, cancellationToken),
+                    .CountAsync(a => a.IsActive && a.Date.DateIso > DateTime.UtcNow, cancellationToken),
 
                 // Courses
                 TotalCourses = await _context.Courses.CountAsync(cancellationToken),

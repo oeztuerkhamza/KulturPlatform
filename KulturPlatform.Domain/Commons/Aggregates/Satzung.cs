@@ -6,8 +6,6 @@ namespace KulturPlatform.Domain.Commons.Aggregates
 {
     public class Satzung : AuditableEntity, IAggregateRoot
     {
-        public string Key { get; private set; }
-
         // Header
         public Title TitleTurkish { get; private set; }
         public Title TitleGerman { get; private set; }
@@ -45,7 +43,6 @@ namespace KulturPlatform.Domain.Commons.Aggregates
         private Satzung(Guid id) : base(id) { }
 
         public static Satzung CreateNew(
-            string key,
             Title titleTurkish,
             Title titleGerman,
             SectionContent nameAndSeatTurkish,
@@ -72,7 +69,6 @@ namespace KulturPlatform.Domain.Commons.Aggregates
         {
             return new Satzung(Guid.NewGuid())
             {
-                Key = key,
                 TitleTurkish = titleTurkish,
                 TitleGerman = titleGerman,
                 NameAndSeatTurkish = nameAndSeatTurkish,

@@ -40,7 +40,8 @@ namespace KulturPlatform.Application.Commands.AboutUs
             if (aboutUs is null)
             {
                 aboutUs = Domain.Commons.Aggregates.AboutUs.Create(
-                    Desc(dto.Quote),
+                    Desc(dto.QuoteTr),
+                    Desc(dto.QuoteDe),
                     dto.QuoteAuthor ?? string.Empty,
                     Desc(dto.WhoWeAreTr),
                     Desc(dto.WhoWeAreDe),
@@ -61,7 +62,8 @@ namespace KulturPlatform.Application.Commands.AboutUs
             else
             {
                 aboutUs.Update(
-                    Desc(dto.Quote),
+                    Desc(dto.QuoteTr),
+                    Desc(dto.QuoteDe),
                     dto.QuoteAuthor ?? string.Empty,
                     Desc(dto.WhoWeAreTr),
                     Desc(dto.WhoWeAreDe),

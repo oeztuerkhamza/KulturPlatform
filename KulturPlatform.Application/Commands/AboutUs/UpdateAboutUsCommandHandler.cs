@@ -32,7 +32,8 @@ namespace KulturPlatform.Application.Commands.AboutUs
             void ApplyChangesTo(Domain.Commons.Aggregates.AboutUs target)
             {
                 target.Update(
-                    new Description(request.Model.Quote.Value),
+                    new Description(request.Model.QuoteTr.Value),
+                    new Description(request.Model.QuoteDe.Value),
                     request.Model.QuoteAuthor,
                     new Description(request.Model.WhoWeAreTr.Value),
                     new Description(request.Model.WhoWeAreDe.Value),

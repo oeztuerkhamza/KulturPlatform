@@ -13,10 +13,18 @@ namespace KulturPlatform.Infrastructure.Configurations
             builder.HasKey(a => a.Id);
 
             // Quote
-            builder.OwnsOne(a => a.Quote, q =>
+            builder.OwnsOne(a => a.QuoteTr, q =>
             {
                 q.Property(p => p.Value)
-                    .HasColumnName("Quote")
+                    .HasColumnName("QuoteTr")
+                    .HasMaxLength(2000)
+                    .IsRequired(false);
+            });
+
+            builder.OwnsOne(a => a.QuoteDe, q =>
+            {
+                q.Property(p => p.Value)
+                    .HasColumnName("QuoteDe")
                     .HasMaxLength(2000)
                     .IsRequired(false);
             });

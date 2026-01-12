@@ -29,7 +29,6 @@ namespace KulturPlatform.Application.Commands.Satzung
             ).ToList() ?? new List<MembershipDetail>();
 
             var satzung = Domain.Commons.Aggregates.Satzung.CreateNew(
-                request.Key,
                 request.TitleTurkish,
                 request.TitleGerman,
                 request.NameAndSeatTurkish,

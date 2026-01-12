@@ -1,9 +1,10 @@
-﻿namespace KulturPlatform.Application.Commands.Home
+﻿using MediatR;
+
+namespace KulturPlatform.Application.Commands.Home
 {
     public record UpdateInstagramPostCommand(
         Guid Id,
         string ImageUrl,
-        string? Link
-    );
-
+        string? Link = null
+    ) : IRequest;
 }

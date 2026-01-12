@@ -34,6 +34,12 @@ namespace KulturPlatform.Infrastructure
         public DbSet<FocusArea> AboutUsFocusAreas { get; set; }
         public DbSet<ActivityArea> AboutUsActivityAreas { get; set; }
 
+        // Home Page Aggregates
+        public DbSet<HeroSection> HeroSections { get; set; }
+        public DbSet<Feature> Features { get; set; }
+        public DbSet<CtaSection> CtaSections { get; set; }
+        public DbSet<InstagramPost> InstagramPosts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

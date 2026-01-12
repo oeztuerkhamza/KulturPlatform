@@ -5,7 +5,7 @@ namespace KulturPlatform.Application.Interfaces.Activity
     public interface IActivityReadService
     {
         Task<IEnumerable<ActivityDto>> GetAllAsync();
-        Task<IEnumerable<ActivityDto>> GetUpcomingAsync();
+        Task<IEnumerable<ActivityDto>> GetUpcomingAsync(CancellationToken cancellationToken);
+        Task<ActivityDto?> GetByIdAsync(Guid id);
     }
-
 }

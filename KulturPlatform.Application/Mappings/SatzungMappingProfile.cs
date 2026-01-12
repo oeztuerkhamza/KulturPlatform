@@ -25,7 +25,6 @@ namespace KulturPlatform.Application.Mappings
             // 🔹 Domain Entity → DTO Mapping
             CreateMap<Domain.Commons.Aggregates.Satzung, SatzungDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key))
                 .ForMember(dest => dest.TitleTurkish, opt => opt.MapFrom(src => src.TitleTurkish))
                 .ForMember(dest => dest.TitleGerman, opt => opt.MapFrom(src => src.TitleGerman))
                 .ForMember(dest => dest.NameAndSeatTurkish, opt => opt.MapFrom(src => src.NameAndSeatTurkish))

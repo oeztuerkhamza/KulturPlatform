@@ -18,16 +18,13 @@ namespace KulturPlatform.API.Controllers
             _mediator = mediator;
         }
 
-        // 🔹 GET by Key (public)
-        [HttpGet("{key}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<SatzungDto>> GetByKey(string key)
+        // 🔹 GET All (admin)
+        [HttpGet]
+        // [Authorize(Policy = "RequireUserAdmin")]
+        public async Task<ActionResult<IEnumerable<SatzungDto>>> GetAll()
         {
-            var satzung = await _mediator.Send(new GetSatzungByKeyQuery(key));
-            if (satzung == null)
-                return NotFound(new { message = $"Satzung with key '{key}' not found." });
-
-            return Ok(satzung);
+            var satzungen = await _mediator.Send(new GetAllSatzungQuery());
+            return Ok(satzungen);
         }
 
         // 🔹 GET by Id (admin)
@@ -38,15 +35,6 @@ namespace KulturPlatform.API.Controllers
             var satzung = await _mediator.Send(new GetSatzungByIdQuery(id));
             if (satzung == null) return NotFound();
             return Ok(satzung);
-        }
-
-        // 🔹 GET All (admin)
-        [HttpGet]
-        // [Authorize(Policy = "RequireUserAdmin")]
-        public async Task<ActionResult<IEnumerable<SatzungDto>>> GetAll()
-        {
-            var satzungen = await _mediator.Send(new GetAllSatzungQuery());
-            return Ok(satzungen);
         }
 
         // 🔹 CREATE

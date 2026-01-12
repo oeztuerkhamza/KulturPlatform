@@ -6,7 +6,8 @@ namespace KulturPlatform.Domain.Commons.Aggregates;
 
 public class AboutUs : AuditableEntity, IAggregateRoot
 {
-    public Description Quote { get; private set; }
+    public Description QuoteTr { get; private set; }
+    public Description QuoteDe { get; private set; }
     public string QuoteAuthor { get; private set; }
 
     public Description WhoWeAreTr { get; private set; }
@@ -35,7 +36,8 @@ public class AboutUs : AuditableEntity, IAggregateRoot
 
     // Private constructor that sets Id
     private AboutUs(Guid id,
-        Description quote,
+        Description quoteTr,
+        Description quoteDe,
         string quoteAuthor,
         Description whoWeAreTr,
         Description whoWeAreDe,
@@ -50,7 +52,8 @@ public class AboutUs : AuditableEntity, IAggregateRoot
         IEnumerable<ActivityArea> activityAreas,
         IEnumerable<TeamMember> teamMembers) : base(id)
     {
-        Quote = quote;
+        QuoteTr = quoteTr;
+        QuoteDe = quoteDe;
         QuoteAuthor = quoteAuthor;
         WhoWeAreTr = whoWeAreTr;
         WhoWeAreDe = whoWeAreDe;
@@ -69,7 +72,8 @@ public class AboutUs : AuditableEntity, IAggregateRoot
 
     // Domain factory
     public static AboutUs Create(
-        Description quote,
+        Description quoteTr,
+        Description quoteDe,
         string quoteAuthor,
         Description whoWeAreTr,
         Description whoWeAreDe,
@@ -87,11 +91,12 @@ public class AboutUs : AuditableEntity, IAggregateRoot
         if (string.IsNullOrWhiteSpace(quoteAuthor))
             throw new ArgumentException("Quote author boş olamaz");
 
-        return new AboutUs(Guid.NewGuid(), quote, quoteAuthor, whoWeAreTr, whoWeAreDe, goalsTr, goalsDe, visionTr, visionDe, missionTr, missionDe, coreValues, focusAreas, activityAreas, teamMembers);
+        return new AboutUs(Guid.NewGuid(), quoteTr, quoteDe, quoteAuthor, whoWeAreTr, whoWeAreDe, goalsTr, goalsDe, visionTr, visionDe, missionTr, missionDe, coreValues, focusAreas, activityAreas, teamMembers);
     }
 
     public void Update(
-        Description quote,
+        Description quoteTr,
+        Description quoteDe,
         string quoteAuthor,
         Description whoWeAreTr,
         Description whoWeAreDe,
@@ -106,7 +111,8 @@ public class AboutUs : AuditableEntity, IAggregateRoot
         IEnumerable<ActivityArea> activityAreas,
         IEnumerable<TeamMember> teamMembers)
     {
-        Quote = quote;
+        QuoteTr = quoteTr;
+        QuoteDe = quoteDe;
         QuoteAuthor = quoteAuthor;
         WhoWeAreTr = whoWeAreTr;
         WhoWeAreDe = whoWeAreDe;

@@ -15,7 +15,7 @@ namespace KulturPlatform.Application.Queries.Activity
 
         public async Task<IEnumerable<ActivityDto>> Handle(GetUpcomingActivitiesQuery request, CancellationToken cancellationToken)
         {
-            return await _activityReadService.GetUpcomingAsync();
+            return await _activityReadService.GetUpcomingAsync(cancellationToken);
         }
     }
 }

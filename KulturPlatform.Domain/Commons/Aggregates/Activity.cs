@@ -23,6 +23,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
         public Url? VideoUrl { get; private set; }
 
         public bool IsActive { get; private set; } = true;
+        
         private Activity(Guid id) : base(id)
         {
         }
@@ -50,7 +51,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
                 Address = address,
                 Category = category,
                 ImageUrl = imageUrl,
-                GalleryImages = galleryImages ?? new MediaGallery(new List<string>()),
+                GalleryImages = galleryImages ?? MediaGallery.Empty(),
                 VideoUrl = videoUrl,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
@@ -78,7 +79,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             UpdateLocation(address);
             UpdateCategory(category);
             ImageUrl = imageUrl;
-            GalleryImages = galleryImages ?? new MediaGallery(new List<string>());
+            GalleryImages = galleryImages ?? MediaGallery.Empty();
             VideoUrl = videoUrl;
             DetailedContentTr = detailedContentTr;
             DetailedContentDe = detailedContentDe;
@@ -88,7 +89,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
                 Deactivate();
             SetUpdatedAt();
         }
-        // Domain methods
+
         public void UpdateTitle(Title titleTr, Title titleDe)
         {
             TitleTr = titleTr;
