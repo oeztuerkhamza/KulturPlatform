@@ -28,7 +28,7 @@ namespace KulturPlatform.Application.Commands.Home
                 new Title(request.SubtitleDe),
                 new Description(request.DescriptionTr),
                 new Description(request.DescriptionDe),
-                Url.Create(request.BackgroundImageUrl),
+                Image.Create(request.BackgroundImageUrl),
                 new Title(request.PrimaryButtonTextTr),
                 new Title(request.PrimaryButtonTextDe),
                 new Title(request.SecondaryButtonTextTr),

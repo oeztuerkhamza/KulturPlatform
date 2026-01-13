@@ -49,8 +49,8 @@ namespace KulturPlatform.Application.Mappings
                     src.Address.State,
                     src.Address.Country)))
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => new Category(src.Category)))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.ImageUrl) ? Url.Create(src.ImageUrl) : null))
-                .ForMember(dest => dest.VideoUrl, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.VideoUrl) ? Url.Create(src.VideoUrl) : null))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.ImageUrl) ? Image.Create(src.ImageUrl) : null))
+                .ForMember(dest => dest.VideoUrl, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.VideoUrl) ? Image.Create(src.VideoUrl) : null))
                 .ForMember(dest => dest.GalleryImages, opt => opt.MapFrom(src => src.GalleryImages != null ? new MediaGallery(src.GalleryImages) : new MediaGallery(new List<string>())));
         }
     }

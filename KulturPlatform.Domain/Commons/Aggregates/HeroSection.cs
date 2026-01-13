@@ -15,7 +15,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
         public Description DescriptionTr { get; private set; }
         public Description DescriptionDe { get; private set; }
 
-        public Url BackgroundImageUrl { get; private set; }
+        public Image BackgroundImageUrl { get; private set; }
 
         public Title PrimaryButtonTextTr { get; private set; }
         public Title PrimaryButtonTextDe { get; private set; }
@@ -32,7 +32,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             Title subtitleDe,
             Description descriptionTr,
             Description descriptionDe,
-            Url backgroundImageUrl,
+            Image backgroundImageUrl,
             Title primaryButtonTextTr,
             Title primaryButtonTextDe,
             Title secondaryButtonTextTr,
@@ -63,7 +63,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             Title subtitleDe,
             Description descriptionTr,
             Description descriptionDe,
-            Url backgroundImageUrl,
+            Image backgroundImageUrl,
             Title primaryButtonTextTr,
             Title primaryButtonTextDe,
             Title secondaryButtonTextTr,

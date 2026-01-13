@@ -15,7 +15,7 @@ namespace KulturPlatform.Infrastructure.Configurations
 
             var titleConverter = new ValueConverter<Title, string>(v => v.Value, v => new Title(v));
             var descriptionConverter = new ValueConverter<Description, string>(v => v.Value, v => new Description(v));
-            var urlConverter = new ValueConverter<Url, string>(v => v.Value, v => Url.Create(v));
+            var urlConverter = new ValueConverter<Image, string>(v => v.Value, v => Image.Create(v));
 
             builder.Property(h => h.TitleTr)
                 .HasConversion(titleConverter)

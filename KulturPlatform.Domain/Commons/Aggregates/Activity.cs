@@ -23,7 +23,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
         public Url? VideoUrl { get; private set; }
 
         public bool IsActive { get; private set; } = true;
-        
+
         private Activity(Guid id) : base(id)
         {
         }

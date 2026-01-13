@@ -41,7 +41,8 @@ namespace KulturPlatform.Application.Commands.Activity
                 request.Address.State,
                 request.Address.Country
             );
-            // 5️⃣ Activity entity yarat
+
+            // 6️⃣ Activity entity yarat
             var activity = Domain.Commons.AggregateRoot.Activity.Create(
                 new Title(request.TitleTr),
                 new Title(request.TitleDe),

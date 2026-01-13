@@ -23,8 +23,8 @@ namespace KulturPlatform.Application.Commands.Partner
 
             var name = new PartnerName(request.Name);
             var displayOrder = new DisplayOrder(request.DisplayOrder);
-            var logoUrl = request.LogoUrl != null ? Url.Create(request.LogoUrl) : null;
-            var websiteUrl = request.WebsiteUrl != null ? Url.Create(request.WebsiteUrl) : null;
+            var logoUrl = request.LogoUrl != null ? Image.Create(request.LogoUrl) : null;
+            var websiteUrl = request.WebsiteUrl != null ? Image.Create(request.WebsiteUrl) : null;
 
             partner.Update(name, displayOrder, logoUrl, websiteUrl);
 

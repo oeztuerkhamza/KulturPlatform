@@ -7,8 +7,8 @@ namespace KulturPlatform.Domain.Commons.Aggregates
     public class Partner : AuditableEntity, IAggregateRoot
     {
         public PartnerName Name { get; private set; }
-        public Url? LogoUrl { get; private set; }
-        public Url? WebsiteUrl { get; private set; }
+        public Image? LogoUrl { get; private set; }
+        public Image? WebsiteUrl { get; private set; }
         public DisplayOrder DisplayOrder { get; private set; }
 
         public bool IsActive { get; private set; } = true;
@@ -17,7 +17,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
         {
         }
 
-        private Partner(Guid id, PartnerName name, DisplayOrder order, Url? logoUrl, Url? websiteUrl)
+        private Partner(Guid id, PartnerName name, DisplayOrder order, Image? logoUrl, Image? websiteUrl)
             : base(id)
         {
             Name = name;
@@ -28,12 +28,12 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             CreatedAt = DateTime.UtcNow;
         }
 
-        public static Partner CreateNew(PartnerName name, DisplayOrder order, Url? logoUrl = null, Url? websiteUrl = null)
+        public static Partner CreateNew(PartnerName name, DisplayOrder order, Image? logoUrl = null, Image? websiteUrl = null)
         {
             return new Partner(Guid.NewGuid(), name, order, logoUrl, websiteUrl);
         }
 
-        public void Update(PartnerName name, DisplayOrder order, Url? logoUrl, Url? websiteUrl)
+        public void Update(PartnerName name, DisplayOrder order, Image? logoUrl, Image? websiteUrl)
         {
             Name = name;
             DisplayOrder = order;

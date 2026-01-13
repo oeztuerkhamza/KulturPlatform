@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Text;
 
 namespace KulturPlatform.Domain.Commons.ValueObjects
 {
@@ -7,7 +6,6 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
     {
         public IReadOnlyList<Url> Images { get; init; }
 
-        // Private parameterless constructor for EF Core
         private MediaGallery() { Images = new List<Url>(); }
 
         // Constructor from Url VO list
@@ -19,7 +17,6 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
             if (images.Count > 10)
                 throw new ArgumentException("Gallery cannot contain more than 10 images.");
 
-            // Immutable copy
             Images = images.ToImmutableList();
         }
 
@@ -41,23 +38,7 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
         public static MediaGallery Empty() => new MediaGallery(new List<Url>());
 
         public bool IsEmpty => Images.Count == 0;
-
-        public override string ToString()
-        {
-            if (IsEmpty)
-                return "MediaGallery: []";
-
-            var sb = new StringBuilder();
-            sb.Append("MediaGallery: [");
-            for (int i = 0; i < Images.Count; i++)
-            {
-                sb.Append(Images[i].ToString());
-                if (i < Images.Count - 1)
-                    sb.Append(", ");
-            }
-
-            sb.Append("]");
-            return sb.ToString();
-        }
+        public override string ToString() => $"MediaGallery: [{string.Join(", ", Images)}]";
     }
+
 }
