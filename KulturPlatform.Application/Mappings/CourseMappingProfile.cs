@@ -1,5 +1,6 @@
 using AutoMapper;
 using KulturPlatform.Application.Dtos;
+using KulturPlatform.Application.Dtos.LocalizationDto;
 using KulturPlatform.Domain.Commons.Aggregates;
 
 namespace KulturPlatform.Application.Mappings
@@ -19,7 +20,15 @@ namespace KulturPlatform.Application.Mappings
                 .ForMember(dest => dest.ScheduleDe, opt => opt.MapFrom(src => src.ScheduleDe != null ? src.ScheduleDe.Value : null))
                 .ForMember(dest => dest.Instructor, opt => opt.MapFrom(src => src.Instructor != null ? src.Instructor.Value : null))
                 .ForMember(dest => dest.CourseLocation, opt => opt.MapFrom(src =>
-                    src.CourseLocation != null ? $"{src.CourseLocation.Street}, {src.CourseLocation.City}" : null))
+                    src.CourseLocation != null ? new AddressDto
+                    {
+                        Street = src.CourseLocation.Street,
+                        HouseNo = src.CourseLocation.HouseNo,
+                        ZipCode = src.CourseLocation.ZipCode,
+                        City = src.CourseLocation.City,
+                        State = src.CourseLocation.State,
+                        Country = src.CourseLocation.Country
+                    } : null))
                 .ForMember(dest => dest.CourseCategory, opt => opt.MapFrom(src => src.CourseCategory != null ? src.CourseCategory.Value : null));
         }
     }

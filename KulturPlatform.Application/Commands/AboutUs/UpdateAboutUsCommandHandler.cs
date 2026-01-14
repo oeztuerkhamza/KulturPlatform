@@ -65,6 +65,8 @@ namespace KulturPlatform.Application.Commands.AboutUs
                         new Name(x.Name.Value),
                         new Title(x.TitleTr.Value),
                         new Title(x.TitleDe.Value),
+                        x.DescriptionTr != null ? new Description(x.DescriptionTr.Value) : null,
+                        x.DescriptionDe != null ? new Description(x.DescriptionDe.Value) : null,
                         x.ImageUrl,
                         x.Order)) ?? Enumerable.Empty<Domain.Commons.Entities.TeamMember>()
                 );

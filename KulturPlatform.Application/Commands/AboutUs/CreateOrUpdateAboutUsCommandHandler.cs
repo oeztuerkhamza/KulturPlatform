@@ -120,6 +120,8 @@ namespace KulturPlatform.Application.Commands.AboutUs
                 new Name(x.Name?.Value ?? string.Empty),
                 new Title(x.TitleTr?.Value ?? string.Empty),
                 new Title(x.TitleDe?.Value ?? string.Empty),
+                x.DescriptionTr != null ? new Description(x.DescriptionTr.Value) : null,
+                x.DescriptionDe != null ? new Description(x.DescriptionDe.Value) : null,
                 x.ImageUrl,
                 x.Order);
     }

@@ -26,6 +26,16 @@ namespace KulturPlatform.Infrastructure.Configurations
                 t.Property(p => p.Value).HasColumnName("TitleDe").HasMaxLength(300).IsRequired(false);
             });
 
+            builder.OwnsOne(x => x.DescriptionTr, d =>
+            {
+                d.Property(p => p.Value).HasColumnName("DescriptionTr").IsRequired(false);
+            });
+
+            builder.OwnsOne(x => x.DescriptionDe, d =>
+            {
+                d.Property(p => p.Value).HasColumnName("DescriptionDe").IsRequired(false);
+            });
+
             builder.Property(x => x.ImageUrl).HasMaxLength(1000).IsRequired(false);
             builder.Property(x => x.Order).IsRequired();
         }

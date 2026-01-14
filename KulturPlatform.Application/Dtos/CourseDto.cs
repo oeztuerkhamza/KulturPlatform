@@ -1,4 +1,6 @@
-﻿namespace KulturPlatform.Application.Dtos
+﻿using KulturPlatform.Application.Dtos.LocalizationDto;
+
+namespace KulturPlatform.Application.Dtos
 {
     public class CourseDto
     {
@@ -20,7 +22,7 @@
         public string? Instructor { get; set; }
 
         public DateTime? Date { get; set; }
-        public string? CourseLocation { get; set; }
+        public AddressDto? CourseLocation { get; set; }
         public string? CourseCategory { get; set; }
 
         public bool IsActive { get; set; }

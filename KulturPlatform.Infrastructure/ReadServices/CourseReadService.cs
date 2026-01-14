@@ -1,4 +1,5 @@
 using KulturPlatform.Application.Dtos;
+using KulturPlatform.Application.Dtos.LocalizationDto;
 using KulturPlatform.Application.Interfaces.Course;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,15 @@ namespace KulturPlatform.Infrastructure.ReadServices
                     Icon = c.Icon,
                     Instructor = c.Instructor != null ? c.Instructor.Value : null,
                     Date = c.Date,
-                    CourseLocation = c.CourseLocation != null ? c.CourseLocation.Street : null,
+                    CourseLocation = c.CourseLocation != null ? new AddressDto
+                    {
+                        Street = c.CourseLocation.Street,
+                        HouseNo = c.CourseLocation.HouseNo,
+                        ZipCode = c.CourseLocation.ZipCode,
+                        City = c.CourseLocation.City,
+                        State = c.CourseLocation.State,
+                        Country = c.CourseLocation.Country
+                    } : null,
                     CourseCategory = c.CourseCategory != null ? c.CourseCategory.Value : null,
                     IsActive = c.IsActive,
                     CreatedAt = c.CreatedAt,
@@ -59,7 +68,15 @@ namespace KulturPlatform.Infrastructure.ReadServices
                     Icon = c.Icon,
                     Instructor = c.Instructor != null ? c.Instructor.Value : null,
                     Date = c.Date,
-                    CourseLocation = c.CourseLocation != null ? c.CourseLocation.Street : null,
+                    CourseLocation = c.CourseLocation != null ? new AddressDto
+                    {
+                        Street = c.CourseLocation.Street,
+                        HouseNo = c.CourseLocation.HouseNo,
+                        ZipCode = c.CourseLocation.ZipCode,
+                        City = c.CourseLocation.City,
+                        State = c.CourseLocation.State,
+                        Country = c.CourseLocation.Country
+                    } : null,
                     CourseCategory = c.CourseCategory != null ? c.CourseCategory.Value : null,
                     IsActive = c.IsActive,
                     CreatedAt = c.CreatedAt,

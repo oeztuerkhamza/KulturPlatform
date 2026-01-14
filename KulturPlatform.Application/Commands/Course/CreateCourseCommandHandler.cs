@@ -27,14 +27,14 @@ namespace KulturPlatform.Application.Commands.Course
             var scheduleTr = request.ScheduleTr != null ? new CourseSchedule(request.ScheduleTr) : null;
             var scheduleDe = request.ScheduleDe != null ? new CourseSchedule(request.ScheduleDe) : null;
             var instructor = request.Instructor != null ? new InstructorName(request.Instructor) : null;
-            var location = request.Address != null
+            var location = request.CourseLocation != null
                 ? new Address(
-                    request.Address.Street,
-                    request.Address.HouseNo,
-                    request.Address.City,
-                    request.Address.State,
-                    request.Address.Country,
-                    request.Address.ZipCode
+                    request.CourseLocation.Street,
+                    request.CourseLocation.HouseNo,
+                    request.CourseLocation.City,
+                    request.CourseLocation.State,
+                    request.CourseLocation.Country,
+                    request.CourseLocation.ZipCode
                 )
                 : null;
             var category = request.Category != null ? new Category(request.Category) : null;

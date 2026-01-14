@@ -17,7 +17,7 @@ namespace KulturPlatform.Application.Commands.Course
         string? Instructor,
         DateTime? Date,
         DateTime Time,
-        AddressDto Address,
+        AddressDto? CourseLocation,
         string? Category,
         bool IsActive
     ) : IRequest;

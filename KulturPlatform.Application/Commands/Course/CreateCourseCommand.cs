@@ -15,7 +15,7 @@ namespace KulturPlatform.Application.Commands.Course
         string? Icon,
         string? Instructor,
         DateTime? Date,
-        AddressDto Address,
-    string? Category
+        AddressDto? CourseLocation,
+        string? Category
     ) : IRequest<Guid>;
 }
