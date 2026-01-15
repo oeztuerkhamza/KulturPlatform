@@ -20,9 +20,6 @@ using KulturPlatform.Application.Interfaces.Satzung;
 using KulturPlatform.Application.Interfaces.TeaEvent;
 using KulturPlatform.Application.Interfaces.ValueItem;
 using KulturPlatform.Application.Interfaces.VolunteerSubmission;
-using KulturPlatform.Domain.Commons.Aggregates;
-using KulturPlatform.Domain.Commons.Constants;
-using KulturPlatform.Domain.Commons.ValueObjects;
 using KulturPlatform.Domain.Interfaces;
 using KulturPlatform.Infrastructure;
 using KulturPlatform.Infrastructure.ReadServices;
@@ -227,9 +224,18 @@ builder.Services.AddScoped<IImprintReadService, ImprintReadService>();
 builder.Services.AddScoped<IContactInfoRepository, ContactInfoRepository>();
 builder.Services.AddScoped<IContactInfoReadService, ContactInfoReadService>();
 
-// AboutUs
-builder.Services.AddScoped<IAboutUsWriteRepository, AboutUsRepository>();
-builder.Services.AddScoped<IAboutUsReadRepository, AboutUsRepository>();
+// About Us - New Structure
+builder.Services.AddScoped<IAboutUsQuoteRepository, AboutUsQuoteRepository>();
+builder.Services.AddScoped<IAboutUsWhoWeAreRepository, AboutUsWhoWeAreRepository>();
+builder.Services.AddScoped<IAboutUsGoalsRepository, AboutUsGoalsRepository>();
+builder.Services.AddScoped<IAboutUsVisionRepository, AboutUsVisionRepository>();
+builder.Services.AddScoped<IAboutUsMissionRepository, AboutUsMissionRepository>();
+builder.Services.AddScoped<IAboutUsHumanRightsRepository, AboutUsHumanRightsRepository>();
+builder.Services.AddScoped<ICoreValueRepository, CoreValueRepository>();
+builder.Services.AddScoped<IFocusAreaRepository, FocusAreaRepository>();
+builder.Services.AddScoped<IActivityAreaRepository, ActivityAreaRepository>();
+builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+builder.Services.AddScoped<IAboutUsAggregateReadService, AboutUsAggregateReadService>();
 
 // Home Page
 builder.Services.AddScoped<IHeroSectionRepository, HeroSectionRepository>();
@@ -241,7 +247,7 @@ builder.Services.AddScoped<IHomeReadService, HomeReadService>();
 
 var app = builder.Build();
 
-// Database migration and seed
+// Database migration
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -255,52 +261,10 @@ using (var scope = app.Services.CreateScope())
         logger.LogInformation("Applying database migrations...");
         db.Database.Migrate();
         logger.LogInformation("Database migrations applied successfully.");
-
-        // Seed admin users if not exists
-        if (!db.Admins.Any())
-        {
-            logger.LogInformation("Seeding initial admin users with roles...");
-
-            // SystemAdmin - Full access
-            var systemAdmin = Admin.CreateNew(
-                email: new Email("admin@kpf.de"),
-                password: Password.Create("Admin123!"),
-                name: new Name("System Administrator"),
-                role: Roles.SystemAdmin
-            );
-
-            // UserAdmin - Content management
-            var userAdmin = Admin.CreateNew(
-                email: new Email("useradmin@kpf.de"),
-                password: Password.Create("Admin123!"),
-                name: new Name("User Administrator"),
-                role: Roles.UserAdmin
-            );
-
-            // Regular User
-            var user = Admin.CreateNew(
-                email: new Email("user@kpf.de"),
-                password: Password.Create("User123!"),
-                name: new Name("Regular User"),
-                role: Roles.User
-            );
-
-            db.Admins.AddRange(systemAdmin, userAdmin, user);
-            db.SaveChanges();
-
-            logger.LogInformation("✅ Seeded 3 admin users:");
-            logger.LogInformation("  🔴 SystemAdmin: admin@kpf.de / Admin123!");
-            logger.LogInformation("  🟡 UserAdmin: useradmin@kpf.de / Admin123!");
-            logger.LogInformation("  🟢 User: user@kpf.de / User123!");
-        }
-        else
-        {
-            logger.LogInformation("Admin users already exist. Skipping seed.");
-        }
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "❌ An error occurred while migrating or seeding the database.");
+        logger.LogError(ex, "❌ An error occurred while migrating the database.");
         throw;
     }
 }
@@ -324,8 +288,6 @@ if (app.Environment.IsDevelopment())
             return Results.Ok(new
             {
                 token = result.Token,
-                //message = "? Token created! Copy the token above and paste in Bearer Token field.",
-                //hint = "This is a development-only endpoint. Use admin@kpf.de / Admin123!"
             });
         }
         catch (Exception ex)
@@ -333,14 +295,14 @@ if (app.Environment.IsDevelopment())
             return Results.BadRequest(new
             {
                 error = ex.Message,
-                hint = "Make sure the database is seeded with admin user"
+                hint = "Make sure the database has admin user"
             });
         }
     })
         .AllowAnonymous()
         .WithTags("Authentication")
         .WithName("GetDevToken")
-        .WithSummary("?? Get Token (One Click!)")
+        .WithSummary("🚀 Get Token (One Click!)")
         .WithDescription("**DEVELOPMENT ONLY** - Instantly get a JWT token with admin credentials. No email/password needed!");
 
     // Scalar API Reference

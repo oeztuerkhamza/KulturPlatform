@@ -27,12 +27,17 @@ namespace KulturPlatform.Infrastructure
         public DbSet<LocalizationResource> LocalizationResources { get; set; }
         public DbSet<Imprint> Imprints { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }
-        public DbSet<AboutUs> AboutUsEntities { get; set; }
 
-        // New typed DbSets for AboutUs items
-        public DbSet<CoreValue> AboutUsCoreValues { get; set; }
-        public DbSet<FocusArea> AboutUsFocusAreas { get; set; }
-        public DbSet<ActivityArea> AboutUsActivityAreas { get; set; }
+        // About Us - New Structure
+        public DbSet<AboutUsQuote> AboutUsQuotes { get; set; }
+        public DbSet<AboutUsWhoWeAre> AboutUsWhoWeAre { get; set; }
+        public DbSet<AboutUsGoals> AboutUsGoals { get; set; }
+        public DbSet<AboutUsVision> AboutUsVision { get; set; }
+        public DbSet<AboutUsMission> AboutUsMission { get; set; }
+        public DbSet<AboutUsHumanRights> AboutUsHumanRights { get; set; }
+        public DbSet<CoreValue> CoreValues { get; set; }
+        public DbSet<FocusArea> FocusAreas { get; set; }
+        public DbSet<ActivityArea> ActivityAreas { get; set; }
 
         // Home Page Aggregates
         public DbSet<HeroSection> HeroSections { get; set; }

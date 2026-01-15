@@ -18,6 +18,23 @@ namespace KulturPlatform.Infrastructure.Configurations
                   .HasMaxLength(200)
                   .IsRequired();
             });
+            // ----- Description (Value Object) -----
+            builder.OwnsOne(p => p.DescriptionTr, vo =>
+            {
+                vo.Property(x => x.Value)
+                  .HasColumnName("DescriptionTr")
+                  .HasMaxLength(200)
+                  .IsRequired();
+            });
+
+            builder.OwnsOne(p => p.DescriptionDe, vo =>
+            {
+                vo.Property(x => x.Value)
+                  .HasColumnName("DescriptionDe")
+                  .HasMaxLength(200)
+                  .IsRequired();
+            });
+
             // ----- DisplayOrder (Value Object) -----
             builder.OwnsOne(p => p.DisplayOrder, vo =>
             {

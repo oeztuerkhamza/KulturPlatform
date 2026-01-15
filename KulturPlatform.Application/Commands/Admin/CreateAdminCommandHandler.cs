@@ -1,7 +1,7 @@
 using KulturPlatform.Application.Interfaces.Admin;
-using KulturPlatform.Domain.Commons.Aggregates;
 using KulturPlatform.Domain.Commons.Constants;
 using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
 using MediatR;
 
 namespace KulturPlatform.Application.Commands.Admin
@@ -9,10 +9,12 @@ namespace KulturPlatform.Application.Commands.Admin
     public class CreateAdminCommandHandler : IRequestHandler<CreateAdminCommand, Guid>
     {
         private readonly IAdminRepository _adminRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CreateAdminCommandHandler(IAdminRepository adminRepository)
+        public CreateAdminCommandHandler(IAdminRepository adminRepository, IUnitOfWork unitOfWork)
         {
             _adminRepository = adminRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Guid> Handle(CreateAdminCommand request, CancellationToken cancellationToken)
@@ -34,7 +36,7 @@ namespace KulturPlatform.Application.Commands.Admin
             );
 
             await _adminRepository.AddAsync(admin, cancellationToken);
-
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return admin.Id;
         }
     }

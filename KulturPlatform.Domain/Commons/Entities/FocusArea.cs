@@ -1,17 +1,42 @@
 using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
 
 namespace KulturPlatform.Domain.Commons.Entities
 {
-    public class FocusArea : AboutUsItem
+    public class FocusArea : AuditableEntity, IAggregateRoot
     {
-        protected FocusArea() : base() { }
+        public Title TitleTr { get; private set; }
+        public Title TitleDe { get; private set; }
+        public Description DescriptionTr { get; private set; }
+        public Description DescriptionDe { get; private set; }
+        public int Order { get; private set; }
+
+        protected FocusArea() { }
 
         private FocusArea(Guid id, Title titleTr, Title titleDe, Description descriptionTr, Description descriptionDe, int order)
-            : base(id, titleTr, titleDe, descriptionTr, descriptionDe, order)
+            : base(id)
         {
+            TitleTr = titleTr;
+            TitleDe = titleDe;
+            DescriptionTr = descriptionTr;
+            DescriptionDe = descriptionDe;
+            Order = order;
         }
 
         public static FocusArea Create(Title titleTr, Title titleDe, Description descriptionTr, Description descriptionDe, int order)
-            => new FocusArea(Guid.NewGuid(), titleTr, titleDe, descriptionTr, descriptionDe, order);
+        {
+            if (order < 0) throw new ArgumentOutOfRangeException(nameof(order));
+            return new FocusArea(Guid.NewGuid(), titleTr, titleDe, descriptionTr, descriptionDe, order);
+        }
+
+        public void Update(Title titleTr, Title titleDe, Description descriptionTr, Description descriptionDe, int order)
+        {
+            TitleTr = titleTr;
+            TitleDe = titleDe;
+            DescriptionTr = descriptionTr;
+            DescriptionDe = descriptionDe;
+            Order = order;
+            SetUpdatedAt();
+        }
     }
 }

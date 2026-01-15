@@ -22,6 +22,8 @@ namespace KulturPlatform.Infrastructure.ReadServices
                 {
                     Id = p.Id,
                     Name = p.Name.Value,
+                    DescriptionTr = p.DescriptionTr.Value,
+                    DescriptionDe = p.DescriptionDe.Value,
                     LogoUrl = p.LogoUrl != null ? p.LogoUrl.Value : null,
                     WebsiteUrl = p.WebsiteUrl != null ? p.WebsiteUrl.Value : null,
                     DisplayOrder = p.DisplayOrder.Value,
@@ -41,6 +43,8 @@ namespace KulturPlatform.Infrastructure.ReadServices
                 {
                     Id = p.Id,
                     Name = p.Name.Value,
+                    DescriptionTr = p.DescriptionTr.Value,
+                    DescriptionDe = p.DescriptionDe.Value,
                     LogoUrl = p.LogoUrl != null ? p.LogoUrl.Value : null,
                     WebsiteUrl = p.WebsiteUrl != null ? p.WebsiteUrl.Value : null,
                     DisplayOrder = p.DisplayOrder.Value,

@@ -292,7 +292,77 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.ToTable("InstagramPosts", (string)null);
                 });
 
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUs", b =>
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsGoals", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutUsGoals", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsHumanRights", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InstagramUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("TenkilMuseumUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutUsHumanRights", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsMission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutUsMission", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsQuote", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -305,21 +375,56 @@ namespace KulturPlatform.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("QuoteAuthor")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
-                        .HasColumnName("RowVersion");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AboutUs", (string)null);
+                    b.ToTable("AboutUsQuotes", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsVision", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutUsVision", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsWhoWeAre", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AboutUsWhoWeAre", (string)null);
                 });
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.Admin", b =>
@@ -438,6 +543,11 @@ namespace KulturPlatform.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("BicSwift")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("ContentGerman")
                         .IsRequired()
                         .HasMaxLength(4000)
@@ -458,6 +568,11 @@ namespace KulturPlatform.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PayPalHandle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -792,40 +907,73 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.ToTable("VolunteerSubmissions", (string)null);
                 });
 
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.AboutUsItem", b =>
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.ActivityArea", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AboutUsId_ActivityAreas")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("AboutUsId_CoreValues")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AboutUsId_FocusAreas")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AboutUsId_TeamMembers")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Order")
-                        .HasColumnType("int")
-                        .HasColumnName("Order");
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AboutUsItems", (string)null);
+                    b.ToTable("ActivityAreas", (string)null);
+                });
 
-                    b.HasDiscriminator().HasValue("AboutUsItem");
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.CoreValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.UseTphMappingStrategy();
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CoreValues", (string)null);
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.FocusArea", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FocusAreas", (string)null);
                 });
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.TeamMember", b =>
@@ -834,48 +982,26 @@ namespace KulturPlatform.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AboutUsId_TeamMembers")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AboutUsId_TeamMembers");
-
-                    b.ToTable("AboutUsTeamMembers", (string)null);
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.ActivityArea", b =>
-                {
-                    b.HasBaseType("KulturPlatform.Domain.Commons.Entities.AboutUsItem");
-
-                    b.HasIndex("AboutUsId_ActivityAreas");
-
-                    b.HasDiscriminator().HasValue("ActivityArea");
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.CoreValue", b =>
-                {
-                    b.HasBaseType("KulturPlatform.Domain.Commons.Entities.AboutUsItem");
-
-                    b.HasIndex("AboutUsId_CoreValues");
-
-                    b.HasDiscriminator().HasValue("CoreValue");
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.FocusArea", b =>
-                {
-                    b.HasBaseType("KulturPlatform.Domain.Commons.Entities.AboutUsItem");
-
-                    b.HasIndex("AboutUsId_FocusAreas");
-
-                    b.HasDiscriminator().HasValue("FocusArea");
+                    b.ToTable("TeamMembers", (string)null);
                 });
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.AggregateRoot.Activity", b =>
@@ -1192,186 +1318,44 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.Navigation("VideoUrl");
                 });
 
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUs", b =>
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsGoals", b =>
                 {
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "GoalsDe", b1 =>
                         {
-                            b1.Property<Guid>("AboutUsId")
+                            b1.Property<Guid>("AboutUsGoalsId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("GoalsDe");
 
-                            b1.HasKey("AboutUsId");
+                            b1.HasKey("AboutUsGoalsId");
 
-                            b1.ToTable("AboutUs");
+                            b1.ToTable("AboutUsGoals");
 
                             b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
+                                .HasForeignKey("AboutUsGoalsId");
                         });
 
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "GoalsTr", b1 =>
                         {
-                            b1.Property<Guid>("AboutUsId")
+                            b1.Property<Guid>("AboutUsGoalsId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("GoalsTr");
 
-                            b1.HasKey("AboutUsId");
+                            b1.HasKey("AboutUsGoalsId");
 
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "MissionDe", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
-                                .HasColumnName("MissionDe");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
+                            b1.ToTable("AboutUsGoals");
 
                             b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "MissionTr", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
-                                .HasColumnName("MissionTr");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "QuoteDe", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(2000)
-                                .HasColumnType("nvarchar(2000)")
-                                .HasColumnName("QuoteDe");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "QuoteTr", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(2000)
-                                .HasColumnType("nvarchar(2000)")
-                                .HasColumnName("QuoteTr");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "VisionDe", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
-                                .HasColumnName("VisionDe");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "VisionTr", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
-                                .HasColumnName("VisionTr");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhoWeAreDe", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
-                                .HasColumnName("WhoWeAreDe");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhoWeAreTr", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
-                                .HasColumnName("WhoWeAreTr");
-
-                            b1.HasKey("AboutUsId");
-
-                            b1.ToTable("AboutUs");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsId");
+                                .HasForeignKey("AboutUsGoalsId");
                         });
 
                     b.Navigation("GoalsDe")
@@ -1379,24 +1363,279 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                     b.Navigation("GoalsTr")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsHumanRights", b =>
+                {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionDe", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsHumanRightsId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("DescriptionDe");
+
+                            b1.HasKey("AboutUsHumanRightsId");
+
+                            b1.ToTable("AboutUsHumanRights");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsHumanRightsId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionTr", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsHumanRightsId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("DescriptionTr");
+
+                            b1.HasKey("AboutUsHumanRightsId");
+
+                            b1.ToTable("AboutUsHumanRights");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsHumanRightsId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleDe", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsHumanRightsId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("TitleDe");
+
+                            b1.HasKey("AboutUsHumanRightsId");
+
+                            b1.ToTable("AboutUsHumanRights");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsHumanRightsId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleTr", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsHumanRightsId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("TitleTr");
+
+                            b1.HasKey("AboutUsHumanRightsId");
+
+                            b1.ToTable("AboutUsHumanRights");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsHumanRightsId");
+                        });
+
+                    b.Navigation("DescriptionDe")
+                        .IsRequired();
+
+                    b.Navigation("DescriptionTr")
+                        .IsRequired();
+
+                    b.Navigation("TitleDe")
+                        .IsRequired();
+
+                    b.Navigation("TitleTr")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsMission", b =>
+                {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "MissionDe", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsMissionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MissionDe");
+
+                            b1.HasKey("AboutUsMissionId");
+
+                            b1.ToTable("AboutUsMission");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsMissionId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "MissionTr", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsMissionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("MissionTr");
+
+                            b1.HasKey("AboutUsMissionId");
+
+                            b1.ToTable("AboutUsMission");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsMissionId");
+                        });
 
                     b.Navigation("MissionDe")
                         .IsRequired();
 
                     b.Navigation("MissionTr")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsQuote", b =>
+                {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "QuoteDe", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsQuoteId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("QuoteDe");
+
+                            b1.HasKey("AboutUsQuoteId");
+
+                            b1.ToTable("AboutUsQuotes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsQuoteId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "QuoteTr", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsQuoteId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("QuoteTr");
+
+                            b1.HasKey("AboutUsQuoteId");
+
+                            b1.ToTable("AboutUsQuotes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsQuoteId");
+                        });
 
                     b.Navigation("QuoteDe")
                         .IsRequired();
 
                     b.Navigation("QuoteTr")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsVision", b =>
+                {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "VisionDe", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsVisionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("VisionDe");
+
+                            b1.HasKey("AboutUsVisionId");
+
+                            b1.ToTable("AboutUsVision");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsVisionId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "VisionTr", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsVisionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("VisionTr");
+
+                            b1.HasKey("AboutUsVisionId");
+
+                            b1.ToTable("AboutUsVision");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsVisionId");
+                        });
 
                     b.Navigation("VisionDe")
                         .IsRequired();
 
                     b.Navigation("VisionTr")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsWhoWeAre", b =>
+                {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhoWeAreDe", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsWhoWeAreId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("WhoWeAreDe");
+
+                            b1.HasKey("AboutUsWhoWeAreId");
+
+                            b1.ToTable("AboutUsWhoWeAre");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsWhoWeAreId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhoWeAreTr", b1 =>
+                        {
+                            b1.Property<Guid>("AboutUsWhoWeAreId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(5000)
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("WhoWeAreTr");
+
+                            b1.HasKey("AboutUsWhoWeAreId");
+
+                            b1.ToTable("AboutUsWhoWeAre");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AboutUsWhoWeAreId");
+                        });
 
                     b.Navigation("WhoWeAreDe")
                         .IsRequired();
@@ -1834,6 +2073,120 @@ namespace KulturPlatform.Infrastructure.Migrations
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.DonatePage", b =>
                 {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "Feature1TitleGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("Feature1TitleGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "Feature1TitleTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("Feature1TitleTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "Feature2TitleGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("Feature2TitleGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "Feature2TitleTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("Feature2TitleTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "Feature3TitleGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("Feature3TitleGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "Feature3TitleTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("Feature3TitleTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Url", "HeroImageUrl", b1 =>
                         {
                             b1.Property<Guid>("DonatePageId")
@@ -1929,6 +2282,233 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasForeignKey("DonatePageId");
                         });
 
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Url", "PayPalUrl", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
+                                .HasColumnName("PayPalUrl");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "TaxInfoGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(1000)
+                                .HasColumnType("nvarchar(1000)")
+                                .HasColumnName("TaxInfoGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "TaxInfoTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(1000)
+                                .HasColumnType("nvarchar(1000)")
+                                .HasColumnName("TaxInfoTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhereDescriptionGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("WhereDescriptionGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhereDescriptionTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("WhereDescriptionTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "WhereTitleGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("WhereTitleGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "WhereTitleTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("WhereTitleTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhyDonateDescriptionGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("WhyDonateDescriptionGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhyDonateDescriptionTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("WhyDonateDescriptionTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "WhyDonateTitleGerman", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("WhyDonateTitleGerman");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "WhyDonateTitleTurkish", b1 =>
+                        {
+                            b1.Property<Guid>("DonatePageId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("WhyDonateTitleTurkish");
+
+                            b1.HasKey("DonatePageId");
+
+                            b1.ToTable("DonatePages");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonatePageId");
+                        });
+
+                    b.Navigation("Feature1TitleGerman")
+                        .IsRequired();
+
+                    b.Navigation("Feature1TitleTurkish")
+                        .IsRequired();
+
+                    b.Navigation("Feature2TitleGerman")
+                        .IsRequired();
+
+                    b.Navigation("Feature2TitleTurkish")
+                        .IsRequired();
+
+                    b.Navigation("Feature3TitleGerman")
+                        .IsRequired();
+
+                    b.Navigation("Feature3TitleTurkish")
+                        .IsRequired();
+
                     b.Navigation("HeroImageUrl")
                         .IsRequired();
 
@@ -1942,6 +2522,39 @@ namespace KulturPlatform.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("HeroTitleTurkish")
+                        .IsRequired();
+
+                    b.Navigation("PayPalUrl")
+                        .IsRequired();
+
+                    b.Navigation("TaxInfoGerman")
+                        .IsRequired();
+
+                    b.Navigation("TaxInfoTurkish")
+                        .IsRequired();
+
+                    b.Navigation("WhereDescriptionGerman")
+                        .IsRequired();
+
+                    b.Navigation("WhereDescriptionTurkish")
+                        .IsRequired();
+
+                    b.Navigation("WhereTitleGerman")
+                        .IsRequired();
+
+                    b.Navigation("WhereTitleTurkish")
+                        .IsRequired();
+
+                    b.Navigation("WhyDonateDescriptionGerman")
+                        .IsRequired();
+
+                    b.Navigation("WhyDonateDescriptionTurkish")
+                        .IsRequired();
+
+                    b.Navigation("WhyDonateTitleGerman")
+                        .IsRequired();
+
+                    b.Navigation("WhyDonateTitleTurkish")
                         .IsRequired();
                 });
 
@@ -2248,6 +2861,44 @@ namespace KulturPlatform.Infrastructure.Migrations
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.Partner", b =>
                 {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionDe", b1 =>
+                        {
+                            b1.Property<Guid>("PartnerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("DescriptionDe");
+
+                            b1.HasKey("PartnerId");
+
+                            b1.ToTable("Partners");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PartnerId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionTr", b1 =>
+                        {
+                            b1.Property<Guid>("PartnerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("DescriptionTr");
+
+                            b1.HasKey("PartnerId");
+
+                            b1.ToTable("Partners");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PartnerId");
+                        });
+
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.DisplayOrder", "DisplayOrder", b1 =>
                         {
                             b1.Property<Guid>("PartnerId")
@@ -2319,6 +2970,12 @@ namespace KulturPlatform.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("PartnerId");
                         });
+
+                    b.Navigation("DescriptionDe")
+                        .IsRequired();
+
+                    b.Navigation("DescriptionTr")
+                        .IsRequired();
 
                     b.Navigation("DisplayOrder")
                         .IsRequired();
@@ -3769,78 +4426,264 @@ namespace KulturPlatform.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.AboutUsItem", b =>
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.ActivityArea", b =>
                 {
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionDe", b1 =>
                         {
-                            b1.Property<Guid>("AboutUsItemId")
+                            b1.Property<Guid>("ActivityAreaId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionDe");
 
-                            b1.HasKey("AboutUsItemId");
+                            b1.HasKey("ActivityAreaId");
 
-                            b1.ToTable("AboutUsItems");
+                            b1.ToTable("ActivityAreas");
 
                             b1.WithOwner()
-                                .HasForeignKey("AboutUsItemId");
+                                .HasForeignKey("ActivityAreaId");
                         });
 
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionTr", b1 =>
                         {
-                            b1.Property<Guid>("AboutUsItemId")
+                            b1.Property<Guid>("ActivityAreaId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(4000)
-                                .HasColumnType("nvarchar(4000)")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionTr");
 
-                            b1.HasKey("AboutUsItemId");
+                            b1.HasKey("ActivityAreaId");
 
-                            b1.ToTable("AboutUsItems");
+                            b1.ToTable("ActivityAreas");
 
                             b1.WithOwner()
-                                .HasForeignKey("AboutUsItemId");
+                                .HasForeignKey("ActivityAreaId");
                         });
 
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleDe", b1 =>
                         {
-                            b1.Property<Guid>("AboutUsItemId")
+                            b1.Property<Guid>("ActivityAreaId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(300)
-                                .HasColumnType("nvarchar(300)")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("TitleDe");
 
-                            b1.HasKey("AboutUsItemId");
+                            b1.HasKey("ActivityAreaId");
 
-                            b1.ToTable("AboutUsItems");
+                            b1.ToTable("ActivityAreas");
 
                             b1.WithOwner()
-                                .HasForeignKey("AboutUsItemId");
+                                .HasForeignKey("ActivityAreaId");
                         });
 
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleTr", b1 =>
                         {
-                            b1.Property<Guid>("AboutUsItemId")
+                            b1.Property<Guid>("ActivityAreaId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(300)
-                                .HasColumnType("nvarchar(300)")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("TitleTr");
 
-                            b1.HasKey("AboutUsItemId");
+                            b1.HasKey("ActivityAreaId");
 
-                            b1.ToTable("AboutUsItems");
+                            b1.ToTable("ActivityAreas");
 
                             b1.WithOwner()
-                                .HasForeignKey("AboutUsItemId");
+                                .HasForeignKey("ActivityAreaId");
+                        });
+
+                    b.Navigation("DescriptionDe")
+                        .IsRequired();
+
+                    b.Navigation("DescriptionTr")
+                        .IsRequired();
+
+                    b.Navigation("TitleDe")
+                        .IsRequired();
+
+                    b.Navigation("TitleTr")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.CoreValue", b =>
+                {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionDe", b1 =>
+                        {
+                            b1.Property<Guid>("CoreValueId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("DescriptionDe");
+
+                            b1.HasKey("CoreValueId");
+
+                            b1.ToTable("CoreValues");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CoreValueId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionTr", b1 =>
+                        {
+                            b1.Property<Guid>("CoreValueId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("DescriptionTr");
+
+                            b1.HasKey("CoreValueId");
+
+                            b1.ToTable("CoreValues");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CoreValueId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleDe", b1 =>
+                        {
+                            b1.Property<Guid>("CoreValueId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("TitleDe");
+
+                            b1.HasKey("CoreValueId");
+
+                            b1.ToTable("CoreValues");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CoreValueId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleTr", b1 =>
+                        {
+                            b1.Property<Guid>("CoreValueId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("TitleTr");
+
+                            b1.HasKey("CoreValueId");
+
+                            b1.ToTable("CoreValues");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CoreValueId");
+                        });
+
+                    b.Navigation("DescriptionDe")
+                        .IsRequired();
+
+                    b.Navigation("DescriptionTr")
+                        .IsRequired();
+
+                    b.Navigation("TitleDe")
+                        .IsRequired();
+
+                    b.Navigation("TitleTr")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.FocusArea", b =>
+                {
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionDe", b1 =>
+                        {
+                            b1.Property<Guid>("FocusAreaId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("DescriptionDe");
+
+                            b1.HasKey("FocusAreaId");
+
+                            b1.ToTable("FocusAreas");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FocusAreaId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionTr", b1 =>
+                        {
+                            b1.Property<Guid>("FocusAreaId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
+                                .HasColumnName("DescriptionTr");
+
+                            b1.HasKey("FocusAreaId");
+
+                            b1.ToTable("FocusAreas");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FocusAreaId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleDe", b1 =>
+                        {
+                            b1.Property<Guid>("FocusAreaId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("TitleDe");
+
+                            b1.HasKey("FocusAreaId");
+
+                            b1.ToTable("FocusAreas");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FocusAreaId");
+                        });
+
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleTr", b1 =>
+                        {
+                            b1.Property<Guid>("FocusAreaId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
+                                .HasColumnName("TitleTr");
+
+                            b1.HasKey("FocusAreaId");
+
+                            b1.ToTable("FocusAreas");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FocusAreaId");
                         });
 
                     b.Navigation("DescriptionDe")
@@ -3858,23 +4701,19 @@ namespace KulturPlatform.Infrastructure.Migrations
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.TeamMember", b =>
                 {
-                    b.HasOne("KulturPlatform.Domain.Commons.Aggregates.AboutUs", null)
-                        .WithMany("TeamMembers")
-                        .HasForeignKey("AboutUsId_TeamMembers")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "DescriptionDe", b1 =>
                         {
                             b1.Property<Guid>("TeamMemberId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionDe");
 
                             b1.HasKey("TeamMemberId");
 
-                            b1.ToTable("AboutUsTeamMembers");
+                            b1.ToTable("TeamMembers");
 
                             b1.WithOwner()
                                 .HasForeignKey("TeamMemberId");
@@ -3886,12 +4725,13 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasColumnType("nvarchar(max)")
+                                .HasMaxLength(2000)
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionTr");
 
                             b1.HasKey("TeamMemberId");
 
-                            b1.ToTable("AboutUsTeamMembers");
+                            b1.ToTable("TeamMembers");
 
                             b1.WithOwner()
                                 .HasForeignKey("TeamMemberId");
@@ -3903,13 +4743,14 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(300)
-                                .HasColumnType("nvarchar(300)")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("Name");
 
                             b1.HasKey("TeamMemberId");
 
-                            b1.ToTable("AboutUsTeamMembers");
+                            b1.ToTable("TeamMembers");
 
                             b1.WithOwner()
                                 .HasForeignKey("TeamMemberId");
@@ -3921,13 +4762,14 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(300)
-                                .HasColumnType("nvarchar(300)")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("TitleDe");
 
                             b1.HasKey("TeamMemberId");
 
-                            b1.ToTable("AboutUsTeamMembers");
+                            b1.ToTable("TeamMembers");
 
                             b1.WithOwner()
                                 .HasForeignKey("TeamMemberId");
@@ -3939,13 +4781,14 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Value")
-                                .HasMaxLength(300)
-                                .HasColumnType("nvarchar(300)")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("TitleTr");
 
                             b1.HasKey("TeamMemberId");
 
-                            b1.ToTable("AboutUsTeamMembers");
+                            b1.ToTable("TeamMembers");
 
                             b1.WithOwner()
                                 .HasForeignKey("TeamMemberId");
@@ -3963,41 +4806,6 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                     b.Navigation("TitleTr")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.ActivityArea", b =>
-                {
-                    b.HasOne("KulturPlatform.Domain.Commons.Aggregates.AboutUs", null)
-                        .WithMany("ActivityAreas")
-                        .HasForeignKey("AboutUsId_ActivityAreas")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.CoreValue", b =>
-                {
-                    b.HasOne("KulturPlatform.Domain.Commons.Aggregates.AboutUs", null)
-                        .WithMany("CoreValues")
-                        .HasForeignKey("AboutUsId_CoreValues")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Entities.FocusArea", b =>
-                {
-                    b.HasOne("KulturPlatform.Domain.Commons.Aggregates.AboutUs", null)
-                        .WithMany("FocusAreas")
-                        .HasForeignKey("AboutUsId_FocusAreas")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUs", b =>
-                {
-                    b.Navigation("ActivityAreas");
-
-                    b.Navigation("CoreValues");
-
-                    b.Navigation("FocusAreas");
-
-                    b.Navigation("TeamMembers");
                 });
 #pragma warning restore 612, 618
         }

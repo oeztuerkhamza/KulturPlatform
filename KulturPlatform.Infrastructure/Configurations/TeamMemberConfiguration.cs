@@ -8,36 +8,61 @@ namespace KulturPlatform.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<TeamMember> builder)
         {
-            builder.ToTable("AboutUsTeamMembers");
+            builder.ToTable("TeamMembers");
+
             builder.HasKey(x => x.Id);
 
-            builder.OwnsOne(x => x.Name, n =>
+            builder.OwnsOne(x => x.Name, name =>
             {
-                n.Property(p => p.Value).HasColumnName("Name").HasMaxLength(300).IsRequired(false);
+                name.Property(n => n.Value)
+                    .HasColumnName("Name")
+                    .HasMaxLength(200)
+                    .IsRequired();
             });
 
-            builder.OwnsOne(x => x.TitleTr, t =>
+            builder.OwnsOne(x => x.TitleTr, title =>
             {
-                t.Property(p => p.Value).HasColumnName("TitleTr").HasMaxLength(300).IsRequired(false);
+                title.Property(t => t.Value)
+                    .HasColumnName("TitleTr")
+                    .HasMaxLength(200)
+                    .IsRequired();
             });
 
-            builder.OwnsOne(x => x.TitleDe, t =>
+            builder.OwnsOne(x => x.TitleDe, title =>
             {
-                t.Property(p => p.Value).HasColumnName("TitleDe").HasMaxLength(300).IsRequired(false);
+                title.Property(t => t.Value)
+                    .HasColumnName("TitleDe")
+                    .HasMaxLength(200)
+                    .IsRequired();
             });
 
-            builder.OwnsOne(x => x.DescriptionTr, d =>
+            builder.OwnsOne(x => x.DescriptionTr, desc =>
             {
-                d.Property(p => p.Value).HasColumnName("DescriptionTr").IsRequired(false);
+                desc.Property(d => d.Value)
+                    .HasColumnName("DescriptionTr")
+                    .HasMaxLength(2000)
+                    .IsRequired(false);
             });
 
-            builder.OwnsOne(x => x.DescriptionDe, d =>
+            builder.OwnsOne(x => x.DescriptionDe, desc =>
             {
-                d.Property(p => p.Value).HasColumnName("DescriptionDe").IsRequired(false);
+                desc.Property(d => d.Value)
+                    .HasColumnName("DescriptionDe")
+                    .HasMaxLength(2000)
+                    .IsRequired(false);
             });
 
-            builder.Property(x => x.ImageUrl).HasMaxLength(1000).IsRequired(false);
-            builder.Property(x => x.Order).IsRequired();
+            builder.Property(x => x.ImageUrl)
+                .HasMaxLength(500);
+
+            builder.Property(x => x.Order)
+                .IsRequired();
+
+            builder.Property(x => x.CreatedAt)
+                .IsRequired();
+
+            builder.Property(x => x.UpdatedAt)
+                .IsRequired(false);
         }
     }
 }

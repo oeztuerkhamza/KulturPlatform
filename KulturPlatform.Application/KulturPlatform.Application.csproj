@@ -25,8 +25,8 @@
   <ItemGroup>
     <Folder Include="Commands\TeamMember\" />
     <Folder Include="Interfaces\TeamMember\" />
-    <Folder Include="Queries\DonatePage\" />
     <Folder Include="Queries\TeamMember\" />
+    <Folder Include="Validation\AboutUs\" />
   </ItemGroup>
 
 </Project>

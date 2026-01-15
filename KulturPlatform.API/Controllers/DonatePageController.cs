@@ -1,4 +1,5 @@
 ﻿using KulturPlatform.Application.Commands.DonatePage;
+using KulturPlatform.Application.Queries.DonatePage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,20 @@ namespace KulturPlatform.API.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var result = await _mediator.Send(new GetDonatePageQuery());
+            return result != null ? Ok(result) : NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateDonatePageCommand cmd)
+        {
+            var id = await _mediator.Send(cmd);
+            return CreatedAtAction(nameof(Get), new { id }, new { id });
+        }
+
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateDonatePageCommand cmd)
         {
@@ -24,5 +39,4 @@ namespace KulturPlatform.API.Controllers
             return ok ? Ok() : NotFound();
         }
     }
-
 }

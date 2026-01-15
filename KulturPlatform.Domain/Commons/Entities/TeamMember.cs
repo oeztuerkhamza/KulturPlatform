@@ -1,8 +1,9 @@
 ﻿using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
 
 namespace KulturPlatform.Domain.Commons.Entities
 {
-    public class TeamMember : Entity
+    public class TeamMember : AuditableEntity, IAggregateRoot
     {
         public Name Name { get; private set; }
         public Title TitleTr { get; private set; }
@@ -49,6 +50,7 @@ namespace KulturPlatform.Domain.Commons.Entities
             DescriptionDe = descriptionDe;
             ImageUrl = imageUrl ?? ImageUrl;
             Order = order;
+            SetUpdatedAt();
         }
     }
 }
