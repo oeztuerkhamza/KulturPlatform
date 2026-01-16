@@ -1,6 +1,5 @@
 using AutoMapper;
 using KulturPlatform.Application.Dtos.Home;
-using KulturPlatform.Application.Interfaces.Activity;
 using KulturPlatform.Application.Interfaces.Home;
 
 namespace KulturPlatform.Infrastructure.ReadServices
@@ -11,7 +10,6 @@ namespace KulturPlatform.Infrastructure.ReadServices
         private readonly IFeatureRepository _featureRepo;
         private readonly ICtaSectionRepository _ctaRepo;
         private readonly IInstagramPostRepository _instagramRepo;
-        private readonly IActivityReadService _activityReadService;
         private readonly IMapper _mapper;
 
         public HomeReadService(
@@ -19,28 +17,26 @@ namespace KulturPlatform.Infrastructure.ReadServices
             IFeatureRepository featureRepo,
             ICtaSectionRepository ctaRepo,
             IInstagramPostRepository instagramRepo,
-            IActivityReadService activityReadService,
             IMapper mapper)
         {
             _heroRepo = heroRepo;
             _featureRepo = featureRepo;
             _ctaRepo = ctaRepo;
             _instagramRepo = instagramRepo;
-            _activityReadService = activityReadService;
             _mapper = mapper;
         }
 
         public async Task<HomeDto> GetHomePageDataAsync(string language = "tr", CancellationToken cancellationToken = default)
         {
+            var hero = await GetHeroSectionAsync(language, cancellationToken);
             var features = await GetFeaturesAsync(language, cancellationToken);
             var cta = await GetCtaSectionAsync(language, cancellationToken);
             var instagram = await GetInstagramPostsAsync(6, cancellationToken);
-            var activities = await _activityReadService.GetUpcomingAsync(cancellationToken);
 
             return new HomeDto(
-                activities.Take(3).ToList(),
+                hero,
                 features,
-                cta ?? new CtaSectionDto(Guid.Empty, "", "", "", "", "", "", "", "", "", ""),
+                cta,
                 instagram
             );
         }

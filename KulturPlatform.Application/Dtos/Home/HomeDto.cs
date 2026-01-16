@@ -3,9 +3,9 @@
 namespace KulturPlatform.Application.Dtos.Home
 {
     public record HomeDto(
-        List<ActivityDto> Activities,
+        HeroSectionDto? HeroSection,
         List<FeatureDto> Features,
-        CtaSectionDto Cta,
+        CtaSectionDto? Cta,
         List<InstagramPostDto> InstagramFeed
     );
 }

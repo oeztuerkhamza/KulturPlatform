@@ -34,6 +34,18 @@ namespace KulturPlatform.API.Controllers
         #region HeroSection
 
         /// <summary>
+        /// Get hero section (Public)
+        /// </summary>
+        [HttpGet("hero")]
+        [AllowAnonymous]
+        public async Task<ActionResult<HeroSectionDto>> GetHeroSection([FromQuery] string lang = "tr")
+        {
+            var query = new GetHeroSectionQuery(lang);
+            var result = await _mediator.Send(query);
+            return result != null ? Ok(result) : NotFound();
+        }
+
+        /// <summary>
         /// Create hero section (SystemAdmin only)
         /// </summary>
         [HttpPost("hero")]
@@ -47,10 +59,12 @@ namespace KulturPlatform.API.Controllers
         /// <summary>
         /// Update hero section (UserAdmin+)
         /// </summary>
-        [HttpPut("hero")]
+        [HttpPut("hero/{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<IActionResult> UpdateHeroSection([FromBody] UpdateHeroSectionCommand command)
+        public async Task<IActionResult> UpdateHeroSection(Guid id, [FromBody] UpdateHeroSectionCommand command)
         {
+            if (id != command.Id) return BadRequest("ID mismatch");
+
             await _mediator.Send(command);
             return NoContent();
         }
@@ -58,6 +72,18 @@ namespace KulturPlatform.API.Controllers
         #endregion
 
         #region CtaSection
+
+        /// <summary>
+        /// Get CTA section (Public)
+        /// </summary>
+        [HttpGet("cta")]
+        [AllowAnonymous]
+        public async Task<ActionResult<CtaSectionDto>> GetCtaSection([FromQuery] string lang = "tr")
+        {
+            var query = new GetCtaSectionQuery(lang);
+            var result = await _mediator.Send(query);
+            return result != null ? Ok(result) : NotFound();
+        }
 
         /// <summary>
         /// Create CTA section (SystemAdmin only)
@@ -73,10 +99,12 @@ namespace KulturPlatform.API.Controllers
         /// <summary>
         /// Update CTA section (UserAdmin+)
         /// </summary>
-        [HttpPut("cta")]
+        [HttpPut("cta/{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<IActionResult> UpdateCtaSection([FromBody] UpdateCtaSectionCommand command)
+        public async Task<IActionResult> UpdateCtaSection(Guid id, [FromBody] UpdateCtaSectionCommand command)
         {
+            if (id != command.Id) return BadRequest("ID mismatch");
+
             await _mediator.Send(command);
             return NoContent();
         }
@@ -84,6 +112,18 @@ namespace KulturPlatform.API.Controllers
         #endregion
 
         #region Features
+
+        /// <summary>
+        /// Get all features (Public)
+        /// </summary>
+        [HttpGet("features")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<FeatureDto>>> GetFeatures([FromQuery] string lang = "tr")
+        {
+            var query = new GetFeaturesQuery(lang);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
 
         /// <summary>
         /// Create feature (UserAdmin+)
@@ -99,10 +139,12 @@ namespace KulturPlatform.API.Controllers
         /// <summary>
         /// Update feature (UserAdmin+)
         /// </summary>
-        [HttpPut("features")]
+        [HttpPut("features/{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<IActionResult> UpdateFeature([FromBody] UpdateFeatureCommand command)
+        public async Task<IActionResult> UpdateFeature(Guid id, [FromBody] UpdateFeatureCommand command)
         {
+            if (id != command.Id) return BadRequest("ID mismatch");
+
             await _mediator.Send(command);
             return NoContent();
         }
@@ -110,6 +152,18 @@ namespace KulturPlatform.API.Controllers
         #endregion
 
         #region InstagramPosts
+
+        /// <summary>
+        /// Get Instagram posts (Public)
+        /// </summary>
+        [HttpGet("instagram")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<InstagramPostDto>>> GetInstagramPosts([FromQuery] int count = 6)
+        {
+            var query = new GetInstagramPostsQuery(count);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
 
         /// <summary>
         /// Create Instagram post (UserAdmin+)
@@ -125,10 +179,12 @@ namespace KulturPlatform.API.Controllers
         /// <summary>
         /// Update Instagram post (UserAdmin+)
         /// </summary>
-        [HttpPut("instagram")]
+        [HttpPut("instagram/{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<IActionResult> UpdateInstagramPost([FromBody] UpdateInstagramPostCommand command)
+        public async Task<IActionResult> UpdateInstagramPost(Guid id, [FromBody] UpdateInstagramPostCommand command)
         {
+            if (id != command.Id) return BadRequest("ID mismatch");
+
             await _mediator.Send(command);
             return NoContent();
         }
