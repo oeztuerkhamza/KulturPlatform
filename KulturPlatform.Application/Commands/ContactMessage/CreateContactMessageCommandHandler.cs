@@ -1,0 +1,51 @@
+using KulturPlatform.Application.Interfaces.ContactMessages;
+using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
+using MediatR;
+
+namespace KulturPlatform.Application.Commands.ContactMessages
+{
+    public class CreateContactMessageCommandHandler : IRequestHandler<CreateContactMessageCommand, Guid>
+    {
+        private readonly IContactMessageRepository _contactMessageRepository;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CreateContactMessageCommandHandler(
+            IContactMessageRepository contactMessageRepository,
+            IUnitOfWork unitOfWork)
+        {
+            _contactMessageRepository = contactMessageRepository;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<Guid> Handle(CreateContactMessageCommand request, CancellationToken cancellationToken)
+        {
+            var anrede = !string.IsNullOrWhiteSpace(request.Anrede)
+                ? new Anrede(request.Anrede)
+                : null;
+
+            var senderName = new Name(request.SenderName);
+            var email = new Email(request.Email);
+
+            var phone = !string.IsNullOrWhiteSpace(request.Phone)
+                ? new PhoneNumber(request.Phone)
+                : null;
+
+            var subject = new Subject(request.Subject);
+            var message = new MessageText(request.Message);
+
+            var contactMessage = Domain.Commons.Aggregates.ContactMessage.CreateNew(
+                anrede,
+                senderName,
+                email,
+                phone,
+                subject,
+                message);
+
+            await _contactMessageRepository.AddAsync(contactMessage, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return contactMessage.Id;
+        }
+    }
+}

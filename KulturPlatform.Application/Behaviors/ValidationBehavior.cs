@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 
-namespace Application.Behaviors
+namespace KulturPlatform.Application.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
@@ -15,8 +15,8 @@ namespace Application.Behaviors
 
         public async Task<TResponse> Handle(
             TRequest request,
-            CancellationToken cancellationToken,
-            RequestHandlerDelegate<TResponse> next)
+            RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken)
         {
             if (_validators.Any())
             {
@@ -38,11 +38,6 @@ namespace Application.Behaviors
             }
 
             return await next();
-        }
-
-        public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

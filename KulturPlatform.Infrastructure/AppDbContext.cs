@@ -27,6 +27,7 @@ namespace KulturPlatform.Infrastructure
         public DbSet<LocalizationResource> LocalizationResources { get; set; }
         public DbSet<Imprint> Imprints { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
 
         // About Us - New Structure
         public DbSet<AboutUsQuote> AboutUsQuotes { get; set; }

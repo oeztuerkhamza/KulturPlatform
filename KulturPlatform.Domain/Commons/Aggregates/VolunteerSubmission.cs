@@ -7,7 +7,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
     {
         public Name FullName { get; private set; }
         public Email Email { get; private set; }
-        public PhoneNumber PhoneNumber { get; private set; }
+        public PhoneNumber? PhoneNumber { get; private set; }
         public SubmissionMessage Message { get; private set; }
         public DateTime SubmittedAt { get; private set; }
 

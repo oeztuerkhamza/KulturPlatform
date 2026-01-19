@@ -4,6 +4,7 @@ using KulturPlatform.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KulturPlatform.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260119135613_MakePhoneNumberNullableInVolunteerSubmission")]
+    partial class MakePhoneNumberNullableInVolunteerSubmission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -495,32 +498,6 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ContactInfos", (string)null);
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.ContactMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsRead")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("ReadAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("SubmittedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsRead");
-
-                    b.HasIndex("SubmittedAt");
-
-                    b.ToTable("ContactMessages", (string)null);
                 });
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.Course", b =>
@@ -1818,137 +1795,6 @@ namespace KulturPlatform.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("SocialMedia")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.ContactMessage", b =>
-                {
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Email", "Email", b1 =>
-                        {
-                            b1.Property<Guid>("ContactMessageId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)")
-                                .HasColumnName("Email");
-
-                            b1.HasKey("ContactMessageId");
-
-                            b1.ToTable("ContactMessages");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContactMessageId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.PhoneNumber", "Phone", b1 =>
-                        {
-                            b1.Property<Guid>("ContactMessageId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("Phone");
-
-                            b1.HasKey("ContactMessageId");
-
-                            b1.ToTable("ContactMessages");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContactMessageId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Name", "SenderName", b1 =>
-                        {
-                            b1.Property<Guid>("ContactMessageId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)")
-                                .HasColumnName("SenderName");
-
-                            b1.HasKey("ContactMessageId");
-
-                            b1.ToTable("ContactMessages");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContactMessageId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Anrede", "Anrede", b1 =>
-                        {
-                            b1.Property<Guid>("ContactMessageId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("Anrede");
-
-                            b1.HasKey("ContactMessageId");
-
-                            b1.ToTable("ContactMessages");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContactMessageId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.MessageText", "Message", b1 =>
-                        {
-                            b1.Property<Guid>("ContactMessageId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(5000)
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Message");
-
-                            b1.HasKey("ContactMessageId");
-
-                            b1.ToTable("ContactMessages");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContactMessageId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Subject", "Subject", b1 =>
-                        {
-                            b1.Property<Guid>("ContactMessageId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)")
-                                .HasColumnName("Subject");
-
-                            b1.HasKey("ContactMessageId");
-
-                            b1.ToTable("ContactMessages");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContactMessageId");
-                        });
-
-                    b.Navigation("Anrede");
-
-                    b.Navigation("Email")
-                        .IsRequired();
-
-                    b.Navigation("Message")
-                        .IsRequired();
-
-                    b.Navigation("Phone");
-
-                    b.Navigation("SenderName")
-                        .IsRequired();
-
-                    b.Navigation("Subject")
                         .IsRequired();
                 });
 

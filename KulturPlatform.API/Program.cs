@@ -127,7 +127,8 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
-builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddAutoMapper(cfg => { }, typeof(ApplicationMarker).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(ApplicationMarker).Assembly);
 
 // Authorization with role-based policies
 builder.Services.ConfigureAuthorization();
@@ -135,13 +136,11 @@ builder.Services.ConfigureAuthorization();
 // OpenAPI - will be used by Scalar
 builder.Services.AddScalarServices();
 
-// AutoMapper
-builder.Services.AddAutoMapper(cfg => { }, typeof(ApplicationMarker).Assembly);
-
 // MediatR
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(KulturPlatform.Application.ApplicationMarker).Assembly);
+    cfg.AddOpenBehavior(typeof(KulturPlatform.Application.Behaviors.ValidationBehavior<,>));
 }); ;
 // Database Context - SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -223,6 +222,10 @@ builder.Services.AddScoped<IImprintReadService, ImprintReadService>();
 // ContactInfo
 builder.Services.AddScoped<IContactInfoRepository, ContactInfoRepository>();
 builder.Services.AddScoped<IContactInfoReadService, ContactInfoReadService>();
+
+// ContactMessage
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.ContactMessages.IContactMessageRepository, ContactMessageRepository>();
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.ContactMessages.IContactMessageReadService, ContactMessageReadService>();
 
 // About Us - New Structure
 builder.Services.AddScoped<IAboutUsQuoteRepository, AboutUsQuoteRepository>();

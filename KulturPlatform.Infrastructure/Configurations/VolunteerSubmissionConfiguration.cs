@@ -34,7 +34,7 @@ namespace KulturPlatform.Infrastructure.Configurations
                 vo.Property(x => x.Value)
                   .HasColumnName("PhoneNumber")
                   .HasMaxLength(50)
-                  .IsRequired();
+                  .IsRequired(false);
             });
 
             // ----- Message (Value Object) -----
