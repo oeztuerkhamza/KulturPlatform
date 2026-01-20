@@ -20,6 +20,10 @@
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentException("URL cannot be empty.");
 
+            // Reject base64 data URIs - these should use ImageData instead
+            if (url.StartsWith("data:", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException("Base64 data URIs are not allowed for URL field. Use ImageData instead.");
+
             if (!Uri.TryCreate(url, UriKind.Absolute, out _))
                 throw new ArgumentException("Invalid URL format.");
 

@@ -159,6 +159,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Token Service
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+// Image Processing Service
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IImageProcessingService, ImageProcessingService>();
+
+// Email Service
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IEmailService, EmailService>();
+
 // Dashboard Service
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 

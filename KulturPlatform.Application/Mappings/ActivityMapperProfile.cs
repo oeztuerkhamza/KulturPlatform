@@ -30,7 +30,7 @@ namespace KulturPlatform.Application.Mappings
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Value))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl != null ? src.ImageUrl.Value : null))
                 .ForMember(dest => dest.VideoUrl, opt => opt.MapFrom(src => src.VideoUrl != null ? src.VideoUrl.Value : null))
-                .ForMember(dest => dest.GalleryImages, opt => opt.MapFrom(src => src.GalleryImages.Images));
+                .ForMember(dest => dest.GalleryImages, opt => opt.MapFrom(src => ConvertDomainGalleryToDto(src.GalleryImages.Images)));
 
             // DTO -> Domain (örn. Create / Update Command maplerinde)
             CreateMap<ActivityDto, Domain.Commons.AggregateRoot.Activity>()
@@ -51,7 +51,63 @@ namespace KulturPlatform.Application.Mappings
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => new Category(src.Category)))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.ImageUrl) ? Image.Create(src.ImageUrl) : null))
                 .ForMember(dest => dest.VideoUrl, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.VideoUrl) ? Image.Create(src.VideoUrl) : null))
-                .ForMember(dest => dest.GalleryImages, opt => opt.MapFrom(src => src.GalleryImages != null ? new MediaGallery(src.GalleryImages) : new MediaGallery(new List<string>())));
+                .ForMember(dest => dest.GalleryImages, opt => opt.MapFrom(src => ConvertDtoGalleryToDomain(src.GalleryImages)));
+        }
+
+        /// <summary>
+        /// Converts domain GalleryImage objects to DTO GalleryImageDto objects
+        /// </summary>
+        private static List<GalleryImageDto> ConvertDomainGalleryToDto(IEnumerable<GalleryImage> domainImages)
+        {
+            return domainImages.Select(img => ConvertGalleryImageToDto(img.GetImageSource())).ToList();
+        }
+
+        /// <summary>
+        /// Converts a single image source string to GalleryImageDto
+        /// </summary>
+        private static GalleryImageDto ConvertGalleryImageToDto(string rawImage)
+        {
+            if (string.IsNullOrEmpty(rawImage))
+                return new GalleryImageDto { Url = null, Base64Data = null, FileName = null };
+
+            // If it's a URL (doesn't start with data:)
+            if (!rawImage.StartsWith("data:"))
+                return new GalleryImageDto { Url = rawImage, Base64Data = null, FileName = null };
+
+            // If it's a data URI: data:image/jpeg;base64,xxxxx
+            var parts = rawImage.Split(",", 2);
+            if (parts.Length == 2)
+            {
+                return new GalleryImageDto
+                {
+                    Url = null,
+                    Base64Data = parts[1], // Extract base64 part only
+                    FileName = null
+                };
+            }
+
+            return new GalleryImageDto { Url = null, Base64Data = null, FileName = null };
+        }
+
+        /// <summary>
+        /// Converts DTO GalleryImageDto objects back to domain MediaGallery
+        /// </summary>
+        private static MediaGallery ConvertDtoGalleryToDomain(List<GalleryImageDto> dtoImages)
+        {
+            if (dtoImages == null || !dtoImages.Any())
+                return new MediaGallery(new List<string>());
+
+            var rawImages = dtoImages.Select(dto =>
+            {
+                // Convert DTO back to raw image string
+                if (!string.IsNullOrEmpty(dto.Url))
+                    return dto.Url;
+                if (!string.IsNullOrEmpty(dto.Base64Data))
+                    return $"data:image/jpeg;base64,{dto.Base64Data}";
+                return string.Empty;
+            }).Where(s => !string.IsNullOrEmpty(s)).ToList();
+
+            return new MediaGallery(rawImages);
         }
     }
 }

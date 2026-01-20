@@ -10,7 +10,7 @@
     string Category,
     string? ImageUrl,
     string? VideoUrl,
-    List<string> GalleryImages
+    List<GalleryImageDto> GalleryImages
 );
 
 }

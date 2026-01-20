@@ -1,4 +1,5 @@
-﻿using KulturPlatform.Application.Dtos.LocalizationDto;
+﻿using KulturPlatform.Application.Dtos.Activity;
+using KulturPlatform.Application.Dtos.LocalizationDto;
 using MediatR;
 
 namespace KulturPlatform.Application.Commands.Activity
@@ -15,7 +16,9 @@ namespace KulturPlatform.Application.Commands.Activity
         AddressDto Address,
         string Category,
         string? ImageUrl,
-        List<string>? GalleryImages,
+        string? ImageBase64, // New: Base64 encoded image data
+        string? ImageFileName, // New: Original filename for base64 image
+        List<GalleryImageDto>? GalleryImages, // Changed from List<string>
         string? VideoUrl,
         bool IsActive
     ) : IRequest<Unit>;

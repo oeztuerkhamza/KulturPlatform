@@ -29,11 +29,73 @@ namespace KulturPlatform.Application.Mappings
                         Country = src.Address.Country
                     },
                     src.Category.Value,
-                    src.ImageUrl != null ? src.ImageUrl.Value : null,
-                    src.GalleryImages.Images.Select(img => img.Value).ToList(),
+                    src.ImageUrl != null ? src.ImageUrl.Value : null, // Deprecated
+                    src.GetImageSource(), // New: Unified image source
+                    CreateImageMetadata(src), // New: Image metadata
+                    ConvertGalleryImages(src.GalleryImages.GetImageSources()), // ✅ Convert to GalleryImageDto objects
                     src.VideoUrl != null ? src.VideoUrl.Value : null,
                     src.IsActive
                 ));
+        }
+
+        private static ImageMetadataDto? CreateImageMetadata(Activity activity)
+        {
+            if (activity.ImageData != null)
+            {
+                return new ImageMetadataDto(
+                    StorageType: "Database",
+                    MimeType: activity.ImageData.MimeType,
+                    FileName: activity.ImageData.FileName,
+                    FileSizeKB: activity.ImageData.FileSizeBytes / 1024
+                );
+            }
+            else if (activity.ImageUrl != null)
+            {
+                return new ImageMetadataDto(
+                    StorageType: "URL",
+                    MimeType: null,
+                    FileName: null,
+                    FileSizeKB: null
+                );
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Converts raw image sources to GalleryImageDto objects
+        /// </summary>
+        private static List<GalleryImageDto> ConvertGalleryImages(IEnumerable<string> rawImages)
+        {
+            return rawImages.Select(ConvertGalleryImage).ToList();
+        }
+
+        /// <summary>
+        /// Converts a single raw image string to GalleryImageDto
+        /// </summary>
+        private static GalleryImageDto ConvertGalleryImage(string rawImage)
+        {
+            if (string.IsNullOrEmpty(rawImage))
+                return new GalleryImageDto { Url = null, Base64Data = null, FileName = null };
+
+            // If it's a URL (doesn't start with data:)
+            if (!rawImage.StartsWith("data:"))
+                return new GalleryImageDto { Url = rawImage, Base64Data = null, FileName = null };
+
+            // If it's a data URI: data:image/jpeg;base64,xxxxx
+            var parts = rawImage.Split(",", 2);
+            if (parts.Length == 2)
+            {
+                return new GalleryImageDto
+                {
+                    Url = null,
+                    Base64Data = parts[1], // Extract base64 part only
+                    FileName = null
+                };
+            }
+
+            // Fallback for malformed data
+            return new GalleryImageDto { Url = null, Base64Data = null, FileName = null };
         }
     }
 }

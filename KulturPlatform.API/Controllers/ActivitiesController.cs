@@ -19,7 +19,9 @@ namespace KulturPlatform.API.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/activities
+        /// <summary>
+        /// Get all activities
+        /// </summary>
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAll()
@@ -28,7 +30,9 @@ namespace KulturPlatform.API.Controllers
             return Ok(result);
         }
 
-        // GET: api/activities/upcoming
+        /// <summary>
+        /// Get upcoming activities
+        /// </summary>
         [HttpGet("upcoming")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ActivityDto>>> GetUpcoming()
@@ -37,7 +41,9 @@ namespace KulturPlatform.API.Controllers
             return Ok(result);
         }
 
-        // GET: api/activities/{id}
+        /// <summary>
+        /// Get activity by ID
+        /// </summary>
         [HttpGet("{id:guid}")]
         [AllowAnonymous]
         public async Task<ActionResult<ActivityDto>> GetById(Guid id)
@@ -50,7 +56,13 @@ namespace KulturPlatform.API.Controllers
             return Ok(result);
         }
 
-        // POST: api/activities
+        /// <summary>
+        /// Create a new activity (UserAdmin+)
+        /// Supports both URL-based and database-stored images:
+        /// - For URL: Provide ImageUrl field
+        /// - For Database: Provide ImageBase64 (with or without data URI prefix) and ImageFileName
+        /// Images are automatically compressed and optimized (max 1920x1080, quality 85)
+        /// </summary>
         [HttpPost]
         [Authorize(Policy = Policies.RequireUserAdmin)]
         public async Task<ActionResult<Guid>> Create(
@@ -65,7 +77,13 @@ namespace KulturPlatform.API.Controllers
             );
         }
 
-        // PUT: api/activities/{id}
+        /// <summary>
+        /// Update an existing activity (UserAdmin+)
+        /// Supports both URL-based and database-stored images:
+        /// - For URL: Provide ImageUrl field
+        /// - For Database: Provide ImageBase64 (with or without data URI prefix) and ImageFileName
+        /// Images are automatically compressed and optimized (max 1920x1080, quality 85)
+        /// </summary>
         [HttpPut("{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
         public async Task<IActionResult> Update(
@@ -79,7 +97,9 @@ namespace KulturPlatform.API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/activities/{id}
+        /// <summary>
+        /// Delete an activity (SystemAdmin only)
+        /// </summary>
         [HttpDelete("{id:guid}")]
         [Authorize(Policy = Policies.RequireSystemAdmin)]
         public async Task<IActionResult> Delete(Guid id)

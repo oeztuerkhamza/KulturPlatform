@@ -18,7 +18,10 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
         public Address Address { get; private set; }
         public Category Category { get; private set; }
 
+        // Hybrid image storage: either URL or Database-stored image
         public Url? ImageUrl { get; private set; }
+        public ImageData? ImageData { get; private set; }
+        
         public MediaGallery GalleryImages { get; private set; }
         public Url? VideoUrl { get; private set; }
 
@@ -37,10 +40,15 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             Address address,
             Category category,
             Url? imageUrl = null,
+            ImageData? imageData = null,
             MediaGallery? galleryImages = null,
             Url? videoUrl = null
         )
         {
+            // Validate that only one image source is provided
+            if (imageUrl != null && imageData != null)
+                throw new ArgumentException("Cannot specify both ImageUrl and ImageData. Choose one image source.");
+
             return new Activity(Guid.NewGuid())
             {
                 TitleTr = titleTr,
@@ -50,7 +58,8 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
                 Date = date,
                 Address = address,
                 Category = category,
-                ImageUrl = imageUrl,
+                ImageUrl = imageData == null ? imageUrl : null, // Only set if no ImageData
+                ImageData = imageData,
                 GalleryImages = galleryImages ?? MediaGallery.Empty(),
                 VideoUrl = videoUrl,
                 IsActive = true,
@@ -66,6 +75,7 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             Address address,
             Category category,
             Url? imageUrl = null,
+            ImageData? imageData = null,
             MediaGallery? galleryImages = null,
             Url? videoUrl = null,
             bool isActive = true,
@@ -73,13 +83,24 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             LocalizedContent? detailedContentDe = null
         )
         {
+            // Validate that only one image source is provided
+            if (imageUrl != null && imageData != null)
+                throw new ArgumentException("Cannot specify both ImageUrl and ImageData. Choose one image source.");
+
             UpdateTitle(titleTr, titleDe);
             UpdateDescription(descriptionTr, descriptionDe);
             UpdateDate(date);
             UpdateLocation(address);
             UpdateCategory(category);
-            ImageUrl = imageUrl;
-            GalleryImages = galleryImages ?? MediaGallery.Empty();
+            UpdateImage(imageUrl, imageData);
+            
+            // ✅ Only update GalleryImages if provided (not null)
+            // When null, it means gallery is being handled separately (e.g., in repository)
+            if (galleryImages != null)
+            {
+                GalleryImages = galleryImages;
+            }
+            
             VideoUrl = videoUrl;
             DetailedContentTr = detailedContentTr;
             DetailedContentDe = detailedContentDe;
@@ -122,6 +143,29 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
             SetUpdatedAt();
         }
 
+        public void UpdateImage(Url? imageUrl, ImageData? imageData)
+        {
+            // Validate that only one image source is provided
+            if (imageUrl != null && imageData != null)
+                throw new ArgumentException("Cannot specify both ImageUrl and ImageData. Choose one image source.");
+
+            // Clear both fields first
+            ImageUrl = null;
+            ImageData = null;
+
+            // Then set the appropriate one
+            if (imageData != null)
+            {
+                ImageData = imageData;
+            }
+            else if (imageUrl != null)
+            {
+                ImageUrl = imageUrl;
+            }
+
+            SetUpdatedAt();
+        }
+
         public void Activate()
         {
             if (!IsActive)
@@ -139,5 +183,22 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
                 SetUpdatedAt();
             }
         }
+
+        /// <summary>
+        /// Gets the image source for frontend display
+        /// Returns ImageData's data URI if available, otherwise ImageUrl
+        /// </summary>
+        public string? GetImageSource()
+        {
+            if (ImageData != null)
+                return ImageData.GetDataUri();
+            
+            return ImageUrl?.Value;
+        }
+
+        /// <summary>
+        /// Checks if the activity has any image
+        /// </summary>
+        public bool HasImage() => ImageUrl != null || ImageData != null;
     }
 }

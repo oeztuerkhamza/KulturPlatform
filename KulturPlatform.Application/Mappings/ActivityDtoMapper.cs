@@ -33,9 +33,9 @@ namespace KulturPlatform.Application.Mappings
 
                 // Date
                 new TranslationDto(
-    activity.Date.ToTrString(),
-    activity.Date.ToDeString()
-),
+                    activity.Date.ToTrString(),
+                    activity.Date.ToDeString()
+                ),
 
                 // Address
                 activity.Address.ToString(),
@@ -44,15 +44,48 @@ namespace KulturPlatform.Application.Mappings
                 activity.Category.ToString().ToLowerInvariant(),
 
                 // Media
-                activity.ImageUrl?.Value,
+                activity.GetImageSource(),
                 activity.VideoUrl?.Value,
 
-                // Gallery
-                activity.GalleryImages.Images
-                    .Select(x => x.Value)
-                    .ToList()
+                // Gallery - convert to GalleryImageDto objects
+                ConvertGalleryImages(activity.GalleryImages.GetImageSources())
             );
         }
-    }
 
+        /// <summary>
+        /// Converts raw image sources (URLs or base64 data URIs) to GalleryImageDto objects
+        /// </summary>
+        private static List<GalleryImageDto> ConvertGalleryImages(IEnumerable<string> rawImages)
+        {
+            return rawImages.Select(ConvertGalleryImage).ToList();
+        }
+
+        /// <summary>
+        /// Converts a single raw image string to GalleryImageDto
+        /// </summary>
+        private static GalleryImageDto ConvertGalleryImage(string rawImage)
+        {
+            if (string.IsNullOrEmpty(rawImage))
+                return new GalleryImageDto { Url = null, Base64Data = null, FileName = null };
+
+            // If it's a URL (doesn't start with data:)
+            if (!rawImage.StartsWith("data:"))
+                return new GalleryImageDto { Url = rawImage, Base64Data = null, FileName = null };
+
+            // If it's a data URI: data:image/jpeg;base64,xxxxx
+            var parts = rawImage.Split(",", 2);
+            if (parts.Length == 2)
+            {
+                return new GalleryImageDto
+                {
+                    Url = null,
+                    Base64Data = parts[1], // Extract base64 part only
+                    FileName = null
+                };
+            }
+
+            // Fallback for malformed data
+            return new GalleryImageDto { Url = null, Base64Data = null, FileName = null };
+        }
+    }
 }

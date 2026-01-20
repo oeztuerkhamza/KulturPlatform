@@ -94,6 +94,25 @@ namespace KulturPlatform.Infrastructure.Configurations
                   .HasMaxLength(500);
             });
 
+            // ----- ImageData (Value Object) - Database-stored image -----
+            builder.OwnsOne(a => a.ImageData, vo =>
+            {
+                vo.Property(x => x.Base64Data)
+                  .HasColumnName("ImageData_Base64")
+                  .HasColumnType("TEXT"); // Store large base64 strings
+
+                vo.Property(x => x.MimeType)
+                  .HasColumnName("ImageData_MimeType")
+                  .HasMaxLength(50);
+
+                vo.Property(x => x.FileName)
+                  .HasColumnName("ImageData_FileName")
+                  .HasMaxLength(255);
+
+                vo.Property(x => x.FileSizeBytes)
+                  .HasColumnName("ImageData_FileSize");
+            });
+
             // ----- VideoUrl (Value Object) -----
             builder.OwnsOne(a => a.VideoUrl, vo =>
             {
@@ -111,7 +130,33 @@ namespace KulturPlatform.Infrastructure.Configurations
                     img.WithOwner().HasForeignKey("ActivityId");
                     img.Property<int>("Id").ValueGeneratedOnAdd();
                     img.HasKey("Id");
-                    img.Property(x => x.Value).HasColumnName("ImageUrl").HasMaxLength(500).IsRequired();
+                    
+                    // ImageUrl (optional)
+                    img.OwnsOne(i => i.ImageUrl, url =>
+                    {
+                        url.Property(x => x.Value)
+                           .HasColumnName("ImageUrl")
+                           .HasMaxLength(500);
+                    });
+                    
+                    // ImageData (optional)
+                    img.OwnsOne(i => i.ImageData, data =>
+                    {
+                        data.Property(x => x.Base64Data)
+                            .HasColumnName("ImageData_Base64")
+                            .HasColumnType("TEXT");
+
+                        data.Property(x => x.MimeType)
+                            .HasColumnName("ImageData_MimeType")
+                            .HasMaxLength(50);
+
+                        data.Property(x => x.FileName)
+                            .HasColumnName("ImageData_FileName")
+                            .HasMaxLength(255);
+
+                        data.Property(x => x.FileSizeBytes)
+                            .HasColumnName("ImageData_FileSize");
+                    });
                 });
             });
 

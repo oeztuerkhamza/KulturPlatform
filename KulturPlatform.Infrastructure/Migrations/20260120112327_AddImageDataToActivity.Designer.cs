@@ -4,6 +4,7 @@ using KulturPlatform.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KulturPlatform.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260120112327_AddImageDataToActivity")]
+    partial class AddImageDataToActivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1166,40 +1169,6 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasForeignKey("ActivityId");
                         });
 
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ImageData", "ImageData", b1 =>
-                        {
-                            b1.Property<Guid>("ActivityId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Base64Data")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("ImageData_Base64");
-
-                            b1.Property<string>("FileName")
-                                .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)")
-                                .HasColumnName("ImageData_FileName");
-
-                            b1.Property<int>("FileSizeBytes")
-                                .HasColumnType("int")
-                                .HasColumnName("ImageData_FileSize");
-
-                            b1.Property<string>("MimeType")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("ImageData_MimeType");
-
-                            b1.HasKey("ActivityId");
-
-                            b1.ToTable("Activities");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ActivityId");
-                        });
-
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Url", "ImageUrl", b1 =>
                         {
                             b1.Property<Guid>("ActivityId")
@@ -1293,6 +1262,40 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasForeignKey("ActivityId");
                         });
 
+                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ImageData", "ImageData", b1 =>
+                        {
+                            b1.Property<Guid>("ActivityId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Base64Data")
+                                .IsRequired()
+                                .HasColumnType("TEXT")
+                                .HasColumnName("ImageData_Base64");
+
+                            b1.Property<string>("FileName")
+                                .IsRequired()
+                                .HasMaxLength(255)
+                                .HasColumnType("nvarchar(255)")
+                                .HasColumnName("ImageData_FileName");
+
+                            b1.Property<int>("FileSizeBytes")
+                                .HasColumnType("int")
+                                .HasColumnName("ImageData_FileSize");
+
+                            b1.Property<string>("MimeType")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("ImageData_MimeType");
+
+                            b1.HasKey("ActivityId");
+
+                            b1.ToTable("Activities");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.MediaGallery", "GalleryImages", b1 =>
                         {
                             b1.Property<Guid>("ActivityId")
@@ -1305,7 +1308,7 @@ namespace KulturPlatform.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ActivityId");
 
-                            b1.OwnsMany("KulturPlatform.Domain.Commons.ValueObjects.GalleryImage", "Images", b2 =>
+                            b1.OwnsMany("KulturPlatform.Domain.Commons.ValueObjects.Url", "Images", b2 =>
                                 {
                                     b2.Property<int>("Id")
                                         .ValueGeneratedOnAdd()
@@ -1316,6 +1319,12 @@ namespace KulturPlatform.Infrastructure.Migrations
                                     b2.Property<Guid>("ActivityId")
                                         .HasColumnType("uniqueidentifier");
 
+                                    b2.Property<string>("Value")
+                                        .IsRequired()
+                                        .HasMaxLength(500)
+                                        .HasColumnType("nvarchar(500)")
+                                        .HasColumnName("ImageUrl");
+
                                     b2.HasKey("Id");
 
                                     b2.HasIndex("ActivityId");
@@ -1324,63 +1333,6 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                                     b2.WithOwner()
                                         .HasForeignKey("ActivityId");
-
-                                    b2.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ImageData", "ImageData", b3 =>
-                                        {
-                                            b3.Property<int>("GalleryImageId")
-                                                .HasColumnType("int");
-
-                                            b3.Property<string>("Base64Data")
-                                                .IsRequired()
-                                                .HasColumnType("TEXT")
-                                                .HasColumnName("ImageData_Base64");
-
-                                            b3.Property<string>("FileName")
-                                                .IsRequired()
-                                                .HasMaxLength(255)
-                                                .HasColumnType("nvarchar(255)")
-                                                .HasColumnName("ImageData_FileName");
-
-                                            b3.Property<int>("FileSizeBytes")
-                                                .HasColumnType("int")
-                                                .HasColumnName("ImageData_FileSize");
-
-                                            b3.Property<string>("MimeType")
-                                                .IsRequired()
-                                                .HasMaxLength(50)
-                                                .HasColumnType("nvarchar(50)")
-                                                .HasColumnName("ImageData_MimeType");
-
-                                            b3.HasKey("GalleryImageId");
-
-                                            b3.ToTable("ActivityGalleryImages");
-
-                                            b3.WithOwner()
-                                                .HasForeignKey("GalleryImageId");
-                                        });
-
-                                    b2.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Url", "ImageUrl", b3 =>
-                                        {
-                                            b3.Property<int>("GalleryImageId")
-                                                .HasColumnType("int");
-
-                                            b3.Property<string>("Value")
-                                                .IsRequired()
-                                                .HasMaxLength(500)
-                                                .HasColumnType("nvarchar(500)")
-                                                .HasColumnName("ImageUrl");
-
-                                            b3.HasKey("GalleryImageId");
-
-                                            b3.ToTable("ActivityGalleryImages");
-
-                                            b3.WithOwner()
-                                                .HasForeignKey("GalleryImageId");
-                                        });
-
-                                    b2.Navigation("ImageData");
-
-                                    b2.Navigation("ImageUrl");
                                 });
 
                             b1.Navigation("Images");
