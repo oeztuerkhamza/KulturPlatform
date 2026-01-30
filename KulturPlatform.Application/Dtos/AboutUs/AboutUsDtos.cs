@@ -15,6 +15,12 @@ public class AboutUsWhoWeAreDto
     public Guid Id { get; set; }
     public string WhoWeAreTr { get; set; }
     public string WhoWeAreDe { get; set; }
+    
+    /// <summary>
+    /// Banner image source - either URL or data URI (base64)
+    /// </summary>
+    public string? BannerImageSource { get; set; }
+    
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }
@@ -65,6 +71,12 @@ public class FocusAreaDto
     public string TitleDe { get; set; }
     public string DescriptionTr { get; set; }
     public string DescriptionDe { get; set; }
+    
+    /// <summary>
+    /// Icon source - either URL or data URI (base64)
+    /// </summary>
+    public string? IconSource { get; set; }
+    
     public int Order { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

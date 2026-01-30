@@ -9,7 +9,8 @@ namespace KulturPlatform.Application.Commands.Partner
         string DescriptionDe,
         int DisplayOrder,
         string? LogoUrl,
-        string? WebsiteUrl,
-        bool IsActive
-    ) : IRequest;
+        string? LogoBase64,
+        string? LogoFileName,
+        string? WebsiteUrl
+    ) : IRequest<Unit>;
 }

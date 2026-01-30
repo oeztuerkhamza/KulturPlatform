@@ -15,44 +15,48 @@ namespace KulturPlatform.Infrastructure.ReadServices
 
         public async Task<IEnumerable<PartnerDto>> GetAllAsync()
         {
-            return await _context.Partners
+            var partners = await _context.Partners
                 .AsNoTracking()
                 .OrderBy(p => p.DisplayOrder.Value)
-                .Select(p => new PartnerDto
-                {
-                    Id = p.Id,
-                    Name = p.Name.Value,
-                    DescriptionTr = p.DescriptionTr.Value,
-                    DescriptionDe = p.DescriptionDe.Value,
-                    LogoUrl = p.LogoUrl != null ? p.LogoUrl.Value : null,
-                    WebsiteUrl = p.WebsiteUrl != null ? p.WebsiteUrl.Value : null,
-                    DisplayOrder = p.DisplayOrder.Value,
-                    IsActive = p.IsActive,
-                    CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt
-                })
                 .ToListAsync();
+
+            return partners.Select(p => new PartnerDto
+            {
+                Id = p.Id,
+                Name = p.Name.Value,
+                DescriptionTr = p.DescriptionTr.Value,
+                DescriptionDe = p.DescriptionDe.Value,
+                LogoUrl = p.GetLogoSource(),
+                WebsiteUrl = p.WebsiteUrl != null ? p.WebsiteUrl.Value : null,
+                DisplayOrder = p.DisplayOrder.Value,
+                IsActive = p.IsActive,
+                CreatedAt = p.CreatedAt,
+                UpdatedAt = p.UpdatedAt
+            });
         }
 
         public async Task<PartnerDto?> GetByIdAsync(Guid id)
         {
-            return await _context.Partners
+            var partner = await _context.Partners
                 .AsNoTracking()
-                .Where(p => p.Id == id)
-                .Select(p => new PartnerDto
-                {
-                    Id = p.Id,
-                    Name = p.Name.Value,
-                    DescriptionTr = p.DescriptionTr.Value,
-                    DescriptionDe = p.DescriptionDe.Value,
-                    LogoUrl = p.LogoUrl != null ? p.LogoUrl.Value : null,
-                    WebsiteUrl = p.WebsiteUrl != null ? p.WebsiteUrl.Value : null,
-                    DisplayOrder = p.DisplayOrder.Value,
-                    IsActive = p.IsActive,
-                    CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt
-                })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (partner == null)
+                return null;
+
+            return new PartnerDto
+            {
+                Id = partner.Id,
+                Name = partner.Name.Value,
+                DescriptionTr = partner.DescriptionTr.Value,
+                DescriptionDe = partner.DescriptionDe.Value,
+                LogoUrl = partner.GetLogoSource(),
+                WebsiteUrl = partner.WebsiteUrl != null ? partner.WebsiteUrl.Value : null,
+                DisplayOrder = partner.DisplayOrder.Value,
+                IsActive = partner.IsActive,
+                CreatedAt = partner.CreatedAt,
+                UpdatedAt = partner.UpdatedAt
+            };
         }
     }
 }

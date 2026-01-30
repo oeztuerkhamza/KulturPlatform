@@ -49,13 +49,31 @@ namespace KulturPlatform.Infrastructure.Configurations
                     .IsRequired();
             });
 
-            // 🔹 ImageUrl (VO)
-            builder.OwnsOne(x => x.ImageUrl, u =>
+            // ✅ ImageUrl (URL option)
+            builder.OwnsOne(x => x.ImageUrl, url =>
             {
-                u.Property(p => p.Value)
-                    .HasColumnName("ImageUrl")
-                    .HasMaxLength(500)
-                    .IsRequired();
+                url.Property(u => u.Value)
+                   .HasColumnName("ImageUrl")
+                   .HasMaxLength(500);
+            });
+
+            // ✅ ImageData (Database option)
+            builder.OwnsOne(x => x.ImageData, data =>
+            {
+                data.Property(d => d.Base64Data)
+                    .HasColumnName("Image_Base64")
+                    .HasColumnType("TEXT");
+
+                data.Property(d => d.MimeType)
+                    .HasColumnName("Image_MimeType")
+                    .HasMaxLength(50);
+
+                data.Property(d => d.FileName)
+                    .HasColumnName("Image_FileName")
+                    .HasMaxLength(255);
+
+                data.Property(d => d.FileSizeBytes)
+                    .HasColumnName("Image_FileSize");
             });
 
             // 🔹 Content (Owned VO)

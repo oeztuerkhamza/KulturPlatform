@@ -14,7 +14,12 @@
         public string Date { get; init; }
         public string Time { get; init; }
         public string Location { get; init; }
-        public string ImageUrl { get; init; }
+        
+        /// <summary>
+        /// Image source - either URL or data URI (base64) for display
+        /// </summary>
+        public string? ImageSource { get; init; }
+        
         public string ContactEmail { get; init; }
         public bool IsActive { get; init; }
     }

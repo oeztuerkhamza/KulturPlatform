@@ -14,7 +14,10 @@ namespace KulturPlatform.Domain.Commons.Aggregates
         public string Date { get; private set; }
         public string Time { get; private set; }
         public Location Location { get; private set; }
-        public Url ImageUrl { get; private set; }
+        
+        // ✅ Hybrid image storage
+        public Url? ImageUrl { get; private set; }
+        public ImageData? ImageData { get; private set; }
 
         public bool IsActive { get; private set; } = true;
 
@@ -30,9 +33,14 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             string date,
             string time,
             Location location,
-            Url imageUrl)
+            Url? imageUrl,
+            ImageData? imageData)
             : base(id)
         {
+            // Validate that only one image source is provided
+            if (imageUrl != null && imageData != null)
+                throw new ArgumentException("Cannot specify both ImageUrl and ImageData. Choose one image source.");
+
             TitleTurkish = titleTr;
             TitleGerman = titleDe;
             Content = content;
@@ -40,6 +48,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             Time = time;
             Location = location;
             ImageUrl = imageUrl;
+            ImageData = imageData;
             CreatedAt = DateTime.UtcNow;
         }
 
@@ -50,7 +59,8 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             string date,
             string time,
             Location location,
-            Url imageUrl)
+            Url? imageUrl = null,
+            ImageData? imageData = null)
         {
             return new TeaEvent(
                 Guid.NewGuid(),
@@ -60,7 +70,8 @@ namespace KulturPlatform.Domain.Commons.Aggregates
                 date,
                 time,
                 location,
-                imageUrl);
+                imageUrl,
+                imageData);
         }
 
         public void UpdateContent(TeaEventContent content)
@@ -73,6 +84,35 @@ namespace KulturPlatform.Domain.Commons.Aggregates
         {
             TitleTurkish = titleTurkish;
             TitleGerman = titleGerman;
+            SetUpdatedAt();
+        }
+
+        public void UpdateImage(Url? imageUrl, ImageData? imageData)
+        {
+            // Validate that only one image source is provided
+            if (imageUrl != null && imageData != null)
+                throw new ArgumentException("Cannot specify both ImageUrl and ImageData. Choose one image source.");
+
+            // Clear both first
+            ImageUrl = null;
+            ImageData = null;
+
+            // Then set the appropriate one
+            if (imageData != null)
+            {
+                ImageData = imageData;
+            }
+            else if (imageUrl != null)
+            {
+                ImageUrl = imageUrl;
+            }
+
+            SetUpdatedAt();
+        }
+
+        public void UpdateLocation(Location location)
+        {
+            Location = location;
             SetUpdatedAt();
         }
 
@@ -94,5 +134,21 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             IsActive = true;
             SetUpdatedAt();
         }
+
+        /// <summary>
+        /// Gets the image source for frontend
+        /// </summary>
+        public string? GetImageSource()
+        {
+            if (ImageData != null)
+                return ImageData.GetDataUri();
+            
+            return ImageUrl?.Value;
+        }
+
+        /// <summary>
+        /// Checks if image exists
+        /// </summary>
+        public bool HasImage() => ImageUrl != null || ImageData != null;
     }
 }

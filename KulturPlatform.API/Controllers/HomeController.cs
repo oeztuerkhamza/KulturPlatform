@@ -61,12 +61,12 @@ namespace KulturPlatform.API.Controllers
         /// </summary>
         [HttpPut("hero/{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<IActionResult> UpdateHeroSection(Guid id, [FromBody] UpdateHeroSectionCommand command)
+        public async Task<ActionResult<HeroSectionDto>> UpdateHeroSection(Guid id, [FromBody] UpdateHeroSectionCommand command)
         {
             if (id != command.Id) return BadRequest("ID mismatch");
 
-            await _mediator.Send(command);
-            return NoContent();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         #endregion
@@ -101,12 +101,12 @@ namespace KulturPlatform.API.Controllers
         /// </summary>
         [HttpPut("cta/{id:guid}")]
         [Authorize(Policy = Policies.RequireUserAdmin)]
-        public async Task<IActionResult> UpdateCtaSection(Guid id, [FromBody] UpdateCtaSectionCommand command)
+        public async Task<ActionResult<CtaSectionDto>> UpdateCtaSection(Guid id, [FromBody] UpdateCtaSectionCommand command)
         {
             if (id != command.Id) return BadRequest("ID mismatch");
 
-            await _mediator.Send(command);
-            return NoContent();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         #endregion

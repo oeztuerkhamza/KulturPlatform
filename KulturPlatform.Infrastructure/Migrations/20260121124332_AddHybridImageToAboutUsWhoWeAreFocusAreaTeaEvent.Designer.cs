@@ -4,6 +4,7 @@ using KulturPlatform.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KulturPlatform.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260121124332_AddHybridImageToAboutUsWhoWeAreFocusAreaTeaEvent")]
+    partial class AddHybridImageToAboutUsWhoWeAreFocusAreaTeaEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -5577,8 +5580,8 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(2000)
-                                .HasColumnType("nvarchar(2000)")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
                                 .HasColumnName("DescriptionDe");
 
                             b1.HasKey("FocusAreaId");
@@ -5596,8 +5599,8 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(2000)
-                                .HasColumnType("nvarchar(2000)")
+                                .HasMaxLength(500)
+                                .HasColumnType("nvarchar(500)")
                                 .HasColumnName("DescriptionTr");
 
                             b1.HasKey("FocusAreaId");

@@ -21,7 +21,25 @@ namespace KulturPlatform.Application.Queries.TeaEvent
             var entity = await _readRepo.GetByIdAsync(request.Id, cancellationToken);
             if (entity == null) return null;
 
-            return _mapper.Map<TeaEventDto>(entity);
+            // Manual mapping to ensure ImageSource is included
+            return new TeaEventDto
+            {
+                Id = entity.Id,
+                TitleTr = entity.TitleTurkish.Value,
+                TitleDe = entity.TitleGerman.Value,
+                IntroTr = entity.Content.IntroTr,
+                IntroDe = entity.Content.IntroDe,
+                HeritageTextTr = entity.Content.HeritageTextTr,
+                HeritageTextDe = entity.Content.HeritageTextDe,
+                ParticipationTextTr = entity.Content.ParticipationTextTr,
+                ParticipationTextDe = entity.Content.ParticipationTextDe,
+                ContactEmail = entity.Content.ContactEmail,
+                Date = entity.Date,
+                Time = entity.Time,
+                Location = entity.Location.Value,
+                ImageSource = entity.GetImageSource(),  // ← ÖNEMLİ
+                IsActive = entity.IsActive
+            };
         }
     }
 }

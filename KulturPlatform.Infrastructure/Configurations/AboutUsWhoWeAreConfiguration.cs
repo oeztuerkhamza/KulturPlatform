@@ -1,4 +1,5 @@
 using KulturPlatform.Domain.Commons.Aggregates;
+using KulturPlatform.Domain.Commons.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,6 +27,31 @@ public class AboutUsWhoWeAreConfiguration : IEntityTypeConfiguration<AboutUsWhoW
                 .HasColumnName("WhoWeAreDe")
                 .HasMaxLength(5000)
                 .IsRequired();
+        });
+
+        builder.OwnsOne(x => x.BannerImageUrl, url =>
+        {
+            url.Property(u => u.Value)
+               .HasColumnName("BannerImageUrl")
+               .HasMaxLength(500);
+        });
+
+        builder.OwnsOne(x => x.BannerImageData, data =>
+        {
+            data.Property(d => d.Base64Data)
+                .HasColumnName("BannerImage_Base64")
+                .HasColumnType("TEXT");
+
+            data.Property(d => d.MimeType)
+                .HasColumnName("BannerImage_MimeType")
+                .HasMaxLength(50);
+
+            data.Property(d => d.FileName)
+                .HasColumnName("BannerImage_FileName")
+                .HasMaxLength(255);
+
+            data.Property(d => d.FileSizeBytes)
+                .HasColumnName("BannerImage_FileSize");
         });
 
         builder.Property(x => x.CreatedAt)

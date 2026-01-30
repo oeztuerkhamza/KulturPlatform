@@ -21,6 +21,11 @@ namespace KulturPlatform.Application.Commands.TeaEvent
         string ContactEmail,
 
         string Date,
-        string Time
+        string Time,
+        string Location,
+        
+        string? ImageUrl = null,
+        string? ImageBase64 = null,
+        string? ImageFileName = null
     ) : IRequest;
 }

@@ -21,6 +21,9 @@ namespace KulturPlatform.Application.Commands.TeaEvent
         string Date,
         string Time,
         string Location,
-        string ImageUrl
+        
+        string? ImageUrl = null,
+        string? ImageBase64 = null,
+        string? ImageFileName = null
     ) : IRequest<Guid>;
 }

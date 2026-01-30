@@ -1,3 +1,4 @@
+using KulturPlatform.Application.Dtos.Home;
 using MediatR;
 
 namespace KulturPlatform.Application.Commands.Home
@@ -10,10 +11,12 @@ namespace KulturPlatform.Application.Commands.Home
         string SubtitleDe,
         string DescriptionTr,
         string DescriptionDe,
-        string BackgroundImageUrl,
+        string? BackgroundImageUrl,
+        string? BackgroundImageBase64,
+        string? BackgroundImageFileName,
         string PrimaryButtonTextTr,
         string PrimaryButtonTextDe,
         string SecondaryButtonTextTr,
         string SecondaryButtonTextDe
-    ) : IRequest;
+    ) : IRequest<HeroSectionDto>;
 }

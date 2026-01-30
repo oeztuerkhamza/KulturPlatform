@@ -8,6 +8,8 @@ namespace KulturPlatform.Application.Commands.Partner
         string DescriptionDe,
         int DisplayOrder,
         string? LogoUrl,
+        string? LogoBase64,
+        string? LogoFileName,
         string? WebsiteUrl
     ) : IRequest<Guid>;
 }

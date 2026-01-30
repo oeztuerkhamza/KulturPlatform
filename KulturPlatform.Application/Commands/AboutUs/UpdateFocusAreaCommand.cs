@@ -8,5 +8,8 @@ public record UpdateFocusAreaCommand(
     string TitleDe,
     string DescriptionTr,
     string DescriptionDe,
-    int Order
+    int Order,
+    string? IconUrl = null,
+    string? IconBase64 = null,
+    string? IconFileName = null
 ) : IRequest;

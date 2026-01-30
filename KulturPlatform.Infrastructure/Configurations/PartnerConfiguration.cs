@@ -10,6 +10,7 @@ namespace KulturPlatform.Infrastructure.Configurations
         {
             builder.ToTable("Partners");
             builder.HasKey(p => p.Id);
+            
             // ----- Name (Value Object) -----
             builder.OwnsOne(p => p.Name, vo =>
             {
@@ -18,6 +19,7 @@ namespace KulturPlatform.Infrastructure.Configurations
                   .HasMaxLength(200)
                   .IsRequired();
             });
+            
             // ----- Description (Value Object) -----
             builder.OwnsOne(p => p.DescriptionTr, vo =>
             {
@@ -42,26 +44,47 @@ namespace KulturPlatform.Infrastructure.Configurations
                   .HasColumnName("DisplayOrder")
                   .IsRequired();
             });
+            
             // ----- IsActive (Primitive) -----
             builder.Property(p => p.IsActive)
                    .HasColumnName("IsActive")
                    .IsRequired();
+            
             // ----- WebsiteUrl (Value Object) -----
             builder.OwnsOne(p => p.WebsiteUrl, vo =>
             {
                 vo.Property(x => x.Value)
                   .HasColumnName("WebsiteUrl")
-                  .HasMaxLength(500)
-                  .IsRequired(false);
+                  .HasMaxLength(500);
             });
-            // ----- LogoUrl (Value Object) -----
-            builder.OwnsOne(p => p.LogoUrl, vo =>
+            
+            // ✅ LogoUrl (URL option)
+            builder.OwnsOne(p => p.LogoUrl, url =>
             {
-                vo.Property(x => x.Value)
-                  .HasColumnName("LogoUrl")
-                  .HasMaxLength(500)
-                  .IsRequired(false);
+                url.Property(x => x.Value)
+                   .HasColumnName("LogoUrl")
+                   .HasMaxLength(500);
             });
+
+            // ✅ LogoData (Database option)
+            builder.OwnsOne(p => p.LogoData, data =>
+            {
+                data.Property(x => x.Base64Data)
+                    .HasColumnName("Logo_Base64")
+                    .HasColumnType("TEXT");
+
+                data.Property(x => x.MimeType)
+                    .HasColumnName("Logo_MimeType")
+                    .HasMaxLength(50);
+
+                data.Property(x => x.FileName)
+                    .HasColumnName("Logo_FileName")
+                    .HasMaxLength(255);
+
+                data.Property(x => x.FileSizeBytes)
+                    .HasColumnName("Logo_FileSize");
+            });
+            
             builder.Property(t => t.CreatedAt)
                 .IsRequired();
 

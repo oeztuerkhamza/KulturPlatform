@@ -35,7 +35,8 @@ namespace KulturPlatform.Application.Mappings
                     cmd.Date,
                     cmd.Time,
                     Location.Create(cmd.Location),
-                    Url.Create(cmd.ImageUrl)
+                    !string.IsNullOrWhiteSpace(cmd.ImageUrl) ? Url.Create(cmd.ImageUrl) : null,
+                    null
                 ));
 
             // Update Command -> Entity (Manual update)
@@ -66,7 +67,7 @@ namespace KulturPlatform.Application.Mappings
                     return entity;
                 });
 
-            // Entity -> DTO
+            // Entity -> DTO - Use GetImageSource() method for hybrid image
             CreateMap<TeaEvent, TeaEventDto>()
                 .ForMember(dest => dest.TitleTr, opt => opt.MapFrom(src => src.TitleTurkish.Value))
                 .ForMember(dest => dest.TitleDe, opt => opt.MapFrom(src => src.TitleGerman.Value))
@@ -78,7 +79,7 @@ namespace KulturPlatform.Application.Mappings
                 .ForMember(dest => dest.ParticipationTextDe, opt => opt.MapFrom(src => src.Content.ParticipationTextDe))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.Content.ContactEmail))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location.Value))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl.Value))
+                .ForMember(dest => dest.ImageSource, opt => opt.MapFrom(src => src.GetImageSource()))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
                 .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Time))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));

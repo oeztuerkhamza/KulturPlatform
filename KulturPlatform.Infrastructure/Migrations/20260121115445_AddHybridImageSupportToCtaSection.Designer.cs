@@ -4,6 +4,7 @@ using KulturPlatform.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KulturPlatform.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260121115445_AddHybridImageSupportToCtaSection")]
+    partial class AddHybridImageSupportToCtaSection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -1816,59 +1819,6 @@ namespace KulturPlatform.Infrastructure.Migrations
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.AboutUsWhoWeAre", b =>
                 {
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ImageData", "BannerImageData", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsWhoWeAreId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Base64Data")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("BannerImage_Base64");
-
-                            b1.Property<string>("FileName")
-                                .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)")
-                                .HasColumnName("BannerImage_FileName");
-
-                            b1.Property<int>("FileSizeBytes")
-                                .HasColumnType("int")
-                                .HasColumnName("BannerImage_FileSize");
-
-                            b1.Property<string>("MimeType")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("BannerImage_MimeType");
-
-                            b1.HasKey("AboutUsWhoWeAreId");
-
-                            b1.ToTable("AboutUsWhoWeAre");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsWhoWeAreId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Url", "BannerImageUrl", b1 =>
-                        {
-                            b1.Property<Guid>("AboutUsWhoWeAreId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("nvarchar(500)")
-                                .HasColumnName("BannerImageUrl");
-
-                            b1.HasKey("AboutUsWhoWeAreId");
-
-                            b1.ToTable("AboutUsWhoWeAre");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AboutUsWhoWeAreId");
-                        });
-
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Description", "WhoWeAreDe", b1 =>
                         {
                             b1.Property<Guid>("AboutUsWhoWeAreId")
@@ -1906,10 +1856,6 @@ namespace KulturPlatform.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("AboutUsWhoWeAreId");
                         });
-
-                    b.Navigation("BannerImageData");
-
-                    b.Navigation("BannerImageUrl");
 
                     b.Navigation("WhoWeAreDe")
                         .IsRequired();
@@ -4772,40 +4718,6 @@ namespace KulturPlatform.Infrastructure.Migrations
 
             modelBuilder.Entity("KulturPlatform.Domain.Commons.Aggregates.TeaEvent", b =>
                 {
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ImageData", "ImageData", b1 =>
-                        {
-                            b1.Property<Guid>("TeaEventId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Base64Data")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("Image_Base64");
-
-                            b1.Property<string>("FileName")
-                                .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)")
-                                .HasColumnName("Image_FileName");
-
-                            b1.Property<int>("FileSizeBytes")
-                                .HasColumnType("int")
-                                .HasColumnName("Image_FileSize");
-
-                            b1.Property<string>("MimeType")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("Image_MimeType");
-
-                            b1.HasKey("TeaEventId");
-
-                            b1.ToTable("TeaEvents");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TeaEventId");
-                        });
-
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Url", "ImageUrl", b1 =>
                         {
                             b1.Property<Guid>("TeaEventId")
@@ -4934,9 +4846,8 @@ namespace KulturPlatform.Infrastructure.Migrations
                     b.Navigation("Content")
                         .IsRequired();
 
-                    b.Navigation("ImageData");
-
-                    b.Navigation("ImageUrl");
+                    b.Navigation("ImageUrl")
+                        .IsRequired();
 
                     b.Navigation("Location")
                         .IsRequired();
@@ -5608,59 +5519,6 @@ namespace KulturPlatform.Infrastructure.Migrations
                                 .HasForeignKey("FocusAreaId");
                         });
 
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.ImageData", "IconData", b1 =>
-                        {
-                            b1.Property<Guid>("FocusAreaId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Base64Data")
-                                .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("Icon_Base64");
-
-                            b1.Property<string>("FileName")
-                                .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)")
-                                .HasColumnName("Icon_FileName");
-
-                            b1.Property<int>("FileSizeBytes")
-                                .HasColumnType("int")
-                                .HasColumnName("Icon_FileSize");
-
-                            b1.Property<string>("MimeType")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("Icon_MimeType");
-
-                            b1.HasKey("FocusAreaId");
-
-                            b1.ToTable("FocusAreas");
-
-                            b1.WithOwner()
-                                .HasForeignKey("FocusAreaId");
-                        });
-
-                    b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Url", "IconUrl", b1 =>
-                        {
-                            b1.Property<Guid>("FocusAreaId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("nvarchar(500)")
-                                .HasColumnName("IconUrl");
-
-                            b1.HasKey("FocusAreaId");
-
-                            b1.ToTable("FocusAreas");
-
-                            b1.WithOwner()
-                                .HasForeignKey("FocusAreaId");
-                        });
-
                     b.OwnsOne("KulturPlatform.Domain.Commons.ValueObjects.Title", "TitleDe", b1 =>
                         {
                             b1.Property<Guid>("FocusAreaId")
@@ -5704,10 +5562,6 @@ namespace KulturPlatform.Infrastructure.Migrations
 
                     b.Navigation("DescriptionTr")
                         .IsRequired();
-
-                    b.Navigation("IconData");
-
-                    b.Navigation("IconUrl");
 
                     b.Navigation("TitleDe")
                         .IsRequired();

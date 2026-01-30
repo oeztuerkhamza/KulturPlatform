@@ -17,7 +17,8 @@ public class AboutUsAggregateProfile : Profile
 
         CreateMap<AboutUsWhoWeAre, AboutUsWhoWeAreDto>()
             .ForMember(dest => dest.WhoWeAreTr, opt => opt.MapFrom(src => src.WhoWeAreTr.Value))
-            .ForMember(dest => dest.WhoWeAreDe, opt => opt.MapFrom(src => src.WhoWeAreDe.Value));
+            .ForMember(dest => dest.WhoWeAreDe, opt => opt.MapFrom(src => src.WhoWeAreDe.Value))
+            .ForMember(dest => dest.BannerImageSource, opt => opt.MapFrom(src => src.GetBannerImageSource()));
 
         CreateMap<AboutUsGoals, AboutUsGoalsDto>()
             .ForMember(dest => dest.GoalsTr, opt => opt.MapFrom(src => src.GoalsTr.Value))
@@ -47,7 +48,8 @@ public class AboutUsAggregateProfile : Profile
             .ForMember(dest => dest.TitleTr, opt => opt.MapFrom(src => src.TitleTr.Value))
             .ForMember(dest => dest.TitleDe, opt => opt.MapFrom(src => src.TitleDe.Value))
             .ForMember(dest => dest.DescriptionTr, opt => opt.MapFrom(src => src.DescriptionTr.Value))
-            .ForMember(dest => dest.DescriptionDe, opt => opt.MapFrom(src => src.DescriptionDe.Value));
+            .ForMember(dest => dest.DescriptionDe, opt => opt.MapFrom(src => src.DescriptionDe.Value))
+            .ForMember(dest => dest.IconSource, opt => opt.MapFrom(src => src.GetIconSource()));
 
         CreateMap<ActivityArea, ActivityAreaDto>()
             .ForMember(dest => dest.TitleTr, opt => opt.MapFrom(src => src.TitleTr.Value))

@@ -1,5 +1,6 @@
 ﻿using KulturPlatform.Application.Interfaces.TeaEvent;
 using KulturPlatform.Domain.Commons.Aggregates;
+using Microsoft.EntityFrameworkCore;
 
 namespace KulturPlatform.Infrastructure.Repositories
 {
@@ -10,6 +11,13 @@ namespace KulturPlatform.Infrastructure.Repositories
         public TeaEventWriteRepository(AppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<TeaEvent?> GetByIdForUpdateAsync(Guid id, CancellationToken cancellationToken)
+        {
+            // ✅ Tracking ile entity al (AsNoTracking YOK!)
+            return await _context.TeaEvents
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task AddAsync(

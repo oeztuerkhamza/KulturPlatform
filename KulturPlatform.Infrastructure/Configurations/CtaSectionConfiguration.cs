@@ -40,6 +40,33 @@ namespace KulturPlatform.Infrastructure.Configurations
                 .HasMaxLength(1000)
                 .IsRequired();
 
+            // ? BackgroundImageUrl (URL option)
+            builder.OwnsOne(c => c.BackgroundImageUrl, url =>
+            {
+                url.Property(x => x.Value)
+                   .HasColumnName("BackgroundImageUrl")
+                   .HasMaxLength(500);
+            });
+
+            // ? BackgroundImageData (Database option)
+            builder.OwnsOne(c => c.BackgroundImageData, data =>
+            {
+                data.Property(x => x.Base64Data)
+                    .HasColumnName("BackgroundImage_Base64")
+                    .HasColumnType("TEXT");
+
+                data.Property(x => x.MimeType)
+                    .HasColumnName("BackgroundImage_MimeType")
+                    .HasMaxLength(50);
+
+                data.Property(x => x.FileName)
+                    .HasColumnName("BackgroundImage_FileName")
+                    .HasMaxLength(255);
+
+                data.Property(x => x.FileSizeBytes)
+                    .HasColumnName("BackgroundImage_FileSize");
+            });
+
             builder.Property(c => c.PrimaryButtonTr)
                 .HasConversion(titleConverter)
                 .HasColumnName("PrimaryButtonTr")
