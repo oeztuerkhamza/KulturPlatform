@@ -1,5 +1,6 @@
 using KulturPlatform.Application.Interfaces;
 using KulturPlatform.Application.Interfaces.AboutUs;
+using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using KulturPlatform.Domain.Interfaces;
 using MediatR;
@@ -10,16 +11,16 @@ public class UpdateFocusAreaCommandHandler : IRequestHandler<UpdateFocusAreaComm
 {
     private readonly IFocusAreaRepository _repository;
     private readonly IUnitOfWork _uow;
-    private readonly IImageProcessingService _imageProcessingService;
+    private readonly ImageService _imageService;
 
     public UpdateFocusAreaCommandHandler(
         IFocusAreaRepository repository, 
         IUnitOfWork uow,
-        IImageProcessingService imageProcessingService)
+        ImageService imageService)
     {
         _repository = repository;
         _uow = uow;
-        _imageProcessingService = imageProcessingService;
+        _imageService = imageService;
     }
 
     public async Task Handle(UpdateFocusAreaCommand request, CancellationToken cancellationToken)
@@ -28,24 +29,37 @@ public class UpdateFocusAreaCommandHandler : IRequestHandler<UpdateFocusAreaComm
         if (focusArea == null)
             throw new KeyNotFoundException($"FocusArea with Id {request.Id} not found.");
 
-        // Process hybrid icon
+        // Handle icon upload
         Url? iconUrl = null;
-        ImageData? iconData = null;
 
         if (!string.IsNullOrWhiteSpace(request.IconBase64) && !string.IsNullOrWhiteSpace(request.IconFileName))
         {
-            // Process base64 icon
-            iconData = await _imageProcessingService.ProcessImageAsync(
+            // Get current icon for cleanup
+            HybridImage? currentIcon = null;
+            if (focusArea.IconUrl != null)
+            {
+                currentIcon = HybridImage.FromUrl(focusArea.IconUrl.Value);
+            }
+            else if (focusArea.IconData != null)
+            {
+                currentIcon = HybridImage.FromImageData(focusArea.IconData);
+            }
+
+            // Upload new icon to storage and get URL
+            var newIcon = await _imageService.UpdateImageAsync(
+                currentIcon,
                 request.IconBase64,
                 request.IconFileName,
+                "focus-areas",
                 maxWidth: 512,
                 maxHeight: 512,
-                quality: 85
-            );
+                quality: 90);
+
+            iconUrl = newIcon.ImageUrl;
         }
         else if (!string.IsNullOrWhiteSpace(request.IconUrl))
         {
-            // Use URL
+            // Use provided URL
             iconUrl = Url.Create(request.IconUrl);
         }
 
@@ -55,7 +69,7 @@ public class UpdateFocusAreaCommandHandler : IRequestHandler<UpdateFocusAreaComm
             new Description(request.DescriptionTr),
             new Description(request.DescriptionDe),
             iconUrl,
-            iconData,
+            null, // Always null - using URL storage now
             request.Order
         );
 

@@ -1,0 +1,120 @@
+// ?? IMPORTANT: This file is currently disabled to avoid build errors
+// To enable Azure Blob Storage support:
+// 1. Install NuGet package: dotnet add package Azure.Storage.Blobs
+// 2. Rename this file from .txt to .cs
+// 3. Update Program.cs to register this service
+// 4. Configure connection string in appsettings.json
+
+/*
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Sas;
+using KulturPlatform.Application.Interfaces;
+using KulturPlatform.Domain.Commons.ValueObjects;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+namespace KulturPlatform.Infrastructure.Services;
+
+/// <summary>
+/// Azure Blob Storage implementation for production-grade image storage
+/// Provides CDN integration, SAS tokens, and scalable storage
+/// 
+/// Required NuGet: Azure.Storage.Blobs
+/// Required Configuration in appsettings.json:
+/// "AzureBlobStorage": {
+///   "ConnectionString": "your-connection-string",
+///   "ContainerPrefix": "kulturplatform"
+/// }
+/// </summary>
+public class AzureBlobStorageService : IFileStorageService
+{
+    private readonly BlobServiceClient _blobServiceClient;
+    private readonly ILogger<AzureBlobStorageService> _logger;
+    private readonly string _containerPrefix;
+
+    public AzureBlobStorageService(
+        ILogger<AzureBlobStorageService> logger,
+        IConfiguration configuration)
+    {
+        _logger = logger;
+        
+        var connectionString = configuration["AzureBlobStorage:ConnectionString"] 
+            ?? throw new InvalidOperationException("Azure Blob Storage connection string not configured");
+        
+        _containerPrefix = configuration["AzureBlobStorage:ContainerPrefix"] ?? "";
+        _blobServiceClient = new BlobServiceClient(connectionString);
+    }
+
+    public async Task<string> UploadImageAsync(ImageData imageData, string containerName, string? fileName = null)
+    {
+        try
+        {
+            var containerClient = await GetOrCreateContainerAsync(containerName);
+            var blobName = fileName ?? $"{Guid.NewGuid()}_{SanitizeFileName(imageData.FileName)}";
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            var blobHttpHeaders = new BlobHttpHeaders
+            {
+                ContentType = imageData.MimeType,
+                CacheControl = "public, max-age=31536000"
+            };
+
+            var imageBytes = imageData.GetBytes();
+            using var stream = new MemoryStream(imageBytes);
+            
+            await blobClient.UploadAsync(
+                stream,
+                new BlobUploadOptions
+                {
+                    HttpHeaders = blobHttpHeaders,
+                    Metadata = new Dictionary<string, string>
+                    {
+                        { "OriginalFileName", imageData.FileName },
+                        { "UploadedAt", DateTime.UtcNow.ToString("O") }
+                    }
+                });
+
+            var url = blobClient.Uri.ToString();
+            _logger.LogInformation("Image uploaded to Azure Blob Storage: {Url}", url);
+            return url;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to upload image to Azure Blob Storage");
+            throw new InvalidOperationException($"Failed to upload image: {ex.Message}", ex);
+        }
+    }
+
+    public async Task<bool> DeleteImageAsync(string imageUrl)
+    {
+        try
+        {
+            var (containerName, blobName) = ParseAzureBlobUrl(imageUrl);
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            var response = await blobClient.DeleteIfExistsAsync();
+            return response.Value;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to delete image from Azure Blob Storage");
+            return false;
+        }
+    }
+
+    // ... (other methods)
+
+    private async Task<BlobContainerClient> GetOrCreateContainerAsync(string containerName)
+    {
+        var fullContainerName = string.IsNullOrEmpty(_containerPrefix) 
+            ? containerName.ToLowerInvariant()
+            : $"{_containerPrefix}-{containerName}".ToLowerInvariant();
+
+        var containerClient = _blobServiceClient.GetBlobContainerClient(fullContainerName);
+        await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+        return containerClient;
+    }
+}
+*/

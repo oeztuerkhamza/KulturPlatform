@@ -162,6 +162,25 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // Image Processing Service
 builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IImageProcessingService, ImageProcessingService>();
 
+// File Storage Service - Local storage for now (switch to Azure later)
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IFileStorageService, LocalFileStorageService>();
+
+// TODO: Uncomment when Azure.Storage.Blobs NuGet package is installed
+// var storageProvider = builder.Configuration["FileStorage:Provider"] ?? "Local";
+// if (storageProvider.Equals("Azure", StringComparison.OrdinalIgnoreCase))
+// {
+//     builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IFileStorageService, AzureBlobStorageService>();
+// }
+// else
+// {
+//     builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IFileStorageService, LocalFileStorageService>();
+// }
+
+// Image Service (Orchestrates processing + storage)
+builder.Services.AddScoped<KulturPlatform.Application.Services.ImageService>();
+
+
+
 // Email Service
 builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IEmailService, EmailService>();
 

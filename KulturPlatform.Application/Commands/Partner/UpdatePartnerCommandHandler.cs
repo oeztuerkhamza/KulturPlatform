@@ -1,4 +1,5 @@
 using KulturPlatform.Application.Interfaces;
+using KulturPlatform.Application.Services;
 using PartnerRepo = KulturPlatform.Application.Interfaces.Partner.IPartnerRepository;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using MediatR;
@@ -8,14 +9,14 @@ namespace KulturPlatform.Application.Commands.Partner
     public class UpdatePartnerCommandHandler : IRequestHandler<UpdatePartnerCommand, Unit>
     {
         private readonly PartnerRepo _repository;
-        private readonly IImageProcessingService _imageProcessingService;
+        private readonly ImageService _imageService;
 
         public UpdatePartnerCommandHandler(
             PartnerRepo repository,
-            IImageProcessingService imageProcessingService)
+            ImageService imageService)
         {
             _repository = repository;
-            _imageProcessingService = imageProcessingService;
+            _imageService = imageService;
         }
 
         public async Task<Unit> Handle(UpdatePartnerCommand request, CancellationToken cancellationToken)
@@ -60,14 +61,16 @@ namespace KulturPlatform.Application.Commands.Partner
 
             if (!string.IsNullOrWhiteSpace(base64Data) && !string.IsNullOrWhiteSpace(fileName))
             {
-                var processedImageData = await _imageProcessingService.ProcessImageAsync(
+                // Upload to storage and get URL
+                var image = await _imageService.ProcessAndUploadImageAsync(
                     base64Data,
                     fileName,
+                    "partners",
                     maxWidth: 800,
                     maxHeight: 800,
-                    quality: 85
+                    quality: 90
                 );
-                return (null, processedImageData);
+                return (image.ImageUrl, null); // Return URL, not database data
             }
             else if (!string.IsNullOrWhiteSpace(url))
             {

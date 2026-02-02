@@ -1,5 +1,6 @@
 using KulturPlatform.Application.Interfaces;
 using KulturPlatform.Application.Interfaces.AboutUs;
+using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.Entities;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using KulturPlatform.Domain.Interfaces;
@@ -11,38 +12,39 @@ public class CreateFocusAreaCommandHandler : IRequestHandler<CreateFocusAreaComm
 {
     private readonly IFocusAreaRepository _repository;
     private readonly IUnitOfWork _uow;
-    private readonly IImageProcessingService _imageProcessingService;
+    private readonly ImageService _imageService;
 
     public CreateFocusAreaCommandHandler(
         IFocusAreaRepository repository,
         IUnitOfWork uow,
-        IImageProcessingService imageProcessingService)
+        ImageService imageService)
     {
         _repository = repository;
         _uow = uow;
-        _imageProcessingService = imageProcessingService;
+        _imageService = imageService;
     }
 
     public async Task<Guid> Handle(CreateFocusAreaCommand request, CancellationToken cancellationToken)
     {
-        // Process hybrid icon
+        // Handle icon upload
         Url? iconUrl = null;
-        ImageData? iconData = null;
 
         if (!string.IsNullOrWhiteSpace(request.IconBase64) && !string.IsNullOrWhiteSpace(request.IconFileName))
         {
-            // Process base64 icon
-            iconData = await _imageProcessingService.ProcessImageAsync(
+            // Upload icon to storage and get URL
+            var icon = await _imageService.ProcessAndUploadImageAsync(
                 request.IconBase64,
                 request.IconFileName,
+                "focus-areas",
                 maxWidth: 512,
                 maxHeight: 512,
-                quality: 85
-            );
+                quality: 90);
+
+            iconUrl = icon.ImageUrl;
         }
         else if (!string.IsNullOrWhiteSpace(request.IconUrl))
         {
-            // Use URL
+            // Use provided URL
             iconUrl = Url.Create(request.IconUrl);
         }
 
@@ -52,7 +54,7 @@ public class CreateFocusAreaCommandHandler : IRequestHandler<CreateFocusAreaComm
             new Description(request.DescriptionTr),
             new Description(request.DescriptionDe),
             iconUrl,
-            iconData,
+            null, // Always null - using URL storage now
             request.Order
         );
 

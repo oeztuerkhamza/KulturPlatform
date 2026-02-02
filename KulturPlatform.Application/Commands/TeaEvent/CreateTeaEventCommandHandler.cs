@@ -1,5 +1,6 @@
 ﻿using KulturPlatform.Application.Interfaces;
 using KulturPlatform.Application.Interfaces.TeaEvent;
+using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using MediatR;
 
@@ -9,14 +10,14 @@ namespace KulturPlatform.Application.Commands.TeaEvent
         : IRequestHandler<CreateTeaEventCommand, Guid>
     {
         private readonly ITeaEventWriteRepository _writeRepo;
-        private readonly IImageProcessingService _imageProcessingService;
+        private readonly ImageService _imageService;
 
         public CreateTeaEventCommandHandler(
             ITeaEventWriteRepository writeRepo,
-            IImageProcessingService imageProcessingService)
+            ImageService imageService)
         {
             _writeRepo = writeRepo;
-            _imageProcessingService = imageProcessingService;
+            _imageService = imageService;
         }
 
         public async Task<Guid> Handle(
@@ -33,24 +34,24 @@ namespace KulturPlatform.Application.Commands.TeaEvent
                 request.ContactEmail
             );
 
-            // Process hybrid image
+            // Process hybrid image - upload to storage
             Url? imageUrl = null;
-            ImageData? imageData = null;
 
             if (!string.IsNullOrWhiteSpace(request.ImageBase64) && !string.IsNullOrWhiteSpace(request.ImageFileName))
             {
-                // Process base64 image
-                imageData = await _imageProcessingService.ProcessImageAsync(
+                // Upload image to storage and get URL
+                var image = await _imageService.ProcessAndUploadImageAsync(
                     request.ImageBase64,
                     request.ImageFileName,
+                    "tea-events",
                     maxWidth: 1920,
                     maxHeight: 1080,
                     quality: 85
                 );
+                imageUrl = image.ImageUrl;
             }
             else if (!string.IsNullOrWhiteSpace(request.ImageUrl))
             {
-                // Use URL
                 imageUrl = Url.Create(request.ImageUrl);
             }
 
@@ -62,7 +63,7 @@ namespace KulturPlatform.Application.Commands.TeaEvent
                 request.Time,
                 Location.Create(request.Location),
                 imageUrl,
-                imageData
+                null // Always null - using URL storage now
             );
 
             await _writeRepo.AddAsync(teaEvent, cancellationToken);

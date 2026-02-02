@@ -8,6 +8,8 @@ public record CreateTeamMemberCommand(
     string TitleDe,
     string? DescriptionTr,
     string? DescriptionDe,
-    string ImageUrl,
+    string? ImageUrl,
+    string? ImageBase64,      // For uploading new image
+    string? ImageFileName,    // For uploading new image
     int Order
 ) : IRequest<Guid>;

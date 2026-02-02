@@ -1,5 +1,6 @@
 using KulturPlatform.Application.Interfaces;
 using KulturPlatform.Application.Interfaces.Home;
+using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.AggregateRoot;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using MediatR;
@@ -9,14 +10,14 @@ namespace KulturPlatform.Application.Commands.Home
     public class CreateHeroSectionCommandHandler : IRequestHandler<CreateHeroSectionCommand, Guid>
     {
         private readonly IHeroSectionRepository _repository;
-        private readonly IImageProcessingService _imageProcessingService;
+        private readonly ImageService _imageService;
 
         public CreateHeroSectionCommandHandler(
             IHeroSectionRepository repository,
-            IImageProcessingService imageProcessingService)
+            ImageService imageService)
         {
             _repository = repository;
-            _imageProcessingService = imageProcessingService;
+            _imageService = imageService;
         }
 
         public async Task<Guid> Handle(CreateHeroSectionCommand request, CancellationToken cancellationToken)
@@ -59,14 +60,16 @@ namespace KulturPlatform.Application.Commands.Home
 
             if (!string.IsNullOrWhiteSpace(base64Data) && !string.IsNullOrWhiteSpace(fileName))
             {
-                var processedImageData = await _imageProcessingService.ProcessImageAsync(
+                // Upload to storage and get URL
+                var image = await _imageService.ProcessAndUploadImageAsync(
                     base64Data,
                     fileName,
+                    "hero-sections",
                     maxWidth: 1920,
                     maxHeight: 1080,
-                    quality: 85
+                    quality: 90
                 );
-                return (null, processedImageData);
+                return (image.ImageUrl, null); // Return URL, not database data
             }
             else if (!string.IsNullOrWhiteSpace(url))
             {

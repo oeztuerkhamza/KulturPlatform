@@ -1,5 +1,6 @@
 ﻿using KulturPlatform.Application.Interfaces;
 using KulturPlatform.Application.Interfaces.Activity;
+using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using MediatR;
 
@@ -8,14 +9,14 @@ namespace KulturPlatform.Application.Commands.Activity
     public class CreateActivityCommandHandler : IRequestHandler<CreateActivityCommand, Guid>
     {
         private readonly IActivityRepository _activityRepository;
-        private readonly IImageProcessingService _imageProcessingService;
+        private readonly ImageService _imageService;
 
         public CreateActivityCommandHandler(
             IActivityRepository activityRepository,
-            IImageProcessingService imageProcessingService)
+            ImageService imageService)
         {
             _activityRepository = activityRepository;
-            _imageProcessingService = imageProcessingService;
+            _imageService = imageService;
         }
 
         public async Task<Guid> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
@@ -23,9 +24,8 @@ namespace KulturPlatform.Application.Commands.Activity
             // 1️⃣ Date string'den ActivityDate VO'ya dönüştür
             var activityDate = ActivityDate.FromString(request.Date);
 
-            // 2️⃣ Process image - either URL or Base64
+            // 2️⃣ Process image - upload to storage
             Url? imageUrl = null;
-            ImageData? imageData = null;
 
             // Validate: both cannot be provided
             if (!string.IsNullOrWhiteSpace(request.ImageUrl) && !string.IsNullOrWhiteSpace(request.ImageBase64))
@@ -33,18 +33,19 @@ namespace KulturPlatform.Application.Commands.Activity
 
             if (!string.IsNullOrWhiteSpace(request.ImageBase64) && !string.IsNullOrWhiteSpace(request.ImageFileName))
             {
-                // Process base64 image with compression and validation
-                imageData = await _imageProcessingService.ProcessImageAsync(
+                // Upload to storage and get URL
+                var image = await _imageService.ProcessAndUploadImageAsync(
                     request.ImageBase64,
                     request.ImageFileName,
+                    "activities",
                     maxWidth: 1920,
                     maxHeight: 1080,
                     quality: 85
                 );
+                imageUrl = image.ImageUrl;
             }
             else if (!string.IsNullOrWhiteSpace(request.ImageUrl))
             {
-                // This will throw if it's a data URI
                 imageUrl = Url.Create(request.ImageUrl);
             }
 
@@ -53,7 +54,7 @@ namespace KulturPlatform.Application.Commands.Activity
             if (!string.IsNullOrWhiteSpace(request.VideoUrl))
                 videoUrl = Url.Create(request.VideoUrl);
 
-            // 4️⃣ GalleryImages map et (opsiyonel)
+            // 4️⃣ GalleryImages map et (opsiyonel) - upload to storage
             MediaGallery? galleryImages = null;
             if (request.GalleryImages != null && request.GalleryImages.Any())
             {
@@ -63,19 +64,22 @@ namespace KulturPlatform.Application.Commands.Activity
                 {
                     if (!string.IsNullOrWhiteSpace(dto.Base64Data) && !string.IsNullOrWhiteSpace(dto.FileName))
                     {
-                        // Process base64 gallery image
-                        var processedImageData = await _imageProcessingService.ProcessImageAsync(
+                        // Upload gallery image to storage
+                        var galleryImage = await _imageService.ProcessAndUploadImageAsync(
                             dto.Base64Data,
                             dto.FileName,
+                            "activities-gallery",
                             maxWidth: 1920,
                             maxHeight: 1080,
-                            quality: 85
+                            quality: 80
                         );
-                        galleryImageList.Add(Domain.Commons.ValueObjects.GalleryImage.FromImageData(processedImageData));
+                        if (galleryImage.ImageUrl != null)
+                        {
+                            galleryImageList.Add(Domain.Commons.ValueObjects.GalleryImage.FromUrl(galleryImage.ImageUrl.Value));
+                        }
                     }
                     else if (!string.IsNullOrWhiteSpace(dto.Url))
                     {
-                        // Use URL
                         galleryImageList.Add(Domain.Commons.ValueObjects.GalleryImage.FromUrl(dto.Url));
                     }
                 }
@@ -115,7 +119,7 @@ namespace KulturPlatform.Application.Commands.Activity
                 address,
                 new Category(request.Category),
                 imageUrl,
-                imageData,
+                null, // Always null - using URL storage now
                 galleryImages,
                 videoUrl
             );
@@ -132,7 +136,7 @@ namespace KulturPlatform.Application.Commands.Activity
                     activity.Address,
                     activity.Category,
                     imageUrl,
-                    imageData,
+                    null, // Always null - using URL storage now
                     galleryImages,
                     videoUrl,
                     request.IsActive,

@@ -1,5 +1,6 @@
 ﻿using KulturPlatform.Application.Interfaces;
 using KulturPlatform.Application.Interfaces.TeaEvent;
+using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using KulturPlatform.Domain.Interfaces;
 using MediatR;
@@ -10,16 +11,16 @@ namespace KulturPlatform.Application.Commands.TeaEvent
         : IRequestHandler<UpdateTeaEventCommand>
     {
         private readonly ITeaEventWriteRepository _writeRepo;
-        private readonly IImageProcessingService _imageProcessingService;
+        private readonly ImageService _imageService;
         private readonly IUnitOfWork _unitOfWork;
 
         public UpdateTeaEventCommandHandler(
             ITeaEventWriteRepository writeRepo,
-            IImageProcessingService imageProcessingService,
+            ImageService imageService,
             IUnitOfWork unitOfWork)
         {
             _writeRepo = writeRepo;
-            _imageProcessingService = imageProcessingService;
+            _imageService = imageService;
             _unitOfWork = unitOfWork;
         }
 
@@ -50,22 +51,34 @@ namespace KulturPlatform.Application.Commands.TeaEvent
             teaEvent.UpdateLocation(Location.Create(request.Location));
             teaEvent.Reschedule(request.Date, request.Time);
 
-            // Process hybrid image if provided
+            // Process hybrid image if provided - upload to storage
             if (!string.IsNullOrWhiteSpace(request.ImageBase64) && !string.IsNullOrWhiteSpace(request.ImageFileName))
             {
-                // Process base64 image
-                var imageData = await _imageProcessingService.ProcessImageAsync(
+                // Get current image for cleanup
+                HybridImage? currentImage = null;
+                if (teaEvent.ImageUrl != null)
+                {
+                    currentImage = HybridImage.FromUrl(teaEvent.ImageUrl.Value);
+                }
+                else if (teaEvent.ImageData != null)
+                {
+                    currentImage = HybridImage.FromImageData(teaEvent.ImageData);
+                }
+
+                // Upload new image to storage
+                var newImage = await _imageService.UpdateImageAsync(
+                    currentImage,
                     request.ImageBase64,
                     request.ImageFileName,
+                    "tea-events",
                     maxWidth: 1920,
                     maxHeight: 1080,
                     quality: 85
                 );
-                teaEvent.UpdateImage(null, imageData);
+                teaEvent.UpdateImage(newImage.ImageUrl, null);
             }
             else if (!string.IsNullOrWhiteSpace(request.ImageUrl))
             {
-                // Use URL
                 var imageUrl = Url.Create(request.ImageUrl);
                 teaEvent.UpdateImage(imageUrl, null);
             }
