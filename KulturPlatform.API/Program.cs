@@ -30,7 +30,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -177,7 +176,10 @@ builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IFileStorageSer
 // }
 
 // Image Service (Orchestrates processing + storage)
+// Register both interface and concrete type for backward compatibility
 builder.Services.AddScoped<KulturPlatform.Application.Services.ImageService>();
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.IImageService>(
+    sp => sp.GetRequiredService<KulturPlatform.Application.Services.ImageService>());
 
 
 

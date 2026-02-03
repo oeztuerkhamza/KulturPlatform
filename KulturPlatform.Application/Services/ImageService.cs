@@ -8,7 +8,7 @@ namespace KulturPlatform.Application.Services;
 /// Orchestrates image processing and storage operations
 /// Combines IImageProcessingService and IFileStorageService for complete image handling
 /// </summary>
-public class ImageService
+public class ImageService : IImageService
 {
     private readonly IImageProcessingService _imageProcessing;
     private readonly IFileStorageService _fileStorage;
@@ -34,10 +34,15 @@ public class ImageService
         string containerName,
         int maxWidth = 1920,
         int maxHeight = 1080,
-        int quality = 85)
+        int quality = 85,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
+            _logger.LogDebug("Processing and uploading image: {FileName} to {Container}", fileName, containerName);
+            
             // Step 1: Process image (resize, compress, validate)
             var processedImage = await _imageProcessing.ProcessImageAsync(
                 base64Data, 
@@ -46,14 +51,23 @@ public class ImageService
                 maxHeight, 
                 quality);
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             // Step 2: Upload to storage and get URL
             var imageUrl = await _fileStorage.UploadImageAsync(
                 processedImage, 
                 containerName, 
                 null); // Let storage service generate unique filename
 
+            _logger.LogInformation("Image uploaded successfully: {FileName} -> {Url}", fileName, imageUrl);
+
             // Step 3: Return HybridImage with URL
             return HybridImage.FromUrl(imageUrl);
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogWarning("Image processing cancelled: {FileName}", fileName);
+            throw;
         }
         catch (Exception ex)
         {
@@ -71,8 +85,11 @@ public class ImageService
         string fileName,
         int maxWidth = 1920,
         int maxHeight = 1080,
-        int quality = 85)
+        int quality = 85,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
             var processedImage = await _imageProcessing.ProcessImageAsync(
@@ -102,8 +119,11 @@ public class ImageService
         string containerName,
         int maxWidth = 1920,
         int maxHeight = 1080,
-        int quality = 85)
+        int quality = 85,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
             // Process and upload new image first
@@ -113,12 +133,13 @@ public class ImageService
                 containerName, 
                 maxWidth, 
                 maxHeight, 
-                quality);
+                quality,
+                cancellationToken);
 
             // Delete old image only after successful upload
             if (currentImage != null && currentImage.IsUrl())
             {
-                await DeleteImageAsync(currentImage);
+                await DeleteImageAsync(currentImage, cancellationToken);
             }
 
             return newImage;
@@ -133,7 +154,7 @@ public class ImageService
     /// <summary>
     /// Delete image from storage
     /// </summary>
-    public async Task<bool> DeleteImageAsync(HybridImage image)
+    public async Task<bool> DeleteImageAsync(HybridImage image, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -154,13 +175,36 @@ public class ImageService
     }
 
     /// <summary>
+    /// Delete image by URL
+    /// </summary>
+    public async Task<bool> DeleteImageByUrlAsync(string imageUrl, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(imageUrl))
+            {
+                return await _fileStorage.DeleteImageAsync(imageUrl);
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to delete image by URL: {Url}", imageUrl);
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Migrate image from database to cloud storage
     /// Useful for migrating existing data
     /// </summary>
     public async Task<HybridImage> MigrateToCloudStorageAsync(
         HybridImage currentImage,
-        string containerName)
+        string containerName,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         if (currentImage.IsDatabase() && currentImage.ImageData != null)
         {
             // Upload existing database image to cloud
@@ -182,8 +226,11 @@ public class ImageService
         HybridImage sourceImage,
         string containerName,
         int width,
-        int height)
+        int height,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
             ImageData sourceData;
@@ -202,6 +249,8 @@ public class ImageService
             {
                 throw new InvalidOperationException("Source image has no data");
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Create thumbnail
             var thumbnail = await _imageProcessing.CreateThumbnailAsync(sourceData, width, height);
