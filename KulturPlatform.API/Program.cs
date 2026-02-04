@@ -352,14 +352,16 @@ if (app.Environment.IsDevelopment())
 
 
 
-// Root redirect to Scalar UI
-app.MapGet("/", () => Results.Redirect("/scalar/v1"));
 
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Root redirect to Scalar UI
+app.MapGet("/", () => Results.Redirect("/scalar/v1"));
 app.MapControllers();
 
 app.Run();

@@ -1,4 +1,4 @@
-using KulturPlatform.Application.Interfaces.Course;
+﻿using KulturPlatform.Application.Interfaces.Course;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using KulturPlatform.Domain.Interfaces;
 using MediatR;
@@ -34,8 +34,15 @@ namespace KulturPlatform.Application.Commands.Course
             var scheduleDe = request.ScheduleDe != null ? new CourseSchedule(request.ScheduleDe) : null;
             var instructor = request.Instructor != null ? new InstructorName(request.Instructor) : null;
             var location = request.CourseLocation != null
-                ? new Address(request.CourseLocation.Street, request.CourseLocation.HouseNo, request.CourseLocation.ZipCode, request.CourseLocation.City, request.CourseLocation.State, request.CourseLocation.Country)
-                : null;
+    ? new Address(
+        request.CourseLocation.Street,
+        request.CourseLocation.HouseNo,
+        request.CourseLocation.ZipCode,
+        request.CourseLocation.City,
+        request.CourseLocation.State,
+        request.CourseLocation.Country
+    )
+    : null;
             var category = request.Category != null ? new Category(request.Category) : null;
 
             course.UpdateTitle(titleTr, titleDe);

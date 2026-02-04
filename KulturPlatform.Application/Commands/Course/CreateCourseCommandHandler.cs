@@ -31,10 +31,10 @@ namespace KulturPlatform.Application.Commands.Course
                 ? new Address(
                     request.CourseLocation.Street,
                     request.CourseLocation.HouseNo,
+                    request.CourseLocation.ZipCode,
                     request.CourseLocation.City,
                     request.CourseLocation.State,
-                    request.CourseLocation.Country,
-                    request.CourseLocation.ZipCode
+                    request.CourseLocation.Country
                 )
                 : null;
             var category = request.Category != null ? new Category(request.Category) : null;

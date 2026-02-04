@@ -1,5 +1,4 @@
-﻿using KulturPlatform.Application.Interfaces;
-using KulturPlatform.Application.Interfaces.Activity;
+﻿using KulturPlatform.Application.Interfaces.Activity;
 using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.ValueObjects;
 using MediatR;
@@ -76,7 +75,7 @@ namespace KulturPlatform.Application.Commands.Activity
             if (request.GalleryImages != null && request.GalleryImages.Any())
             {
                 var galleryImageList = new List<Domain.Commons.ValueObjects.GalleryImage>();
-                
+
                 foreach (var dto in request.GalleryImages)
                 {
                     if (!string.IsNullOrWhiteSpace(dto.Base64Data) && !string.IsNullOrWhiteSpace(dto.FileName))
@@ -100,7 +99,7 @@ namespace KulturPlatform.Application.Commands.Activity
                         galleryImageList.Add(Domain.Commons.ValueObjects.GalleryImage.FromUrl(dto.Url));
                     }
                 }
-                
+
                 if (galleryImageList.Any())
                 {
                     galleryImages = new MediaGallery(galleryImageList);
