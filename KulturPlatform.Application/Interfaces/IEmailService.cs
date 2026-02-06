@@ -24,6 +24,16 @@ namespace KulturPlatform.Application.Interfaces
             CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Sends an email (public method for newsletter and other services)
+        /// </summary>
+        Task SendEmailAsync(
+            string toEmail,
+            string subject,
+            string htmlBody,
+            string? replyToEmail = null,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Checks if an email address or IP has exceeded rate limits
         /// </summary>
         Task<bool> IsRateLimitExceededAsync(string identifier);

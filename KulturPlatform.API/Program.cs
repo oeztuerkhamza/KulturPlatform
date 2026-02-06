@@ -274,6 +274,11 @@ builder.Services.AddScoped<IFeatureRepository, FeatureRepository>();
 builder.Services.AddScoped<IInstagramPostRepository, InstagramPostRepository>();
 builder.Services.AddScoped<IHomeReadService, HomeReadService>();
 
+// Newsletter
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.Newsletter.INewsletterSubscriberRepository, NewsletterSubscriberRepository>();
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.Newsletter.INewsletterCampaignRepository, NewsletterCampaignRepository>();
+builder.Services.AddScoped<KulturPlatform.Application.Interfaces.Newsletter.INewsletterService, NewsletterService>();
+
 
 var app = builder.Build();
 

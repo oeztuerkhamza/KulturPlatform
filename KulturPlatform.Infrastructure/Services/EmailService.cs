@@ -1,9 +1,11 @@
+using Azure;
+using Azure.Communication.Email;
 using KulturPlatform.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Mail;
-using System.Collections.Concurrent;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -13,6 +15,8 @@ namespace KulturPlatform.Infrastructure.Services
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<EmailService> _logger;
+        private readonly EmailClient? _azureEmailClient;
+        private readonly string _emailProvider;
         private static readonly ConcurrentDictionary<string, List<DateTime>> _rateLimitTracker = new();
         private static readonly object _cleanupLock = new();
         private static DateTime _lastCleanup = DateTime.UtcNow;
@@ -21,6 +25,25 @@ namespace KulturPlatform.Infrastructure.Services
         {
             _configuration = configuration;
             _logger = logger;
+
+            var emailSettings = _configuration.GetSection("EmailSettings");
+            _emailProvider = emailSettings["Provider"] ?? "Smtp";
+
+            // Initialize Azure Email Client if configured
+            if (_emailProvider.Equals("AzureCommunicationServices", StringComparison.OrdinalIgnoreCase))
+            {
+                var connectionString = emailSettings["AzureConnectionString"];
+                if (!string.IsNullOrWhiteSpace(connectionString))
+                {
+                    _azureEmailClient = new EmailClient(connectionString);
+                    _logger.LogInformation("? Azure Communication Services Email initialized");
+                }
+                else
+                {
+                    _logger.LogWarning("?? Azure Connection String not configured, falling back to SMTP");
+                    _emailProvider = "Smtp";
+                }
+            }
         }
 
         public async Task<bool> IsRateLimitExceededAsync(string identifier)
@@ -253,6 +276,113 @@ namespace KulturPlatform.Infrastructure.Services
             string htmlBody,
             string? replyToEmail = null,
             CancellationToken cancellationToken = default)
+        {
+            if (_emailProvider.Equals("AzureCommunicationServices", StringComparison.OrdinalIgnoreCase)
+                && _azureEmailClient != null)
+            {
+                await SendEmailViaAzureAsync(toEmail, subject, htmlBody, replyToEmail, cancellationToken);
+            }
+            else
+            {
+                await SendEmailViaSmtpAsync(toEmail, subject, htmlBody, replyToEmail, cancellationToken);
+            }
+        }
+
+        // Public method for newsletter and other services (implements IEmailService)
+        async Task IEmailService.SendEmailAsync(
+            string toEmail,
+            string subject,
+            string htmlBody,
+            string? replyToEmail,
+            CancellationToken cancellationToken)
+        {
+            await SendEmailAsync(toEmail, subject, htmlBody, replyToEmail, cancellationToken);
+        }
+
+        private async Task SendEmailViaAzureAsync(
+            string toEmail,
+            string subject,
+            string htmlBody,
+            string? replyToEmail,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                var emailSettings = _configuration.GetSection("EmailSettings");
+                var senderEmail = emailSettings["AzureSenderEmail"]
+                    ?? "DoNotReply@kulturplattformfreiburg.org";
+                var senderName = emailSettings["AzureSenderName"]
+                    ?? "Kultur Platform Freiburg";
+
+                var emailContent = new EmailContent(subject)
+                {
+                    Html = htmlBody
+                };
+
+                var emailRecipients = new EmailRecipients(new List<EmailAddress>
+                {
+                    new EmailAddress(toEmail)
+                });
+
+                var emailMessage = new EmailMessage(
+                    senderAddress: senderEmail,
+                    emailRecipients,
+                    emailContent);
+
+                // Add Reply-To if provided
+                if (!string.IsNullOrWhiteSpace(replyToEmail))
+                {
+                    emailMessage.ReplyTo.Add(new EmailAddress(replyToEmail));
+                }
+
+                // Add custom headers for better deliverability
+                emailMessage.Headers.Add("X-Mailer", "KulturPlatformFreiburg-Azure/1.0");
+                emailMessage.Headers.Add("Organization", "Kultur Platform Freiburg");
+                emailMessage.Headers.Add("List-Unsubscribe-Post", "List-Unsubscribe=One-Click");
+
+                EmailSendOperation emailSendOperation = await _azureEmailClient!.SendAsync(
+                    WaitUntil.Completed,
+                    emailMessage,
+                    cancellationToken);
+
+                _logger.LogInformation(
+                    "? Email sent via Azure to {Email}. MessageId: {MessageId}, Status: {Status}",
+                    toEmail,
+                    emailSendOperation.Id,
+                    emailSendOperation.Value.Status);
+
+                // Check delivery status - Azure SDK 1.0.1 doesn't expose error details in EmailSendResult
+                if (emailSendOperation.Value.Status == EmailSendStatus.Failed)
+                {
+                    _logger.LogError(
+                        "? Azure email delivery failed to {Email}",
+                        toEmail);
+                    throw new InvalidOperationException("Email delivery failed");
+                }
+            }
+            catch (RequestFailedException azureEx)
+            {
+                _logger.LogError(azureEx,
+                    "? Azure Communication Services error for {Email}. ErrorCode: {ErrorCode}",
+                    toEmail, azureEx.ErrorCode);
+
+                // Fallback to SMTP if Azure fails
+                _logger.LogWarning("?? Falling back to SMTP due to Azure error");
+                await SendEmailViaSmtpAsync(toEmail, subject, htmlBody, replyToEmail, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "? Unexpected error while sending email via Azure to {Email}", toEmail);
+                throw;
+            }
+        }
+
+        private async Task SendEmailViaSmtpAsync(
+            string toEmail,
+            string subject,
+            string htmlBody,
+            string? replyToEmail,
+            CancellationToken cancellationToken)
         {
             try
             {

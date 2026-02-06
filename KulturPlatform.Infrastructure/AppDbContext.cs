@@ -29,6 +29,10 @@ namespace KulturPlatform.Infrastructure
         public DbSet<ContactInfo> ContactInfos { get; set; }
         public DbSet<ContactMessage> ContactMessages { get; set; }
 
+        // Newsletter
+        public DbSet<NewsletterSubscriber> NewsletterSubscribers { get; set; }
+        public DbSet<NewsletterCampaign> NewsletterCampaigns { get; set; }
+
         // About Us - New Structure
         public DbSet<AboutUsQuote> AboutUsQuotes { get; set; }
         public DbSet<AboutUsWhoWeAre> AboutUsWhoWeAre { get; set; }
