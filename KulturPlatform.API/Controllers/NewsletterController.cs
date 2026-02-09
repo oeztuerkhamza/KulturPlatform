@@ -117,7 +117,7 @@ namespace KulturPlatform.API.Controllers
         /// Get all newsletter subscribers (admin only)
         /// </summary>
         [HttpGet("subscribers")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> GetSubscribers()
         {
             var query = new GetNewsletterSubscribersQuery();
@@ -129,7 +129,7 @@ namespace KulturPlatform.API.Controllers
         /// Get subscriber statistics (admin only)
         /// </summary>
         [HttpGet("subscribers/stats")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> GetSubscriberStats()
         {
             var query = new GetNewsletterStatsQuery();
@@ -141,7 +141,7 @@ namespace KulturPlatform.API.Controllers
         /// Create new newsletter campaign (admin only)
         /// </summary>
         [HttpPost("campaigns")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> CreateCampaign([FromBody] CreateNewsletterCampaignCommand command)
         {
             var campaignId = await _mediator.Send(command);
@@ -152,7 +152,7 @@ namespace KulturPlatform.API.Controllers
         /// Get all newsletter campaigns (admin only)
         /// </summary>
         [HttpGet("campaigns")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> GetCampaigns()
         {
             var query = new GetNewsletterCampaignsQuery();
@@ -164,7 +164,7 @@ namespace KulturPlatform.API.Controllers
         /// Get newsletter campaign by ID (admin only)
         /// </summary>
         [HttpGet("campaigns/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> GetCampaign(Guid id)
         {
             var query = new GetNewsletterCampaignByIdQuery { Id = id };
@@ -180,7 +180,7 @@ namespace KulturPlatform.API.Controllers
         /// Update newsletter campaign (admin only)
         /// </summary>
         [HttpPut("campaigns/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> UpdateCampaign(Guid id, [FromBody] UpdateNewsletterCampaignCommand command)
         {
             if (id != command.Id)
@@ -194,7 +194,7 @@ namespace KulturPlatform.API.Controllers
         /// Send newsletter campaign (admin only)
         /// </summary>
         [HttpPost("campaigns/{id}/send")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> SendCampaign(Guid id)
         {
             try
@@ -222,7 +222,7 @@ namespace KulturPlatform.API.Controllers
         /// Send test newsletter email (admin only)
         /// </summary>
         [HttpPost("campaigns/{id}/test")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> SendTestEmail(Guid id, [FromBody] SendTestNewsletterCommand command)
         {
             if (id != command.CampaignId)
@@ -236,7 +236,7 @@ namespace KulturPlatform.API.Controllers
         /// Delete newsletter campaign (admin only)
         /// </summary>
         [HttpDelete("campaigns/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize] // System Admin or User Admin can access
         public async Task<IActionResult> DeleteCampaign(Guid id)
         {
             var command = new DeleteNewsletterCampaignCommand { Id = id };
