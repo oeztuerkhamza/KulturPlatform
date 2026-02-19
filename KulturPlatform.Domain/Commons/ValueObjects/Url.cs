@@ -15,10 +15,10 @@
             Value = value;
         }
 
-        public static Url Create(string url)
+        public static Url? Create(string? url)
         {
             if (string.IsNullOrWhiteSpace(url))
-                throw new ArgumentException("URL cannot be empty.");
+                return null;
 
             // Reject base64 data URIs - these should use ImageData instead
             if (url.StartsWith("data:", StringComparison.OrdinalIgnoreCase))

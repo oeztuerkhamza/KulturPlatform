@@ -15,12 +15,6 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
                 throw new ArgumentException("Category cannot be empty.", nameof(value));
 
             Value = value.Trim();
-
-            var allowedCategories = new[] { "Music", "Art", "Education", "Social" };
-            if (!allowedCategories.Contains(value, StringComparer.OrdinalIgnoreCase))
-                throw new ArgumentException($"Category '{value}' is not allowed.", nameof(value));
-
-            Value = value;
         }
         public override string ToString() => Value;
     }

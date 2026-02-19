@@ -11,7 +11,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
         public Title HeroTitleGerman { get; private set; }
         public Title HeroSubtitleTurkish { get; private set; }
         public Title HeroSubtitleGerman { get; private set; }
-        public Url HeroImageUrl { get; private set; }
+        public Url? HeroImageUrl { get; private set; }
 
         // Feature Highlights (3 features)
         public Title Feature1TitleTurkish { get; private set; }
@@ -57,7 +57,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             Title heroTitleGerman,
             Title heroSubtitleTurkish,
             Title heroSubtitleGerman,
-            Url heroImageUrl,
+            Url? heroImageUrl,
             Title feature1TitleTurkish,
             Title feature1TitleGerman,
             Title feature2TitleTurkish,
@@ -128,7 +128,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             Title heroTitleGerman,
             Title heroSubtitleTurkish,
             Title heroSubtitleGerman,
-            Url heroImageUrl,
+            Url? heroImageUrl,
             Title feature1TitleTurkish,
             Title feature1TitleGerman,
             Title feature2TitleTurkish,
@@ -192,7 +192,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             Title heroTitleGerman,
             Title heroSubtitleTurkish,
             Title heroSubtitleGerman,
-            Url heroImageUrl,
+            Url? heroImageUrl,
             Title feature1TitleTurkish,
             Title feature1TitleGerman,
             Title feature2TitleTurkish,
@@ -231,7 +231,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
             SetUpdatedAt();
         }
 
-        private void UpdateHeroSection(Title titleTr, Title titleDe, Title subtitleTr, Title subtitleDe, Url imageUrl)
+        private void UpdateHeroSection(Title titleTr, Title titleDe, Title subtitleTr, Title subtitleDe, Url? imageUrl)
         {
             HeroTitleTurkish = titleTr;
             HeroTitleGerman = titleDe;

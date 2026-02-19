@@ -49,7 +49,7 @@ namespace KulturPlatform.Infrastructure.Configurations
                 vo.Property(u => u.Value)
                   .HasColumnName("HeroImageUrl")
                   .HasMaxLength(500)
-                  .IsRequired();
+                  .IsRequired(false);
             });
 
             // Feature Highlights
