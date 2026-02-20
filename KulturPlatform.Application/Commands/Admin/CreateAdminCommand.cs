@@ -6,6 +6,6 @@ namespace KulturPlatform.Application.Commands.Admin
         string Email,
         string Password,
         string Name,
-        string Role = "User"
+        string Role = "UserAdmin"
     ) : IRequest<Guid>;
 }

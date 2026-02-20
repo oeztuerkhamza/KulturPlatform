@@ -31,7 +31,16 @@ namespace KulturPlatform.Infrastructure.Repositories
 
         public void Update(Admin admin, CancellationToken cancellationToken)
         {
-            _context.Admins.Update(admin);
+            var entry = _context.Entry(admin);
+            if (entry.State == EntityState.Detached)
+            {
+                _context.Admins.Attach(admin);
+                entry.State = EntityState.Modified;
+            }
+            else
+            {
+                _context.Admins.Update(admin);
+            }
         }
 
         public void Delete(Admin admin, CancellationToken cancellationToken)

@@ -77,13 +77,19 @@ namespace KulturPlatform.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id }, id);
         }
 
-        // PUT: api/admins/{id} - SystemAdmin only
+        // PUT: api/admins/{id} - SystemAdmin or self
         [HttpPut("{id}")]
-        [Authorize(Policy = Policies.RequireSystemAdmin)]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAdminCommand command)
         {
             if (id != command.Id)
                 return BadRequest("Id mismatch.");
+
+            // Users can update their own profile, SystemAdmin can update all
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var isSystemAdmin = User.IsInRole(Roles.SystemAdmin);
+
+            if (!isSystemAdmin && currentUserId != id.ToString())
+                return Forbid();
 
             await _mediator.Send(command);
             return NoContent();

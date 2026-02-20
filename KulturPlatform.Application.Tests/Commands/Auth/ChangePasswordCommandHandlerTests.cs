@@ -4,6 +4,8 @@ using KulturPlatform.Application.Interfaces.Admin;
 using KulturPlatform.Domain.Commons.Aggregates;
 using KulturPlatform.Domain.Commons.Constants;
 using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -12,13 +14,19 @@ namespace KulturPlatform.Application.Tests.Commands.Auth;
 public class ChangePasswordCommandHandlerTests
 {
     private readonly Mock<IAdminRepository> _adminRepositoryMock;
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<ILogger<ChangePasswordCommandHandler>> _loggerMock;
     private readonly ChangePasswordCommandHandler _handler;
 
     public ChangePasswordCommandHandlerTests()
     {
         _adminRepositoryMock = new Mock<IAdminRepository>();
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _loggerMock = new Mock<ILogger<ChangePasswordCommandHandler>>();
         _handler = new ChangePasswordCommandHandler(
-            _adminRepositoryMock.Object);
+            _adminRepositoryMock.Object,
+            _unitOfWorkMock.Object,
+            _loggerMock.Object);
     }
 
     [Fact]
@@ -28,7 +36,7 @@ public class ChangePasswordCommandHandlerTests
         var adminId = Guid.NewGuid();
         var currentPassword = "CurrentPassword123!";
         var newPassword = "NewPassword123!";
-        
+
         var admin = Admin.CreateNew(
             Email.Create("admin@test.com"),
             Password.Create(currentPassword),
@@ -100,7 +108,7 @@ public class ChangePasswordCommandHandlerTests
         var adminId = Guid.NewGuid();
         var currentPassword = "CurrentPassword123!";
         var newPassword = "NewPassword123!";
-        
+
         var admin = Admin.CreateNew(
             Email.Create("admin@test.com"),
             Password.Create(currentPassword),
