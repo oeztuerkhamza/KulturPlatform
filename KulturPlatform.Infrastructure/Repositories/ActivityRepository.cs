@@ -16,7 +16,6 @@ namespace KulturPlatform.Infrastructure.Repositories
         public async Task AddAsync(Activity activity, CancellationToken cancellationToken = default)
         {
             await _context.Activities.AddAsync(activity, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(Activity activity, CancellationToken cancellationToken = default)
@@ -61,15 +60,11 @@ namespace KulturPlatform.Infrastructure.Repositories
                 activity.DetailedContentTr,
                 activity.DetailedContentDe
             );
-
-            // Save changes - EF Core will track all changes automatically
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(Activity activity, CancellationToken cancellationToken = default)
         {
             _context.Activities.Remove(activity);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<Activity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

@@ -20,5 +20,12 @@ namespace KulturPlatform.Domain.Commons.AggregateRoot
                 CreatedAt = DateTime.UtcNow
             };
         }
+
+        public void Update(Url imageUrl, Url? link = null)
+        {
+            ImageUrl = imageUrl;
+            Link = link;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

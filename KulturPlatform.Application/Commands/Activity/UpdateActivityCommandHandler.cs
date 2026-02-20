@@ -1,6 +1,7 @@
 ﻿using KulturPlatform.Application.Interfaces.Activity;
 using KulturPlatform.Application.Services;
 using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
 using MediatR;
 
 namespace KulturPlatform.Application.Commands.Activity
@@ -9,13 +10,16 @@ namespace KulturPlatform.Application.Commands.Activity
     {
         private readonly IActivityRepository _activityRepository;
         private readonly ImageService _imageService;
+        private readonly IUnitOfWork _unitOfWork;
 
         public UpdateActivityCommandHandler(
             IActivityRepository activityRepository,
-            ImageService imageService)
+            ImageService imageService,
+            IUnitOfWork unitOfWork)
         {
             _activityRepository = activityRepository;
             _imageService = imageService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(UpdateActivityCommand request, CancellationToken cancellationToken)
@@ -136,6 +140,9 @@ namespace KulturPlatform.Application.Commands.Activity
 
             // 8️⃣ Repository'de update et
             await _activityRepository.UpdateAsync(activity, cancellationToken);
+
+            // 9️⃣ UnitOfWork ile değişiklikleri kaydet
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

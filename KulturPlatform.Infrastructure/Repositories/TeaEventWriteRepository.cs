@@ -25,7 +25,6 @@ namespace KulturPlatform.Infrastructure.Repositories
             CancellationToken cancellationToken)
         {
             await _context.TeaEvents.AddAsync(teaEvent, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task UpdateAsync(
@@ -33,7 +32,6 @@ namespace KulturPlatform.Infrastructure.Repositories
             CancellationToken cancellationToken)
         {
             _context.TeaEvents.Update(teaEvent);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(
@@ -41,7 +39,6 @@ namespace KulturPlatform.Infrastructure.Repositories
             CancellationToken cancellationToken)
         {
             _context.TeaEvents.Remove(teaEvent);
-            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

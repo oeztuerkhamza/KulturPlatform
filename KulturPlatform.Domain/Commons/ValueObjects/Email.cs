@@ -20,6 +20,11 @@
             Value = email;
         }
 
+        public static Email Create(string email)
+        {
+            return new Email(email);
+        }
+
         private static bool IsValidEmail(string email)
         {
             try

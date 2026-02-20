@@ -1,6 +1,7 @@
 using KulturPlatform.Application.Dtos.AuthDto;
 using KulturPlatform.Application.Interfaces.Admin;
 using KulturPlatform.Application.Interfaces.Auth;
+using KulturPlatform.Domain.Interfaces;
 using MediatR;
 
 namespace KulturPlatform.Application.Commands.Auth
@@ -9,11 +10,13 @@ namespace KulturPlatform.Application.Commands.Auth
     {
         private readonly IAdminRepository _adminRepository;
         private readonly ITokenService _tokenService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public LoginCommandHandler(IAdminRepository adminRepository, ITokenService tokenService)
+        public LoginCommandHandler(IAdminRepository adminRepository, ITokenService tokenService, IUnitOfWork unitOfWork)
         {
             _adminRepository = adminRepository;
             _tokenService = tokenService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<LoginResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -30,6 +33,8 @@ namespace KulturPlatform.Application.Commands.Auth
                 throw new UnauthorizedAccessException("Invalid email or password.");
 
             admin.UpdateLastLogin();
+            _adminRepository.Update(admin, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var token = _tokenService.GenerateToken(admin.Id, admin.Email.Value, admin.Role);
 

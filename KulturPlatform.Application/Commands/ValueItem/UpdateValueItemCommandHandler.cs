@@ -1,6 +1,7 @@
 ﻿using KulturPlatform.Application.Interfaces.ValueItem;
 using KulturPlatform.Domain.Commons.Aggregates;
 using KulturPlatform.Domain.Commons.ValueObjects;
+using KulturPlatform.Domain.Interfaces;
 using MediatR;
 
 namespace KulturPlatform.Application.Commands.ValueItem
@@ -9,10 +10,14 @@ namespace KulturPlatform.Application.Commands.ValueItem
         : IRequestHandler<UpdateValueItemCommand, Unit>
     {
         private readonly IValueItemWriteRepository _writeRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateValueItemCommandHandler(IValueItemWriteRepository writeRepository)
+        public UpdateValueItemCommandHandler(
+            IValueItemWriteRepository writeRepository,
+            IUnitOfWork unitOfWork)
         {
             _writeRepository = writeRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Unit> Handle(
@@ -41,6 +46,9 @@ namespace KulturPlatform.Application.Commands.ValueItem
 
             // Repository update (async)
             await _writeRepository.UpdateAsync(valueItem, cancellationToken);
+
+            // UnitOfWork ile değişiklikleri kaydet
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

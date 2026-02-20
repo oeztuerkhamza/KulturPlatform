@@ -1,10 +1,11 @@
 ﻿using KulturPlatform.Application.Dtos.Activity;
+using KulturPlatform.Application.Dtos.Common;
 using KulturPlatform.Application.Interfaces.Activity;
 using MediatR;
 
 namespace KulturPlatform.Application.Queries.Activity
 {
-    public class GetAllActivitiesQueryHandler : IRequestHandler<GetAllActivitiesQuery, IEnumerable<ActivityDto>>
+    public class GetAllActivitiesQueryHandler : IRequestHandler<GetAllActivitiesQuery, PagedResult<ActivityDto>>
     {
         private readonly IActivityReadService _activityReadService;
 
@@ -13,9 +14,12 @@ namespace KulturPlatform.Application.Queries.Activity
             _activityReadService = activityReadService;
         }
 
-        public async Task<IEnumerable<ActivityDto>> Handle(GetAllActivitiesQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<ActivityDto>> Handle(GetAllActivitiesQuery request, CancellationToken cancellationToken)
         {
-            return await _activityReadService.GetAllAsync();
+            return await _activityReadService.GetAllPagedAsync(
+                request.PageNumber,
+                request.PageSize,
+                cancellationToken);
         }
     }
 }

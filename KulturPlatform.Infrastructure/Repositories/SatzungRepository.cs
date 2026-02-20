@@ -25,7 +25,6 @@ namespace KulturPlatform.Infrastructure.Repositories
         public void Update(Satzung entity, CancellationToken cancellationToken)
         {
             _context.Satzungen.Update(entity);
-            _context.SaveChangesAsync(cancellationToken);
         }
 
         public void Delete(Satzung entity, CancellationToken cancellationToken)

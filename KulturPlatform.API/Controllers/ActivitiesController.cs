@@ -1,5 +1,6 @@
 ﻿using KulturPlatform.Application.Commands.Activity;
 using KulturPlatform.Application.Dtos.Activity;
+using KulturPlatform.Application.Dtos.Common;
 using KulturPlatform.Application.Queries.Activity;
 using KulturPlatform.Domain.Commons.Constants;
 using MediatR;
@@ -20,13 +21,22 @@ namespace KulturPlatform.API.Controllers
         }
 
         /// <summary>
-        /// Get all activities
+        /// Get all activities with pagination
         /// </summary>
+        /// <param name="pageNumber">Page number (default: 1)</param>
+        /// <param name="pageSize">Items per page (default: 20, max: 100)</param>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAll()
+        public async Task<ActionResult<PagedResult<ActivityDto>>> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 20)
         {
-            var result = await _mediator.Send(new GetAllActivitiesQuery());
+            var query = new GetAllActivitiesQuery
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 

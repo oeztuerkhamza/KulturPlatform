@@ -20,11 +20,52 @@ namespace KulturPlatform.API.Controllers
 
         /// <summary>
         /// Get complete About Us aggregate with all IDs (Public)
+        /// WARNING: Large response - consider using lazy loading endpoints instead
         /// </summary>
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAggregate()
             => Ok(await _mediator.Send(new GetAboutUsAggregateQuery()));
+
+        /// <summary>
+        /// Get About Us summary (Quote, WhoWeAre, Goals) - Lazy loading
+        /// </summary>
+        [HttpGet("summary")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetSummary()
+            => Ok(await _mediator.Send(new GetAboutUsSummaryQuery()));
+
+        /// <summary>
+        /// Get About Us values (Vision, Mission, CoreValues) - Lazy loading
+        /// </summary>
+        [HttpGet("values")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetValues()
+            => Ok(await _mediator.Send(new GetAboutUsValuesQuery()));
+
+        /// <summary>
+        /// Get About Us focus areas - Lazy loading
+        /// </summary>
+        [HttpGet("focus-areas")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFocusAreas()
+            => Ok(await _mediator.Send(new GetAboutUsFocusAreasQuery()));
+
+        /// <summary>
+        /// Get About Us activity areas - Lazy loading
+        /// </summary>
+        [HttpGet("activity-areas")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetActivityAreas()
+            => Ok(await _mediator.Send(new GetAboutUsActivityAreasQuery()));
+
+        /// <summary>
+        /// Get About Us team members - Lazy loading
+        /// </summary>
+        [HttpGet("team")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTeam()
+            => Ok(await _mediator.Send(new GetAboutUsTeamQuery()));
 
         #region Quote
 

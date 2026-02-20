@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using KulturPlatform.API.Configuration;
+using KulturPlatform.API.Middleware;
 using KulturPlatform.Application;
 using KulturPlatform.Application.Commands.Auth;
 using KulturPlatform.Application.Interfaces.AboutUs;
@@ -88,43 +89,27 @@ builder.Services.AddAuthentication(options =>
         RoleClaimType = System.Security.Claims.ClaimTypes.Role
     };
 
-    // ✅ Debug için event handlers
-    options.Events = new JwtBearerEvents
+    // Authentication event handlers (development only for debugging)
+    if (builder.Environment.IsDevelopment())
     {
-        OnMessageReceived = context =>
+        options.Events = new JwtBearerEvents
         {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            var authHeader = context.Request.Headers["Authorization"].ToString();
-            logger.LogWarning("📨 OnMessageReceived - Authorization Header: [{Header}]", authHeader);
-
-            if (!string.IsNullOrEmpty(authHeader))
+            OnAuthenticationFailed = context =>
             {
-                var parts = authHeader.Split(' ');
-                logger.LogWarning("📨 Header parts count: {Count}", parts.Length);
-                if (parts.Length == 2)
-                {
-                    logger.LogWarning("📨 Scheme: [{Scheme}], Token length: {Length}", parts[0], parts[1]?.Length ?? 0);
-                    var tokenDots = parts[1]?.Count(c => c == '.');
-                    logger.LogWarning("📨 Token dots count: {Dots}", tokenDots);
-                }
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning("JWT Authentication failed: {Exception}", context.Exception.Message);
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                var userId = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var role = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                logger.LogInformation("JWT Token validated - UserId: {UserId}, Role: {Role}", userId, role);
+                return Task.CompletedTask;
             }
-            return Task.CompletedTask;
-        },
-        OnAuthenticationFailed = context =>
-        {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogError("❌ JWT Authentication failed: {Exception}", context.Exception.Message);
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            var userId = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            var role = context.Principal?.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-            logger.LogInformation("✅ JWT Token validated - UserId: {UserId}, Role: {Role}", userId, role);
-            return Task.CompletedTask;
-        }
-    };
+        };
+    }
 });
 builder.Services.AddAutoMapper(cfg => { }, typeof(ApplicationMarker).Assembly);
 builder.Services.AddValidatorsFromAssembly(typeof(ApplicationMarker).Assembly);
@@ -357,6 +342,12 @@ if (app.Environment.IsDevelopment())
 
 
 
+
+// Correlation ID - must be first to ensure all logs have correlation ID
+app.UseCorrelationId();
+
+// Global exception handler - must be early in pipeline
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseStaticFiles();
 app.UseHttpsRedirection();

@@ -5,4 +5,7 @@
     <Project Path="KulturPlatform.Domain/KulturPlatform.Domain.csproj" />
     <Project Path="KulturPlatform.Infrastructure/KulturPlatform.Infrastructure.csproj" />
   </Folder>
+  <Project Path="KulturPlatform.API.IntegrationTests/KulturPlatform.API.IntegrationTests.csproj" />
+  <Project Path="KulturPlatform.Application.Tests/KulturPlatform.Application.Tests.csproj" />
+  <Project Path="KulturPlatform.Domain.Tests/KulturPlatform.Domain.Tests.csproj" />
 </Solution>

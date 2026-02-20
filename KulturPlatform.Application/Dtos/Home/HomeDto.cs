@@ -6,6 +6,7 @@ namespace KulturPlatform.Application.Dtos.Home
         HeroSectionDto? HeroSection,
         List<FeatureDto> Features,
         CtaSectionDto? Cta,
-        List<InstagramPostDto> InstagramFeed
+        List<InstagramPostDto> InstagramFeed,
+        List<ActivityDto> UpcomingActivities
     );
 }

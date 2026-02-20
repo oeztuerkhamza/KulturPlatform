@@ -21,40 +21,22 @@ namespace KulturPlatform.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginDto loginDto)
         {
-            try
-            {
-                var command = new LoginCommand(loginDto.Email, loginDto.Password);
-                var result = await _mediator.Send(command);
-                return Ok(result);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
+            var command = new LoginCommand(loginDto.Email, loginDto.Password);
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
-            try
-            {
-                var adminIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if (adminIdClaim == null || !Guid.TryParse(adminIdClaim.Value, out var adminId))
-                    return Unauthorized();
+            var adminIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (adminIdClaim == null || !Guid.TryParse(adminIdClaim.Value, out var adminId))
+                return Unauthorized();
 
-                var command = new ChangePasswordCommand(adminId, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
-                await _mediator.Send(command);
-                return Ok(new { message = "Password changed successfully." });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            var command = new ChangePasswordCommand(adminId, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
+            await _mediator.Send(command);
+            return Ok(new { message = "Password changed successfully." });
         }
 
         [Authorize]
@@ -69,7 +51,7 @@ namespace KulturPlatform.API.Controllers
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            // Debug: Tüm claim'leri döndür
+            // Debug: Tï¿½m claim'leri dï¿½ndï¿½r
             var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
 
             return Ok(new

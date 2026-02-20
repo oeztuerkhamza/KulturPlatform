@@ -120,3 +120,23 @@ public class AboutUsAggregateDto
     public List<ActivityAreaDto> ActivityAreas { get; set; } = new();
     public List<TeamMemberDto> TeamMembers { get; set; } = new();
 }
+
+/// <summary>
+/// Lazy loading DTO - Critical summary data (Quote, WhoWeAre, Goals)
+/// </summary>
+public class AboutUsSummaryDto
+{
+    public AboutUsQuoteDto? Quote { get; set; }
+    public AboutUsWhoWeAreDto? WhoWeAre { get; set; }
+    public AboutUsGoalsDto? Goals { get; set; }
+}
+
+/// <summary>
+/// Lazy loading DTO - Values data (Vision, Mission, CoreValues)
+/// </summary>
+public class AboutUsValuesDto
+{
+    public AboutUsVisionDto? Vision { get; set; }
+    public AboutUsMissionDto? Mission { get; set; }
+    public List<CoreValueDto> CoreValues { get; set; } = new();
+}

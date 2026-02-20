@@ -1,6 +1,8 @@
 ﻿using KulturPlatform.Application.Dtos.Activity;
+using KulturPlatform.Application.Dtos.Common;
 using KulturPlatform.Application.Dtos.LocalizationDto;
 using KulturPlatform.Application.Interfaces.Activity;
+using KulturPlatform.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace KulturPlatform.Infrastructure.ReadServices
@@ -45,6 +47,43 @@ namespace KulturPlatform.Infrastructure.ReadServices
                     a.IsActive
                 ))
                 .ToListAsync();
+        }
+
+        public async Task<PagedResult<ActivityDto>> GetAllPagedAsync(
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellationToken)
+        {
+            var query = _context.Activities
+                .AsNoTracking()
+                .Select(a => new ActivityDto(
+                    a.Id,
+                    a.TitleTr.Value,
+                    a.TitleDe.Value,
+                    a.DescriptionTr.Value,
+                    a.DescriptionDe.Value,
+                    a.DetailedContentTr != null ? a.DetailedContentTr.Value : null,
+                    a.DetailedContentDe != null ? a.DetailedContentDe.Value : null,
+                    a.Date.DateIso.ToString("yyyy-MM-dd"),
+                    new AddressDto
+                    {
+                        Street = a.Address.Street,
+                        HouseNo = a.Address.HouseNo,
+                        ZipCode = a.Address.ZipCode,
+                        City = a.Address.City,
+                        State = a.Address.State,
+                        Country = a.Address.Country
+                    },
+                    a.Category.Value,
+                    a.ImageUrl != null ? a.ImageUrl.Value : null,
+                    a.ImageData != null ? a.ImageData.GetDataUri() : (a.ImageUrl != null ? a.ImageUrl.Value : null),
+                    CreateImageMetadata(a),
+                    ConvertGalleryImages(a.GalleryImages.Images.Select(img => img.GetImageSource())),
+                    a.VideoUrl != null ? a.VideoUrl.Value : null,
+                    a.IsActive
+                ));
+
+            return await query.ToPagedResultAsync(pageNumber, pageSize, cancellationToken);
         }
 
         public async Task<IEnumerable<ActivityDto>> GetUpcomingAsync(CancellationToken cancellationToken)

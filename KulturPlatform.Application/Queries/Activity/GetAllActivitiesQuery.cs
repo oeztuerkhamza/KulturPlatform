@@ -1,7 +1,11 @@
 ﻿using KulturPlatform.Application.Dtos.Activity;
+using KulturPlatform.Application.Dtos.Common;
+using KulturPlatform.Application.Queries.Common;
 using MediatR;
 
 namespace KulturPlatform.Application.Queries.Activity
 {
-    public record GetAllActivitiesQuery() : IRequest<IEnumerable<ActivityDto>>;
+    public class GetAllActivitiesQuery : PagedQuery, IRequest<PagedResult<ActivityDto>>
+    {
+    }
 }

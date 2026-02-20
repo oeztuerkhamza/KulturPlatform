@@ -5,5 +5,6 @@ namespace KulturPlatform.Application.Interfaces.ValueItem
         Task<Domain.Commons.Aggregates.ValueItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task AddAsync(Domain.Commons.Aggregates.ValueItem valueItem, CancellationToken cancellationToken);
         Task UpdateAsync(Domain.Commons.Aggregates.ValueItem valueItem, CancellationToken cancellationToken);
+        void Delete(Domain.Commons.Aggregates.ValueItem valueItem);
     }
 }

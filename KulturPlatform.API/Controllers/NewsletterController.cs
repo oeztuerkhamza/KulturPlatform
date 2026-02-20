@@ -27,22 +27,14 @@ namespace KulturPlatform.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Subscribe([FromBody] SubscribeToNewsletterCommand command)
         {
-            try
+            var result = await _mediator.Send(command);
+            return Ok(new
             {
-                var result = await _mediator.Send(command);
-                return Ok(new
-                {
-                    success = true,
-                    message = result
-                        ? "Verification email sent. Please check your inbox."
-                        : "Email already subscribed and verified."
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error subscribing to newsletter");
-                return BadRequest(new { success = false, message = ex.Message });
-            }
+                success = true,
+                message = result
+                    ? "Verification email sent. Please check your inbox."
+                    : "Email already subscribed and verified."
+            });
         }
 
         /// <summary>
@@ -52,31 +44,23 @@ namespace KulturPlatform.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Verify([FromQuery] string token)
         {
-            try
+            var command = new VerifyNewsletterSubscriptionCommand { Token = token };
+            var result = await _mediator.Send(command);
+
+            if (result)
             {
-                var command = new VerifyNewsletterSubscriptionCommand { Token = token };
-                var result = await _mediator.Send(command);
-
-                if (result)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        message = "Newsletter subscription verified successfully!"
-                    });
-                }
-
-                return NotFound(new
-                {
-                    success = false,
-                    message = "Invalid verification link."
+                    success = true,
+                    message = "Newsletter subscription verified successfully!"
                 });
             }
-            catch (Exception ex)
+
+            return NotFound(new
             {
-                _logger.LogError(ex, "Error verifying newsletter subscription");
-                return BadRequest(new { success = false, message = ex.Message });
-            }
+                success = false,
+                message = "Invalid verification link."
+            });
         }
 
         /// <summary>
@@ -86,31 +70,23 @@ namespace KulturPlatform.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Unsubscribe([FromQuery] string token)
         {
-            try
+            var command = new UnsubscribeFromNewsletterCommand { Token = token };
+            var result = await _mediator.Send(command);
+
+            if (result)
             {
-                var command = new UnsubscribeFromNewsletterCommand { Token = token };
-                var result = await _mediator.Send(command);
-
-                if (result)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        message = "Successfully unsubscribed from newsletter."
-                    });
-                }
-
-                return NotFound(new
-                {
-                    success = false,
-                    message = "Invalid unsubscribe link."
+                    success = true,
+                    message = "Successfully unsubscribed from newsletter."
                 });
             }
-            catch (Exception ex)
+
+            return NotFound(new
             {
-                _logger.LogError(ex, "Error unsubscribing from newsletter");
-                return BadRequest(new { success = false, message = ex.Message });
-            }
+                success = false,
+                message = "Invalid unsubscribe link."
+            });
         }
 
         /// <summary>

@@ -42,6 +42,7 @@ public class AboutUsAggregateReadService : IAboutUsAggregateReadService
 
     public async Task<AboutUsAggregate> GetAboutUsAggregateAsync(CancellationToken ct)
     {
+        // Execute queries sequentially to avoid DbContext concurrency issues
         var quote = await _quoteRepository.GetAsync(ct);
         var whoWeAre = await _whoWeAreRepository.GetAsync(ct);
         var goals = await _goalsRepository.GetAsync(ct);
