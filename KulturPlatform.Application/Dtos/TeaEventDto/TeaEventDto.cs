@@ -16,12 +16,31 @@
         public string Location { get; init; }
         
         /// <summary>
-        /// Image source - either URL or data URI (base64) for display
+        /// Deprecated: Use ImageSource instead
+        /// </summary>
+        public string? ImageUrl { get; init; }
+        
+        /// <summary>
+        /// Unified image source - either URL or data URI from database
         /// </summary>
         public string? ImageSource { get; init; }
+        
+        /// <summary>
+        /// Metadata about the stored image
+        /// </summary>
+        public ImageMetadataDto? ImageMetadata { get; init; }
         
         public string ContactEmail { get; init; }
         public bool IsActive { get; init; }
     }
 
+    /// <summary>
+    /// Metadata about the stored image
+    /// </summary>
+    public record ImageMetadataDto(
+        string StorageType, // "URL" or "Database"
+        string? MimeType, // Only for database storage
+        string? FileName, // Only for database storage
+        int? FileSizeKB // Only for database storage
+    );
 }

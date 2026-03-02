@@ -67,7 +67,7 @@ namespace KulturPlatform.Application.Mappings
                     return entity;
                 });
 
-            // Entity -> DTO - Use GetImageSource() method for hybrid image
+            // Entity -> DTO - Map hybrid image fields (Activity pattern)
             CreateMap<TeaEvent, TeaEventDto>()
                 .ForMember(dest => dest.TitleTr, opt => opt.MapFrom(src => src.TitleTurkish.Value))
                 .ForMember(dest => dest.TitleDe, opt => opt.MapFrom(src => src.TitleGerman.Value))
@@ -79,10 +79,36 @@ namespace KulturPlatform.Application.Mappings
                 .ForMember(dest => dest.ParticipationTextDe, opt => opt.MapFrom(src => src.Content.ParticipationTextDe))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.Content.ContactEmail))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location.Value))
-                .ForMember(dest => dest.ImageSource, opt => opt.MapFrom(src => src.GetImageSource()))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl != null ? src.ImageUrl.Value : null)) // Deprecated
+                .ForMember(dest => dest.ImageSource, opt => opt.MapFrom(src => src.GetImageSource())) // Unified source
+                .ForMember(dest => dest.ImageMetadata, opt => opt.MapFrom(src => CreateImageMetadata(src))) // Metadata
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
                 .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Time))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+        }
+
+        private static ImageMetadataDto? CreateImageMetadata(TeaEvent teaEvent)
+        {
+            if (teaEvent.ImageData != null)
+            {
+                return new ImageMetadataDto(
+                    StorageType: "Database",
+                    MimeType: teaEvent.ImageData.MimeType,
+                    FileName: teaEvent.ImageData.FileName,
+                    FileSizeKB: teaEvent.ImageData.FileSizeBytes / 1024
+                );
+            }
+            else if (teaEvent.ImageUrl != null)
+            {
+                return new ImageMetadataDto(
+                    StorageType: "URL",
+                    MimeType: null,
+                    FileName: null,
+                    FileSizeKB: null
+                );
+            }
+
+            return null;
         }
     }
 }
