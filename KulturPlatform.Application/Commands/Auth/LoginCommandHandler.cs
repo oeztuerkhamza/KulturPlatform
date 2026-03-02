@@ -22,7 +22,7 @@ namespace KulturPlatform.Application.Commands.Auth
         public async Task<LoginResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var admin = await _adminRepository.GetByEmailAsync(request.Email, cancellationToken);
-            
+
             if (admin == null)
                 throw new UnauthorizedAccessException("Invalid email or password.");
 
