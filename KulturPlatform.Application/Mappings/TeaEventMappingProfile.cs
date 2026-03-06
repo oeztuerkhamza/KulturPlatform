@@ -112,3 +112,4 @@ namespace KulturPlatform.Application.Mappings
         }
     }
 }
+/
