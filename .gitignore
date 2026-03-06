@@ -361,3 +361,20 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Production secrets
+.env
+!.env.example
+
+# Database backups
+db-backup/
+*.bak
+
+# SSL certificates
+nginx/ssl/
+
+# Email server - sensitive data
+email/config/postfix-accounts.cf
+email/config/postfix-virtual.cf
+email/config/opendkim/
+email/config/opendmarc/
+
