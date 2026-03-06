@@ -9,10 +9,10 @@ services:
     domainname: kulturplattformfreiburg.org
     restart: unless-stopped
     ports:
-      - "25:25"       # SMTP  (incoming mail)
-      - "465:465"     # SMTPS (submission over TLS)
-      - "587:587"     # SMTP  (submission STARTTLS)
-      - "993:993"     # IMAPS (mail clients)
+      - '25:25' # SMTP  (incoming mail)
+      - '465:465' # SMTPS (submission over TLS)
+      - '587:587' # SMTP  (submission STARTTLS)
+      - '993:993' # IMAPS (mail clients)
     volumes:
       - maildata:/var/mail
       - mailstate:/var/mail-state
@@ -44,7 +44,7 @@ services:
     networks:
       - kpf_network
     healthcheck:
-      test: ["CMD-SHELL", "ss -tlnp | grep -q ':25' || exit 1"]
+      test: ['CMD-SHELL', "ss -tlnp | grep -q ':25' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -58,10 +58,10 @@ services:
     depends_on:
       - mailserver
     environment:
-      - ROUNDCUBEMAIL_DEFAULT_HOST=ssl://mailserver
-      - ROUNDCUBEMAIL_DEFAULT_PORT=993
-      - ROUNDCUBEMAIL_SMTP_SERVER=tls://mailserver
-      - ROUNDCUBEMAIL_SMTP_PORT=587
+      - ROUNDCUBEMAIL_DEFAULT_HOST=mailserver
+      - ROUNDCUBEMAIL_DEFAULT_PORT=143
+      - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
+      - ROUNDCUBEMAIL_SMTP_PORT=25
       - ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE=25M
       - ROUNDCUBEMAIL_SKIN=elastic
       - ROUNDCUBEMAIL_PLUGINS=archive,zipdownload,managesieve

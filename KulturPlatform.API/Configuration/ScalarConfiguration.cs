@@ -1,4 +1,4 @@
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 
 namespace KulturPlatform.API.Configuration
@@ -19,7 +19,7 @@ namespace KulturPlatform.API.Configuration
 
                     // SECURITY SCHEME EKLE
                     document.Components ??= new OpenApiComponents();
-                    document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+                    document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
 
                     document.Components.SecuritySchemes.Add("bearerAuth", new OpenApiSecurityScheme
                     {

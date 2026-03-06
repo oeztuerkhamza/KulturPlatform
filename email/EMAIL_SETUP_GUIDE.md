@@ -8,13 +8,13 @@ Bu rehber, kendi domain'inizde e-posta gönderip almanızı, webmail ile Gmail g
 
 ## 📋 Genel Bakış
 
-| Bileşen | Teknoloji | Açıklama |
-|---------|-----------|----------|
-| Mail Server | Docker-Mailserver (Postfix + Dovecot) | E-posta gönderme/alma |
-| Webmail | Roundcube | Tarayıcıdan Gmail gibi kullanım |
-| Anti-Spam | SpamAssassin | Spam filtreleme |
-| Güvenlik | Fail2ban + DKIM + SPF + DMARC | E-posta güvenliği |
-| SSL | Let's Encrypt | Şifreli bağlantı |
+| Bileşen     | Teknoloji                             | Açıklama                        |
+| ----------- | ------------------------------------- | ------------------------------- |
+| Mail Server | Docker-Mailserver (Postfix + Dovecot) | E-posta gönderme/alma           |
+| Webmail     | Roundcube                             | Tarayıcıdan Gmail gibi kullanım |
+| Anti-Spam   | SpamAssassin                          | Spam filtreleme                 |
+| Güvenlik    | Fail2ban + DKIM + SPF + DMARC         | E-posta güvenliği               |
+| SSL         | Let's Encrypt                         | Şifreli bağlantı                |
 
 ---
 
@@ -26,11 +26,11 @@ Aşağıdaki DNS kayıtlarını ekleyin:
 
 ### Zorunlu Kayıtlar
 
-| Tür | Host | Değer | TTL |
-|-----|------|-------|-----|
-| **A** | `mail` | `152.53.163.22` | 3600 |
-| **MX** | `@` | `10 mail.kulturplattformfreiburg.org.` | 3600 |
-| **TXT** | `@` | `v=spf1 mx a ip4:152.53.163.22 ~all` | 3600 |
+| Tür     | Host     | Değer                                                                           | TTL  |
+| ------- | -------- | ------------------------------------------------------------------------------- | ---- |
+| **A**   | `mail`   | `152.53.163.22`                                                                 | 3600 |
+| **MX**  | `@`      | `10 mail.kulturplattformfreiburg.org.`                                          | 3600 |
+| **TXT** | `@`      | `v=spf1 mx a ip4:152.53.163.22 ~all`                                            | 3600 |
 | **TXT** | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:admin@kulturplattformfreiburg.org; pct=100` | 3600 |
 
 ### DKIM Kaydı (Kurulumdan sonra eklenecek)
@@ -43,8 +43,8 @@ DKIM kaydı kurulum esnasında otomatik oluşturulur. `setup-email.sh` çalışt
 
 Çıkan değeri şu şekilde DNS'e ekleyin:
 
-| Tür | Host | Değer |
-|-----|------|-------|
+| Tür     | Host              | Değer                                                      |
+| ------- | ----------------- | ---------------------------------------------------------- |
 | **TXT** | `mail._domainkey` | `v=DKIM1; h=sha256; k=rsa; p=MIIBIjAN...` (script çıktısı) |
 
 ### Opsiyonel: Reverse DNS (PTR)
@@ -81,6 +81,7 @@ chmod +x setup-email.sh mail-manage.sh
 ```
 
 Script otomatik olarak:
+
 1. ✅ Gerekli dizinleri oluşturur
 2. ✅ SSL sertifikası alır (mail.kulturplattformfreiburg.org)
 3. ✅ Mail server container'larını başlatır
@@ -137,6 +138,7 @@ Script otomatik olarak:
 3. Gmail benzeri arayüzle e-postalarınızı yönetin!
 
 ### Roundcube Özellikleri:
+
 - 📨 E-posta gönderme/alma
 - 📎 Dosya ekleme (25MB'a kadar)
 - 📁 Klasör yönetimi
@@ -180,6 +182,7 @@ Gmail üzerinden kulturplattformfreiburg.org e-postalarınızı okuyup göndereb
 ## 📱 ADIM 6: Telefon / Outlook Bağlantısı
 
 ### iPhone Mail:
+
 1. Ayarlar → Mail → Hesaplar → Hesap Ekle → Diğer
 2. **Gelen Sunucu (IMAP):**
    - Sunucu: `mail.kulturplattformfreiburg.org`
@@ -189,6 +192,7 @@ Gmail üzerinden kulturplattformfreiburg.org e-postalarınızı okuyup göndereb
    - Port: 587, TLS: Açık
 
 ### Android / Outlook:
+
 - Aynı sunucu bilgilerini kullanın
 - IMAP: port 993 (SSL)
 - SMTP: port 587 (STARTTLS)
@@ -200,24 +204,28 @@ Gmail üzerinden kulturplattformfreiburg.org e-postalarınızı okuyup göndereb
 Kurulumdan sonra e-postalarınızın güvenliğini test edin:
 
 ### SPF Kontrolü:
+
 ```bash
 dig TXT kulturplattformfreiburg.org
 # "v=spf1 mx a ip4:152.53.163.22 ~all" görünmeli
 ```
 
 ### MX Kontrolü:
+
 ```bash
 dig MX kulturplattformfreiburg.org
 # mail.kulturplattformfreiburg.org. görünmeli
 ```
 
 ### E-posta Testi:
+
 ```bash
 # Sunucudan test maili gönder
 docker exec kpf_mailserver swaks --to test@gmail.com --from info@kulturplattformfreiburg.org --server localhost
 ```
 
 ### Online Test:
+
 - https://www.mail-tester.com → Test e-postası gönderin, puanınızı görün
 - https://mxtoolbox.com → DNS kayıtlarınızı kontrol edin
 
@@ -241,12 +249,14 @@ SMTP_PASSWORD=noreply_sifresi
 ```
 
 Sonra API container'ını yeniden başlatın:
+
 ```bash
 cd /opt/kulturplatform
 docker compose up -d api
 ```
 
 > **Not:** Bunun için `noreply@kulturplattformfreiburg.org` hesabını oluşturmanız gerekir:
+>
 > ```bash
 > ./mail-manage.sh add noreply@kulturplattformfreiburg.org "NoReplySifre123!"
 > ```
@@ -256,11 +266,13 @@ docker compose up -d api
 ## ❓ Sorun Giderme
 
 ### Mail server başlamıyor:
+
 ```bash
 docker logs kpf_mailserver
 ```
 
 ### E-posta gönderilemiyor:
+
 ```bash
 # Port 25 açık mı?
 telnet mail.kulturplattformfreiburg.org 25
@@ -274,11 +286,13 @@ ufw allow 993/tcp
 ```
 
 ### Spam klasörüne düşüyor:
+
 1. DNS kayıtlarını kontrol edin (SPF, DKIM, DMARC)
 2. Reverse DNS (PTR) kaydını ayarlayın
 3. https://www.mail-tester.com ile test edin
 
 ### Roundcube'a bağlanamıyorum:
+
 ```bash
 docker logs kpf_roundcube
 docker exec kpf_nginx nginx -t
@@ -303,13 +317,13 @@ email/
 
 ## 📊 Port Kullanımı
 
-| Port | Protokol | Kullanım | Firewall |
-|------|----------|----------|----------|
-| 25 | SMTP | Gelen e-posta | Açık olmalı |
-| 465 | SMTPS | Güvenli gönderim | Açık olmalı |
-| 587 | SMTP | STARTTLS gönderim | Açık olmalı |
-| 993 | IMAPS | Mail client bağlantısı | Açık olmalı |
-| 443 | HTTPS | Webmail (Roundcube) | Zaten açık |
+| Port | Protokol | Kullanım               | Firewall    |
+| ---- | -------- | ---------------------- | ----------- |
+| 25   | SMTP     | Gelen e-posta          | Açık olmalı |
+| 465  | SMTPS    | Güvenli gönderim       | Açık olmalı |
+| 587  | SMTP     | STARTTLS gönderim      | Açık olmalı |
+| 993  | IMAPS    | Mail client bağlantısı | Açık olmalı |
+| 443  | HTTPS    | Webmail (Roundcube)    | Zaten açık  |
 
 ---
 
