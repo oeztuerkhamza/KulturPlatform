@@ -363,18 +363,39 @@ MigrationBackup/
 FodyWeavers.xsd
 # Production secrets
 .env
+.env.production
+.env.local
 !.env.example
 
 # Database backups
 db-backup/
 *.bak
+*.sql.gz
 
 # SSL certificates
 nginx/ssl/
+*.pem
+*.key
+*.crt
+*.pfx
 
 # Email server - sensitive data
 email/config/postfix-accounts.cf
 email/config/postfix-virtual.cf
 email/config/opendkim/
 email/config/opendmarc/
+
+# Docker
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
 
