@@ -30,6 +30,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 using System.Text;
 
@@ -349,6 +350,12 @@ if (app.Environment.IsDevelopment())
 
 
 
+// Forwarded headers - must be first for correct client IP/scheme behind nginx
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 // Correlation ID - must be first to ensure all logs have correlation ID
 app.UseCorrelationId();
 
@@ -356,11 +363,24 @@ app.UseCorrelationId();
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseStaticFiles();
-app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Health check endpoint
+app.MapGet("/health", (AppDbContext db) =>
+{
+    try
+    {
+        db.Database.CanConnect();
+        return Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
+    }
+    catch
+    {
+        return Results.Json(new { status = "unhealthy", timestamp = DateTime.UtcNow }, statusCode: 503);
+    }
+}).AllowAnonymous();
 
 // Root redirect to Scalar UI
 app.MapGet("/", () => Results.Redirect("/scalar/v1"));

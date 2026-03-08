@@ -32,24 +32,24 @@ jobs:
           envs: GITHUB_TOKEN
           script: |
             set -e
-            
+
             cd /opt/kulturplatform
-            
+
             echo "=== Pulling latest code ==="
             git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/oeztuerkhamza/KulturPlatform.git"
             git fetch origin Kult
             git reset --hard origin/Kult
             git remote set-url origin "https://github.com/oeztuerkhamza/KulturPlatform.git"
-            
+
             echo "=== Building API ==="
             docker compose build api --no-cache
-            
+
             echo "=== Restarting API ==="
             docker compose up -d api
-            
+
             echo "=== Waiting for health check ==="
             sleep 15
-            
+
             if docker ps --filter "name=kpf_api" --filter "status=running" | grep -q kpf_api; then
               echo "=== API is running ==="
             else
@@ -57,7 +57,7 @@ jobs:
               docker logs kpf_api --tail 30
               exit 1
             fi
-            
+
             echo "=== Deployment complete ==="
         env:
           GITHUB_TOKEN: ${{ github.token }}

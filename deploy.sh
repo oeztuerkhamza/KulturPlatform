@@ -100,7 +100,7 @@ TMPCONF
         --webroot -w /var/www/certbot \
         --non-interactive --agree-tos \
         -m "admin@$DOMAIN" \
-        -d "$DOMAIN" -d "www.$DOMAIN" -d "api.$DOMAIN"
+        -d "$DOMAIN" -d "www.$DOMAIN" -d "api.$DOMAIN" -d "mail.$DOMAIN"
 
     info "SSL sertifikası alındı!"
 fi
@@ -111,7 +111,7 @@ cp "$PROJECT_DIR/nginx/conf.d/kulturplatform.conf.prod" \
 
 # ─── 8. Tüm servisleri başlat ────────────────────────────────────────────────
 info "Servisler başlatılıyor..."
-docker compose pull sqlserver nginx certbot 2>/dev/null || true
+docker compose pull sqlserver nginx certbot mailserver roundcube 2>/dev/null || true
 docker compose up -d --build
 
 info "Kontrol ediliyor..."

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ─── SQL Server ─────────────────────────────────────────────────────────────
   sqlserver:
@@ -12,21 +10,21 @@ services:
       MSSQL_PID: 'Express'
     volumes:
       - sqlserver_data:/var/opt/mssql
-      - ./db-backup:/var/opt/mssql/backup # .bak dosyası buraya konur
+      - ./db-backup:/var/opt/mssql/backup
     networks:
       - kpf_network
     healthcheck:
       test:
         [
           'CMD-SHELL',
-          '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q ''SELECT 1'' -C -No 2>/dev/null || exit 1',
+          '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$${MSSQL_SA_PASSWORD}" -Q "SELECT 1" -C -No 2>/dev/null || exit 1',
         ]
       interval: 15s
       timeout: 10s
       retries: 10
       start_period: 30s
 
-  # ─── .NET 10 API ────────────────────────────────────────────────────────────
+  # ─── .NET API ───────────────────────────────────────────────────────────────
   api:
     build:
       context: .
@@ -38,6 +36,7 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: 'true'
       ConnectionStrings__DefaultConnection: 'Server=sqlserver,1433;Database=KulturPlatformDb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;MultipleActiveResultSets=true'
       JwtSettings__SecretKey: '${JWT_SECRET_KEY}'
       FileStorage__BaseUrl: 'https://api.kulturplattformfreiburg.org'
@@ -46,7 +45,7 @@ services:
       EmailSettings__FromEmail: '${SMTP_FROM_EMAIL}'
       EmailSettings__Username: '${SMTP_USERNAME}'
       EmailSettings__Password: '${SMTP_PASSWORD}'
-      EmailSettings__EnableSsl: '${SMTP_ENABLE_SSL:-false}'
+      EmailSettings__EnableSsl: '${SMTP_ENABLE_SSL:-true}'
       AppSettings__BaseUrl: 'https://kulturplattformfreiburg.org'
       Cors__AllowedOrigins__0: 'https://kulturplattformfreiburg.org'
       Cors__AllowedOrigins__1: 'https://www.kulturplattformfreiburg.org'
@@ -59,11 +58,12 @@ services:
       test:
         [
           'CMD-SHELL',
-          'wget -qO- http://localhost:8080/health 2>/dev/null || exit 0',
+          'curl -sf http://localhost:8080/health || exit 1',
         ]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 30s
 
   # ─── Nginx (Reverse Proxy + Frontend) ───────────────────────────────────────
   nginx:
@@ -94,12 +94,83 @@ services:
       - certbot_certs:/etc/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
+  # ─── Mail Server (Postfix + Dovecot) ────────────────────────────────────────
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: kpf_mailserver
+    hostname: mail.kulturplattformfreiburg.org
+    domainname: kulturplattformfreiburg.org
+    restart: unless-stopped
+    ports:
+      - '25:25'
+      - '465:465'
+      - '587:587'
+      - '993:993'
+    volumes:
+      - maildata:/var/mail
+      - mailstate:/var/mail-state
+      - maillogs:/var/log/mail
+      - ./email/config/:/tmp/docker-mailserver/
+      - certbot_certs:/etc/letsencrypt:ro
+    environment:
+      - OVERRIDE_HOSTNAME=mail.kulturplattformfreiburg.org
+      - ENABLE_CLAMAV=0
+      - ENABLE_SPAMASSASSIN=1
+      - SPAMASSASSIN_SPAM_TO_INBOX=1
+      - ENABLE_FAIL2BAN=1
+      - ENABLE_POSTGREY=0
+      - ENABLE_SASLAUTHD=0
+      - ONE_DIR=1
+      - TZ=Europe/Berlin
+      - SSL_TYPE=letsencrypt
+      - SSL_DOMAIN=kulturplattformfreiburg.org
+      - ENABLE_OPENDKIM=1
+      - POSTFIX_MESSAGE_SIZE_LIMIT=26214400
+      - DOVECOT_MAILBOX_FORMAT=maildir
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - kpf_network
+    healthcheck:
+      test: ['CMD-SHELL', "ss -tlnp | grep -q ':25' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ─── Roundcube Webmail ──────────────────────────────────────────────────────
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: kpf_roundcube
+    restart: unless-stopped
+    depends_on:
+      - mailserver
+    environment:
+      - ROUNDCUBEMAIL_DEFAULT_HOST=mailserver
+      - ROUNDCUBEMAIL_DEFAULT_PORT=143
+      - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
+      - ROUNDCUBEMAIL_SMTP_PORT=25
+      - ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE=25M
+      - ROUNDCUBEMAIL_SKIN=elastic
+      - ROUNDCUBEMAIL_PLUGINS=archive,zipdownload,managesieve
+    volumes:
+      - roundcube_data:/var/roundcube/db
+      - roundcube_html:/var/www/html
+      - ./email/roundcube-config.inc.php:/var/roundcube/config/config.inc.php:ro
+    networks:
+      - kpf_network
+
 volumes:
   sqlserver_data:
   uploads_data:
   frontend_dist:
   certbot_webroot:
   certbot_certs:
+  maildata:
+  mailstate:
+  maillogs:
+  roundcube_data:
+  roundcube_html:
 
 networks:
   kpf_network:
