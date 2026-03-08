@@ -1,0 +1,58 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [Kult]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+      - '.github/prompts/**'
+
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & Deploy API
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          command_timeout: 10m
+          script: |
+            set -e
+            
+            cd /opt/kulturplatform
+            
+            echo "=== Pulling latest code ==="
+            git fetch origin Kult
+            git reset --hard origin/Kult
+            
+            echo "=== Building API ==="
+            docker compose build api --no-cache
+            
+            echo "=== Restarting API ==="
+            docker compose up -d api
+            
+            echo "=== Waiting for health check ==="
+            sleep 15
+            
+            if docker ps --filter "name=kpf_api" --filter "status=running" | grep -q kpf_api; then
+              echo "=== API is running ==="
+            else
+              echo "=== ERROR: API is not running ==="
+              docker logs kpf_api --tail 30
+              exit 1
+            fi
+            
+            echo "=== Deployment complete ==="
