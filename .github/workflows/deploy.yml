@@ -41,11 +41,15 @@ jobs:
             git reset --hard origin/Kult
             git remote set-url origin "https://github.com/oeztuerkhamza/KulturPlatform.git"
 
+            echo "=== Cleaning up old containers ==="
+            docker compose down api --remove-orphans 2>/dev/null || true
+            docker container prune -f 2>/dev/null || true
+
             echo "=== Building API ==="
             docker compose build api --no-cache
 
             echo "=== Restarting API ==="
-            docker compose up -d api
+            docker compose up -d --force-recreate api
 
             echo "=== Waiting for health check ==="
             sleep 15
