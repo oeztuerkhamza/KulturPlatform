@@ -68,6 +68,7 @@ services:
     volumes:
       - roundcube_data:/var/roundcube/db
       - roundcube_html:/var/www/html
+      - ./roundcube-config.inc.php:/var/roundcube/config/config.inc.php:ro
     networks:
       - kpf_network
 
