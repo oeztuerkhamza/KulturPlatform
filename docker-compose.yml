@@ -164,6 +164,8 @@ volumes:
   sqlserver_data:
   uploads_data:
   frontend_dist:
+    external: true
+    name: kulturplatform_frontend_dist
   certbot_webroot:
   certbot_certs:
   maildata:
