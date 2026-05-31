@@ -34,7 +34,7 @@ server {
     # (hamzaoeztuerk.de). X-Frame-Options cannot whitelist a third-party origin
     # (ALLOW-FROM is dead), so framing is governed by CSP frame-ancestors —
     # which permits only self + the portfolio + localhost.
-    add_header Content-Security-Policy "frame-ancestors 'self' https://hamzaoeztuerk.de http://localhost:4200 http://localhost:4000" always;
+    add_header Content-Security-Policy "frame-ancestors 'self' https://hamzaoeztuerk.de https://*.vercel.app http://localhost:4200 http://localhost:4000" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
