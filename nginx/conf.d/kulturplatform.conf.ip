@@ -7,7 +7,8 @@ server {
     index index.html;
 
     # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
+    # Allow embedding as a live demo on the portfolio (hamzaoeztuerk.de) + localhost.
+    add_header Content-Security-Policy "frame-ancestors 'self' https://hamzaoeztuerk.de http://localhost:4200 http://localhost:4000" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
