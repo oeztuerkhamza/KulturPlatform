@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using KulturPlatform.API;
 using KulturPlatform.API.Configuration;
 using KulturPlatform.API.Middleware;
 using KulturPlatform.Application;
@@ -31,8 +32,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using Scalar.AspNetCore;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +62,54 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
+
+// ─── Rate limiting (Newsletter-Missbrauch) ───────────────────────────────────
+// Der oeffentliche /api/newsletter/subscribe-Endpunkt verschickt fuer jede
+// beliebige Adresse eine Double-Opt-In-Mail. Ohne Limit laesst sich der Server
+// als Spam-Schleuder missbrauchen; genau das hat die Reputation der sendenden
+// IP zerstoert und die Bounce-Flut ausgeloest.
+var abuseSettings = builder.Configuration.GetSection("AbuseProtection");
+var perIpPermits = abuseSettings.GetValue<int?>("SubscribePerIpPermits") ?? 3;
+var perIpWindowMinutes = abuseSettings.GetValue<int?>("SubscribePerIpWindowMinutes") ?? 15;
+var globalPermits = abuseSettings.GetValue<int?>("SubscribeGlobalPermitsPerHour") ?? 60;
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    // Pro Client-IP. nginx setzt X-Real-IP auf $remote_addr und ueberschreibt
+    // dabei jeden vom Client mitgeschickten Wert; der API-Container ist nicht
+    // direkt veroeffentlicht, also ist der Header nicht faelschbar.
+    options.AddPolicy(NewsletterRateLimiting.SubscribePolicy, httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter<string>(
+            partitionKey: NewsletterRateLimiting.ResolveClientIp(httpContext),
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = perIpPermits,
+                Window = TimeSpan.FromMinutes(perIpWindowMinutes),
+                QueueLimit = 0
+            }));
+
+    // Notbremse ueber alle IPs hinweg: auch ein verteiltes Botnetz kann den
+    // Server nie mehr als globalPermits Bestaetigungsmails pro Stunde
+    // ausloesen. Schuetzt die IP-Reputation unabhaengig von der Angriffsform.
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+    {
+        if (!httpContext.Request.Path.StartsWithSegments(NewsletterRateLimiting.SubscribePath))
+        {
+            return RateLimitPartition.GetNoLimiter<string>("unlimited");
+        }
+
+        return RateLimitPartition.GetFixedWindowLimiter<string>(
+            "newsletter-subscribe-global",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = globalPermits,
+                Window = TimeSpan.FromHours(1),
+                QueueLimit = 0
+            });
+    });
+});
 
 builder.Services.AddControllers();
 
@@ -365,6 +416,7 @@ app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseStaticFiles();
 app.UseCors("AllowFrontend");
 app.UseRouting();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
