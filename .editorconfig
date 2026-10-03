@@ -1,0 +1,21 @@
+# Alle Quelldateien als UTF-8 speichern.
+# Hintergrund: Mehrere .cs-Dateien waren versehentlich Windows-1252-kodiert.
+# Der C#-Compiler liest Quelldateien als UTF-8, wodurch Umlaute (ä, ö, ü, ß)
+# zu U+FFFD wurden und so in versendeten E-Mails landeten.
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{cs,csproj,slnx}]
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,js,ts,tsx,css,html}]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false

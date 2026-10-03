@@ -182,7 +182,7 @@ namespace KulturPlatform.Infrastructure.Services
         <tr>
             <td style=""padding: 20px; text-align: center; background-color: #f8f9fa;"">
                 <p style='color: #666; font-size: 12px; margin: 0;'>
-                    Diese Nachricht wurde �ber das Kontaktformular auf der Website gesendet.
+                    Diese Nachricht wurde über das Kontaktformular auf der Website gesendet.
                 </p>
                 <p style='color: #666; font-size: 12px; margin: 5px 0 0 0;'>
                     Kultur Platform Freiburg | <a href=""https://kulturplattformfreiburg.org"" style=""color: #007bff;"">kulturplattformfreiburg.org</a>
@@ -251,7 +251,7 @@ namespace KulturPlatform.Infrastructure.Services
         <tr>
             <td style=""padding: 20px; text-align: center; background-color: #f8f9fa;"">
                 <p style='color: #666; font-size: 12px; margin: 0;'>
-                    Diese Bewerbung wurde �ber das Freiwilligenformular auf der Website eingereicht.
+                    Diese Bewerbung wurde über das Freiwilligenformular auf der Website eingereicht.
                 </p>
                 <p style='color: #666; font-size: 12px; margin: 5px 0 0 0;'>
                     Kultur Platform Freiburg | <a href=""https://kulturplattformfreiburg.org"" style=""color: #007bff;"">kulturplattformfreiburg.org</a>

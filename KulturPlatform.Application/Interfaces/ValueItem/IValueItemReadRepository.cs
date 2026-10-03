@@ -4,10 +4,10 @@ namespace KulturPlatform.Application.Interfaces.ValueItem
 {
     public interface IValueItemReadRepository
     {
-        // Listeleme için
+        // Listeleme iÃ§in
         Task<IReadOnlyList<ValueItemDetailDto>> GetAllAsync(CancellationToken cancellationToken);
 
-        // Detay için
+        // Detay iÃ§in
         Task<ValueItemDetailDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     }
 }

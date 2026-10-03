@@ -5,7 +5,7 @@ using KulturPlatform.Domain.Interfaces;
 namespace KulturPlatform.Domain.Commons.Aggregates
 {
     /// <summary>
-    /// Künye (Imprint/Impressum) - Legal information about the organization
+    /// KÃ¼nye (Imprint/Impressum) - Legal information about the organization
     /// </summary>
     public class Imprint : AuditableEntity, IAggregateRoot
     {

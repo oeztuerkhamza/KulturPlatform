@@ -231,15 +231,15 @@ namespace KulturPlatform.Infrastructure.Services
     <table role=""presentation"" style=""width: 100%; max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;"">
         <tr>
             <td style=""padding: 40px 30px; text-align: center;"">
-                <h2 style=""color: #333; margin: 0 0 20px 0;"">Newsletter-Anmeldung bestätigen</h2>
+                <h2 style=""color: #333; margin: 0 0 20px 0;"">Newsletter-Anmeldung bestÃ¤tigen</h2>
                 <p style=""color: #666; line-height: 1.6; margin: 20px 0;"">
-                    Vielen Dank für Ihr Interesse an unserem Newsletter!
+                    Vielen Dank fÃ¼r Ihr Interesse an unserem Newsletter!
                 </p>
                 <p style=""color: #666; line-height: 1.6; margin: 20px 0;"">
-                    Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Button klicken:
+                    Bitte bestÃ¤tigen Sie Ihre E-Mail-Adresse, indem Sie auf den folgenden Button klicken:
                 </p>
                 <a href=""{verificationUrl}"" style=""display: inline-block; padding: 15px 30px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; margin: 20px 0;"">
-                    E-Mail bestätigen / Confirm Email
+                    E-Mail bestÃ¤tigen / Confirm Email
                 </a>
                 <p style=""color: #999; font-size: 12px; margin: 30px 0 0 0;"">
                     Oder kopieren Sie diesen Link in Ihren Browser:<br/>
@@ -253,7 +253,7 @@ namespace KulturPlatform.Infrastructure.Services
 
             await _emailService.SendEmailAsync(
                 subscriber.Email.Value,
-                "Newsletter-Anmeldung bestätigen / Confirm Newsletter Subscription",
+                "Newsletter-Anmeldung bestÃ¤tigen / Confirm Newsletter Subscription",
                 htmlBody,
                 null,
                 cancellationToken);
@@ -275,14 +275,14 @@ namespace KulturPlatform.Infrastructure.Services
             <td style=""padding: 40px 30px;"">
                 <h2 style=""color: #333; margin: 0 0 20px 0;"">Willkommen! / Welcome!</h2>
                 <p style=""color: #666; line-height: 1.6;"">
-                    Vielen Dank für die Bestätigung Ihrer E-Mail-Adresse. Sie sind jetzt für unseren Newsletter angemeldet.
+                    Vielen Dank fÃ¼r die BestÃ¤tigung Ihrer E-Mail-Adresse. Sie sind jetzt fÃ¼r unseren Newsletter angemeldet.
                 </p>
                 <p style=""color: #666; line-height: 1.6;"">
-                    Sie erhalten nun regelmäßig Updates über unsere Aktivitäten und Veranstaltungen.
+                    Sie erhalten nun regelmÃ¤ÃŸig Updates Ã¼ber unsere AktivitÃ¤ten und Veranstaltungen.
                 </p>
                 <hr style=""border: none; border-top: 1px solid #ddd; margin: 30px 0;"" />
                 <p style=""color: #999; font-size: 12px;"">
-                    Falls Sie sich abmelden möchten, klicken Sie <a href=""{unsubscribeUrl}"" style=""color: #dc3545;"">hier</a>.
+                    Falls Sie sich abmelden mÃ¶chten, klicken Sie <a href=""{unsubscribeUrl}"" style=""color: #dc3545;"">hier</a>.
                 </p>
             </td>
         </tr>
@@ -356,7 +356,7 @@ namespace KulturPlatform.Infrastructure.Services
                     <a href=""https://kulturplattformfreiburg.org"" style=""color: #007bff; text-decoration: none;"">kulturplattformfreiburg.org</a>
                 </p>
                 <p style=""color: #999; font-size: 12px; margin: 10px 0;"">
-                    Sie erhalten diese E-Mail, weil Sie sich für unseren Newsletter angemeldet haben.
+                    Sie erhalten diese E-Mail, weil Sie sich fÃ¼r unseren Newsletter angemeldet haben.
                 </p>
                 <p style=""margin: 10px 0;"">
                     <a href=""{unsubscribeUrl}"" style=""color: #dc3545; font-size: 12px; text-decoration: underline;"">
@@ -370,7 +370,7 @@ namespace KulturPlatform.Infrastructure.Services
         <tr>
             <td style=""padding: 20px; text-align: center;"">
                 <p style=""color: #999; font-size: 11px; margin: 0;"">
-                    © {DateTime.UtcNow.Year} Kultur Platform Freiburg. Alle Rechte vorbehalten.
+                    Â© {DateTime.UtcNow.Year} Kultur Platform Freiburg. Alle Rechte vorbehalten.
                 </p>
             </td>
         </tr>
