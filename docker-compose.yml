@@ -43,6 +43,7 @@ services:
       EmailSettings__SmtpHost: '${SMTP_HOST}'
       EmailSettings__SmtpPort: '${SMTP_PORT:-587}'
       EmailSettings__FromEmail: '${SMTP_FROM_EMAIL}'
+      EmailSettings__BounceAddress: '${SMTP_BOUNCE_ADDRESS:-}'
       EmailSettings__Username: '${SMTP_USERNAME}'
       EmailSettings__Password: '${SMTP_PASSWORD}'
       EmailSettings__EnableSsl: '${SMTP_ENABLE_SSL:-true}'
