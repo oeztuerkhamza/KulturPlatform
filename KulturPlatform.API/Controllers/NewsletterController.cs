@@ -4,6 +4,7 @@ using KulturPlatform.Application.Queries.Newsletter;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace KulturPlatform.API.Controllers
 {
@@ -13,6 +14,9 @@ namespace KulturPlatform.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<NewsletterController> _logger;
+
+        private const string GenericSubscribeMessage =
+            "If this address is not yet subscribed, a verification email has been sent. Please check your inbox.";
 
         public NewsletterController(IMediator mediator, ILogger<NewsletterController> logger)
         {
@@ -25,16 +29,26 @@ namespace KulturPlatform.API.Controllers
         /// </summary>
         [HttpPost("subscribe")]
         [AllowAnonymous]
+        [EnableRateLimiting(NewsletterRateLimiting.SubscribePolicy)]
         public async Task<IActionResult> Subscribe([FromBody] SubscribeToNewsletterCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(new
+            // Honeypot: ein im Formular verstecktes Feld, das ein Mensch nie
+            // ausfuellt. Ist es befuellt, war es ein Bot - wir antworten wie im
+            // Erfolgsfall, verschicken aber keine Mail.
+            if (!string.IsNullOrWhiteSpace(command.Website))
             {
-                success = true,
-                message = result
-                    ? "Verification email sent. Please check your inbox."
-                    : "Email already subscribed and verified."
-            });
+                _logger.LogWarning(
+                    "Newsletter honeypot ausgeloest von {ClientIp}",
+                    NewsletterRateLimiting.ResolveClientIp(HttpContext));
+
+                return Ok(new { success = true, message = GenericSubscribeMessage });
+            }
+
+            await _mediator.Send(command);
+
+            // Bewusst immer dieselbe Antwort: sonst laesst sich ueber den
+            // Endpunkt abfragen, welche Adressen bereits angemeldet sind.
+            return Ok(new { success = true, message = GenericSubscribeMessage });
         }
 
         /// <summary>
