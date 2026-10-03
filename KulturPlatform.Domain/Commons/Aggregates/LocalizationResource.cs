@@ -4,7 +4,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
 {
     /// <summary>
     /// Localization resource for multilingual content management
-    /// Admin panel'den düzenlenebilir çeviriler
+    /// Admin panel'den dÃ¼zenlenebilir Ã§eviriler
     /// </summary>
     public class LocalizationResource : IAggregateRoot
     {

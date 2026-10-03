@@ -51,7 +51,7 @@ namespace KulturPlatform.API.Controllers
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            // Debug: T�m claim'leri d�nd�r
+            // Debug: Tüm claim'leri döndür
             var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
 
             return Ok(new

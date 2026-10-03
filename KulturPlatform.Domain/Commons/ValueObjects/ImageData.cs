@@ -11,7 +11,7 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
         public string FileName { get; init; }
         public int FileSizeBytes { get; init; }
 
-        // EF Core için
+        // EF Core iÃ§in
         private ImageData()
         {
             Base64Data = string.Empty;

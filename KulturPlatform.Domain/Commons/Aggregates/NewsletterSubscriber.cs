@@ -30,7 +30,7 @@ namespace KulturPlatform.Domain.Commons.Aggregates
                 Email = email,
                 FullName = fullName,
                 IsActive = true,
-                IsVerified = false, // Double opt-in için false ba?lar
+                IsVerified = false, // Double opt-in iÃ§in false ba?lar
                 SubscribedAt = DateTime.UtcNow,
                 UnsubscribeToken = GenerateToken(),
                 VerificationToken = GenerateToken(),
