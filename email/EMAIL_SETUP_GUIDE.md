@@ -261,6 +261,31 @@ docker compose up -d api
 > ./mail-manage.sh add noreply@kulturplattformfreiburg.org "NoReplySifre123!"
 > ```
 
+### İadeleri (bounce) ayrı bir kutuya alma
+
+Ulaşamayan mailler için karşı sunucunun geri yolladığı iade bildirimleri
+(*Undelivered Mail Returned to Sender*) varsayılan olarak `SMTP_FROM_EMAIL`
+kutusuna düşer. API'nin otomatik maillerinin iadelerini ayrı bir kutuya almak için:
+
+```bash
+# 1. Önce kutuyu oluşturun — kutu yoksa iadeler kaybolur
+./mail-manage.sh add bounces@kulturplattformfreiburg.org "GucluBirSifre!"
+
+# 2. .env dosyasına ekleyin
+echo 'SMTP_BOUNCE_ADDRESS=bounces@kulturplattformfreiburg.org' >> .env
+
+# 3. API'yi yeniden başlatın
+docker compose up -d api
+```
+
+API bu adresi SMTP zarf göndericisi (`MAIL FROM`) olarak kullanır; iadeler oraya
+gider, alıcının gördüğü `From:` değişmez. Maile ayrıca bir `Sender:` başlığı
+eklenir; bazı istemciler (ör. Outlook) bunu "bounces@… adına" diye gösterebilir.
+
+> **Not:** Mail sunucusunda `SPOOF_PROTECTION=1` açılırsa, API'nin SMTP
+> kullanıcısının bu adresle gönderme izni olmalıdır; yoksa tüm gönderimler
+> reddedilir.
+
 ---
 
 ## ❓ Sorun Giderme

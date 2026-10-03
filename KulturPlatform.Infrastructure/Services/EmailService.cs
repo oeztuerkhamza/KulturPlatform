@@ -418,6 +418,23 @@ namespace KulturPlatform.Infrastructure.Services
                     Priority = MailPriority.Normal
                 };
 
+                // Route bounces to a dedicated mailbox instead of FromEmail.
+                // SmtpClient uses Sender as the envelope sender (MAIL FROM); From is unchanged.
+                var bounceAddress = emailSettings["BounceAddress"];
+                if (!string.IsNullOrWhiteSpace(bounceAddress))
+                {
+                    if (MailAddress.TryCreate(bounceAddress, out var bounce))
+                    {
+                        mailMessage.Sender = bounce;
+                    }
+                    else
+                    {
+                        _logger.LogWarning(
+                            "EmailSettings:BounceAddress '{BounceAddress}' is not a valid address; bounces go to {FromEmail}",
+                            bounceAddress, fromEmail);
+                    }
+                }
+
                 // Add plain text alternative (multipart/alternative improves deliverability)
                 var plainText = System.Text.RegularExpressions.Regex.Replace(htmlBody, "<[^>]+>", " ");
                 plainText = System.Text.RegularExpressions.Regex.Replace(plainText, @"\s+", " ").Trim();
