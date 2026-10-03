@@ -9,7 +9,7 @@ namespace KulturPlatform.Domain.Commons.ValueObjects
         public Url? ImageUrl { get; init; }
         public ImageData? ImageData { get; init; }
 
-        // EF Core için
+        // EF Core iÃ§in
         private HybridImage()
         {
         }

@@ -117,22 +117,22 @@ namespace KulturPlatform.API.Controllers
                 },
                 Testimonials = new TestimonialsDto
                 {
-                    Title = "Gönüllülerimizin Deneyimleri",
+                    Title = "GÃ¶nÃ¼llÃ¼lerimizin Deneyimleri",
                     Items = new List<TestimonialDto>
                     {
                         new TestimonialDto
                         {
                             Name = "Ay?e Y?lmaz",
-                            Quote = "KPF'de gönüllü olmak bana çok ?ey katt?. Hem yeni insanlarla tan??t?m hem de topluma katk?da bulunman?n mutlulu?unu ya?ad?m.",
+                            Quote = "KPF'de gÃ¶nÃ¼llÃ¼ olmak bana Ã§ok ?ey katt?. Hem yeni insanlarla tan??t?m hem de topluma katk?da bulunman?n mutlulu?unu ya?ad?m.",
                             Image = "/images/testimonials/ayse.jpg",
-                            Role = "Etkinlik Koordinatörü"
+                            Role = "Etkinlik KoordinatÃ¶rÃ¼"
                         },
                         new TestimonialDto
                         {
                             Name = "Mehmet Demir",
-                            Quote = "Gönüllü olarak ba?lad?m, ?imdi ekibin ayr?lmaz bir parças?y?m. Kesinlikle tavsiye ederim!",
+                            Quote = "GÃ¶nÃ¼llÃ¼ olarak ba?lad?m, ?imdi ekibin ayr?lmaz bir parÃ§as?y?m. Kesinlikle tavsiye ederim!",
                             Image = "/images/testimonials/mehmet.jpg",
-                            Role = "Sosyal Medya Yöneticisi"
+                            Role = "Sosyal Medya YÃ¶neticisi"
                         }
                     }
                 }

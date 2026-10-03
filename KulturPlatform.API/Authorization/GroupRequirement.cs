@@ -35,7 +35,7 @@ namespace KulturPlatform.API.Authorization
         {
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             
-            // ?? DEBUG: Tüm claim'leri logla
+            // ?? DEBUG: TÃ¼m claim'leri logla
             var allClaims = string.Join(", ", context.User.Claims.Select(c => $"{c.Type}={c.Value}"));
             _logger.LogWarning("?? User {UserId} claims: {Claims}", userId, allClaims);
 
