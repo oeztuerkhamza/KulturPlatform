@@ -15,5 +15,12 @@ namespace KulturPlatform.Application.Commands.Newsletter
         /// nach einem echten Formularfeld aussehen.
         /// </summary>
         public string? Website { get; set; }
+
+        /// <summary>
+        /// Token aus GET /api/newsletter/challenge und die dazu errechnete
+        /// Loesung. Ohne gueltiges Paar wird die Anmeldung abgelehnt.
+        /// </summary>
+        public string? ChallengeToken { get; set; }
+        public string? ChallengeNonce { get; set; }
     }
 }

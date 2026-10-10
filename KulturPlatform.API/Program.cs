@@ -115,6 +115,7 @@ builder.Services.AddControllers();
 
 // Memory Cache (for LocalizationService)
 builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<NewsletterChallengeService>();
 
 // CORS
 //builder.Services.ConfigureCors();

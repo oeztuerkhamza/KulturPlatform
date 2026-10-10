@@ -20,11 +20,29 @@ namespace KulturPlatform.API.Controllers
 
         private readonly IConfiguration _configuration;
 
-        public NewsletterController(IMediator mediator, ILogger<NewsletterController> logger, IConfiguration configuration)
+        private readonly NewsletterChallengeService _challenges;
+
+        public NewsletterController(
+            IMediator mediator,
+            ILogger<NewsletterController> logger,
+            IConfiguration configuration,
+            NewsletterChallengeService challenges)
         {
             _mediator = mediator;
             _logger = logger;
             _configuration = configuration;
+            _challenges = challenges;
+        }
+
+        /// <summary>
+        /// Issue a proof-of-work challenge for the subscribe form (public endpoint)
+        /// </summary>
+        [HttpGet("challenge")]
+        [AllowAnonymous]
+        [ResponseCache(NoStore = true)]
+        public IActionResult GetChallenge()
+        {
+            return Ok(new { token = _challenges.Issue(), difficulty = _challenges.DifficultyBits });
         }
 
         /// <summary>
@@ -57,6 +75,18 @@ namespace KulturPlatform.API.Controllers
                     NewsletterRateLimiting.ResolveClientIp(HttpContext));
 
                 return Ok(new { success = true, message = GenericSubscribeMessage });
+            }
+
+            // Die Bots posten direkt an die API, ohne die Website zu laden. Wer
+            // keine geloeste Aufgabe mitschickt, bekommt keine Mail ausgeloest.
+            if ((_configuration.GetValue<bool?>("AbuseProtection:RequireChallenge") ?? true)
+                && !_challenges.TryConsume(command.ChallengeToken, command.ChallengeNonce))
+            {
+                _logger.LogWarning(
+                    "Newsletter-Anmeldung ohne gueltige Challenge von {ClientIp} verworfen",
+                    NewsletterRateLimiting.ResolveClientIp(HttpContext));
+
+                return BadRequest(new { success = false, message = "Verification failed. Please reload the page and try again." });
             }
 
             await _mediator.Send(command);
