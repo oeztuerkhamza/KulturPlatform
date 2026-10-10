@@ -47,6 +47,7 @@ services:
       EmailSettings__Username: '${SMTP_USERNAME}'
       EmailSettings__Password: '${SMTP_PASSWORD}'
       EmailSettings__EnableSsl: '${SMTP_ENABLE_SSL:-true}'
+      AbuseProtection__SubscribeEnabled: '${NEWSLETTER_SUBSCRIBE_ENABLED:-true}'
       AppSettings__BaseUrl: 'https://kulturplattformfreiburg.org'
       Cors__AllowedOrigins__0: 'https://kulturplattformfreiburg.org'
       Cors__AllowedOrigins__1: 'https://www.kulturplattformfreiburg.org'

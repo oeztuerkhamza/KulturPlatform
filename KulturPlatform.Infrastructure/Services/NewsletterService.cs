@@ -47,8 +47,11 @@ namespace KulturPlatform.Infrastructure.Services
 
                 if (existing.IsActive && !existing.IsVerified)
                 {
-                    _logger.LogInformation("Email {Email} is pending verification. Resending verification email", email);
-                    await SendVerificationEmailAsync(existing, cancellationToken);
+                    // Bewusst kein erneuter Versand: Bots tragen dieselben fremden
+                    // Adressen immer wieder ein, und jede Wiederholung hat bisher eine
+                    // weitere Bestaetigungsmail ausgeloest. Genau diese Wiederholungen
+                    // haben die Reputation der sendenden IP beschaedigt.
+                    _logger.LogInformation("Email {Email} is pending verification. Not resending verification email", email);
                     return true;
                 }
 

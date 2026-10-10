@@ -18,10 +18,13 @@ namespace KulturPlatform.API.Controllers
         private const string GenericSubscribeMessage =
             "If this address is not yet subscribed, a verification email has been sent. Please check your inbox.";
 
-        public NewsletterController(IMediator mediator, ILogger<NewsletterController> logger)
+        private readonly IConfiguration _configuration;
+
+        public NewsletterController(IMediator mediator, ILogger<NewsletterController> logger, IConfiguration configuration)
         {
             _mediator = mediator;
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -39,6 +42,18 @@ namespace KulturPlatform.API.Controllers
             {
                 _logger.LogWarning(
                     "Newsletter honeypot ausgeloest von {ClientIp}",
+                    NewsletterRateLimiting.ResolveClientIp(HttpContext));
+
+                return Ok(new { success = true, message = GenericSubscribeMessage });
+            }
+
+            // Notschalter: laesst sich ueber AbuseProtection__SubscribeEnabled=false
+            // ohne neues Deployment umlegen, solange die sendende IP auf
+            // Sperrlisten steht. Antwort wie im Erfolgsfall, aber keine Mail.
+            if (!(_configuration.GetValue<bool?>("AbuseProtection:SubscribeEnabled") ?? true))
+            {
+                _logger.LogWarning(
+                    "Newsletter-Anmeldung ist deaktiviert, Anfrage von {ClientIp} verworfen",
                     NewsletterRateLimiting.ResolveClientIp(HttpContext));
 
                 return Ok(new { success = true, message = GenericSubscribeMessage });
