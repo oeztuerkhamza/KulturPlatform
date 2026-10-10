@@ -338,7 +338,15 @@ using (var scope = app.Services.CreateScope())
 
         // Apply pending migrations
         logger.LogInformation("Applying database migrations...");
-        db.Database.Migrate();
+        // Der InMemory-Provider der Integrationstests kennt keine Migrationen.
+        if (db.Database.IsRelational())
+        {
+            db.Database.Migrate();
+        }
+        else
+        {
+            db.Database.EnsureCreated();
+        }
         logger.LogInformation("Database migrations applied successfully.");
     }
     catch (Exception ex)
@@ -440,3 +448,6 @@ app.MapGet("/", () => Results.Redirect("/scalar/v1"));
 app.MapControllers();
 
 app.Run();
+
+// Fuer WebApplicationFactory<Program> in den Integrationstests sichtbar machen.
+public partial class Program { }
